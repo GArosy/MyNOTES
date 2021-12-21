@@ -84,9 +84,25 @@ $ git commit -m "描述信息" #将暂存区的文件提交，存入分支，形
 
   粘贴：`Shift`+`Insert`
 
-- 在本地pull远程库的文件时发生错误`fatal: refusing to merge unrelated histories`
+- 在本地 `$ git pull origin master`进行获取时发生错误`fatal: refusing to merge unrelated histories`
 
   用非clone的方式在本地建立远程库时可能发生此问题。
 
-  解决方法：在 pull命令后使用 `--allow-unrelated-histories` ，合并两个独立启动仓库的历史。
+  解决方法：
+  
+  - 在 pull命令后使用 `--allow-unrelated-histories` ，合并两个独立启动仓库的历史。
+  
+    ```
+    $ git pull origin master --allow-unrelated-histories
+    ```
+
+- 键入 `$ git push origin master` 进行提交的时候出现错误：`error: failed to push some refs to 'https://github.com/xxx/`
+
+  由远程库与本地库不一致造成，解决方法：
+
+  - ```
+    $ git pull --reabase origin master
+    ```
+
+    把远程库中的更新**合并**到（**pull=fetch+merge**）本地库中，**–-rebase**的作用是取消掉本地库中刚刚的commit，并把他们**接到**更新后的版本库之中。
 
