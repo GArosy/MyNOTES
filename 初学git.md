@@ -68,7 +68,7 @@ $ git commit -m "描述信息" #将暂存区的文件提交，存入分支，形
 | :--------: | :----------------------------------------------------------: | :----------------------------------------------------------- |
 | git add .  | 监控工作区的状态树，此命令会把工作区的所有变化提交到暂存区，包括文件内容修改(modified)以及新文件(new)，但不包括被删除的文件。 |                                                              |
 | git add -u | 他仅监控已经被add的文件（即tracked file），他会将被修改的文件提交到暂存区。add -u 不会提交新文件（untracked file）。（git add --update的缩写）,我们在写一个的新的功能创建了一些新的代码文件，我们暂时不想提交这些代码，这种情况下就可以考虑此命令。 |                                                              |
-| git add -A | 是上面两个功能的合集（git add --all的缩写），一般新创建和删除的文件都是要加到暂存区的，所以我们通常直接用这个命令就可以了。 |                                                              |
+| git add -a | 是上面两个功能的合集（git add --all的缩写），一般新创建和删除的文件都是要加到暂存区的，所以我们通常直接用这个命令就可以了。 |                                                              |
 |  git show  |                      列出最近一次的提交                      | 对于commit：像这样，你不断对文件进行修改，然后不断提交修改到版本库里，就好比玩RPG游戏时，每通过一关就会自动把游戏状态存盘，如果某一关没过去，你还可以选择读取前一关的状态。有些时候，在打Boss之前，你会手动存盘，以便万一打Boss失败了，可以从最近的地方重新开始。Git也是一样，每当你觉得文件修改到一定程度的时候，就可以“保存一个快照”，这个快照在Git中被称为commit。一旦你把文件改乱了，或者误删了文件，还可以从最近的一个commit恢复，然后继续工作，而不是把几个月的工作成果全部丢失。 |
 |   git rm   |                           删除文件                           |                                                              |
 
@@ -84,9 +84,25 @@ $ git commit -m "描述信息" #将暂存区的文件提交，存入分支，形
 
   粘贴：`Shift`+`Insert`
 
-- 在本地pull远程库的文件时发生错误`fatal: refusing to merge unrelated histories`
+- 在本地 `$ git pull origin master`进行获取时发生错误`fatal: refusing to merge unrelated histories`
 
   用非clone的方式在本地建立远程库时可能发生此问题。
 
-  解决方法：在 pull命令后使用 `--allow-unrelated-histories` ，合并两个独立启动仓库的历史。
+  解决方法：
+  
+  - 在 pull命令后使用 `--allow-unrelated-histories` ，合并两个独立启动仓库的历史。
+  
+    ```
+    $ git pull origin master --allow-unrelated-histories
+    ```
+
+- 键入 `$ git push origin master` 进行提交的时候出现错误：`error: failed to push some refs to 'https://github.com/xxx/`
+
+  由远程库与本地库不一致造成，解决方法：
+
+  - ```
+    $ git pull --reabase origin master
+    ```
+
+    把远程库中的更新**合并**到（**pull=fetch+merge**）本地库中，**–-rebase**的作用是取消掉本地库中刚刚的commit，并把他们**接到**更新后的版本库之中。
 
