@@ -3,6 +3,8 @@
 >上一篇阐述了通过修改 `navigation.webdriver` 返回值绕过WebDriver识别的方法，但在实际运用中仍有局限，因为Selenium、Puppeteer 一众模拟浏览器在爬取时有十几个特征值可被检测到，仅仅修改 webdriver 这一值意义不大。
 >
 >本篇会介绍一个基于 Node.js 上的 `puppeteer` 插件，通过在selenium中加载一个 `.js` 文件来实现隐藏模拟浏览器指纹特征，可解决绝大部分基于访问监测的反爬。
+>
+>参考文章：[https://mp.weixin.qq.com/s/Bge-_yiatSq4CQq7fRvjdQ](https://mp.weixin.qq.com/s/Bge-_yiatSq4CQq7fRvjdQ)
 
 ## 工作原理
 
