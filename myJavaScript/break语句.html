@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>myJavaScriptLearning</title>
+</head>
+
+<body>
+    <p>点击测试break循环</p>
+    <button onclick="myFunction()">Click Here</button>
+    <p id="demo">循环打印1到10</p>
+    <script>
+        function myFunction() {
+            var x = "",
+                i = 0;
+            for (; i < 10; i++) {
+                if (i > 7) {
+                    break;
+                }
+                x = x + i + "<br>";
+            }
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+</body>
+
+</html>
