@@ -211,15 +211,56 @@ function isArray(myArray) {
 JavaScript变量可以使用**函数**或**自动转换**成为一个新变量或其他数据类型。
 
 - 数字 > 字符串
-  - 
-- 布尔值 > 字符串
-  - 
+
+  全局方法 `String()` 可将任何类型的数字、字母、表达式转换为字符串：
+
+  ```
+  String(x)
+  String(123)
+  String(100 + 23)
+  ```
+
+  `Number` 方法 `toString()` 具有同样的效果
+
+  ```
+  x.toString()
+  (123).toString()
+  (100 + 23).toString()
+  ```
+
 - 日期 > 字符串
-  - 
+
+  - `Date()` 直接返回字符串
+
+  - 全局方法 `String(new Date())`
+
+  - ```
+    obj = new Date()
+    obj.toString()
+    ```
+
+  更多 `Date` 方法：
+
+  | 方法              | 描述                                        |
+  | :---------------- | :------------------------------------------ |
+  | getDate()         | 从 Date 对象返回一个月中的某一天 (1 ~ 31)。 |
+  | getDay()          | 从 Date 对象返回一周中的某一天 (0 ~ 6)。    |
+  | getFullYear()     | 从 Date 对象以四位数字返回年份。            |
+  | getHours()        | 返回 Date 对象的小时 (0 ~ 23)。             |
+  | getMilliseconds() | 返回 Date 对象的毫秒(0 ~ 999)。             |
+  | getMinutes()      | 返回 Date 对象的分钟 (0 ~ 59)。             |
+  | getMonth()        | 从 Date 对象返回月份 (0 ~ 11)。             |
+  | getSeconds()      | 返回 Date 对象的秒数 (0 ~ 59)。             |
+  | getTime()         | 返回 1970 年 1 月 1 日至今的毫秒数。        |
+
 - 字符串 > 数字
   - 
+  
 - 一元运算符 `+`
   - 
+  
 - 布尔值 > 数字
+
 - 日期 > 数字
+
 - 自动转换类型
