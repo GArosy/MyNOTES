@@ -311,3 +311,98 @@ JavaScript变量可以使用**函数**或**自动转换**成为一个新变量�
 
 ### 正则表达式
 
+```
+var re = /表达式主体/修饰符
+```
+
+#### 常用方法
+
+JavaScript 中，正则表达式通常用于两个字符串方法：
+
+- `search()` 方法用于检索与正则式相匹配的字符串，并返回字符串的起始位置：
+
+```
+var str = "Hello world!";
+var n = str.search(/World/i);
+document.getElementById("demo").innerHTML = n;
+// 返回 6
+```
+
+- `replace()` 方法用于替换在字符串中与正则式相匹配的字符串；
+
+```
+<p id="demo">Hello world</p>
+<button onclick="myFunction()">Click me</button>
+<script>
+function myFunction(){
+	var str = document.getElementById("demo").innerHTML;//replace()方法接收字符串并作为参数
+	var txt = str.replace(/World/i,"John");				//替换字符串
+	document.getElementById("demo").innerHTML = txt;	//输出替换后的字符串
+}
+</script>
+// 点击按钮后Hello world被替换为Hello John
+```
+
+`test()` 方法是一个正则表达式方法，用于检测字符串是否匹配某个模式，返回**布尔值**。
+
+```
+/e/.test("hello world")		//返回 ture
+```
+
+`exec()` 方法是一个正则表达式方法，用于检测字符串的匹配，返回一个**数组**存放匹配结果，未匹配则返回 `null`。
+
+```
+/e/.exec("hello world")		// 返回 e
+```
+
+#### 修饰符与表达式模式
+
+| 修饰符 | 描述                                                     |
+| :----- | :------------------------------------------------------- |
+| i      | 执行对大小写不敏感的匹配。                               |
+| g      | 执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。 |
+| m      | 执行多行匹配。                                           |
+
+| 元字符 | 描述                                        |
+| :----- | :------------------------------------------ |
+| \d     | 查找数字。                                  |
+| \s     | 查找空白字符。                              |
+| \b     | 匹配单词边界。                              |
+| \uxxxx | 查找以十六进制数 xxxx 规定的 Unicode 字符。 |
+
+| 量词 | 描述                                  |
+| :--- | :------------------------------------ |
+| n+   | 匹配任何包含至少一个 *n* 的字符串。   |
+| n*   | 匹配任何包含零个或多个 *n* 的字符串。 |
+| n?   | 匹配任何包含零个或一个 *n* 的字符串。 |
+
+`[]` 用于查找某个范围内的字符
+
+| 表达式 | 描述                       |
+| :----- | :------------------------- |
+| [abc]  | 查找方括号之间的任何字符。 |
+| [0-9]  | 查找任何从 0 至 9 的数字。 |
+| (x\|y) | 查找任何以 \| 分隔的选项。 |
+
+#### RegExp 对象
+
+#### 实例
+
+```
+/*校验邮件地址是否合法*/
+function isEmail(str){
+	var reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
+	return reg.test(str)
+}
+
+/*校验是否中文名称组成 */
+function ischina(str) {
+    var reg=/^[\u4E00-\u9FA5]{2,4}$/;
+    return reg.test(str);
+}
+```
+
+### 错误
+
+`try` 语句允许我们在
+

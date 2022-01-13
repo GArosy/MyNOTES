@@ -1,0 +1,2 @@
+<!--pages/test/test2.wxml-->
+<button type="primary" bindtap="ClickMe">ClickMe</button>

@@ -1,0 +1,18 @@
+<!--pages/test/test.wxml-->
+<view>Hello</view>
+<text selectable>hello</text>
+<text decode>w o r l d </text>
+
+<button type="primary">click</button>
+
+<checkbox value="1">John</checkbox>
+<checkbox value="2">Bob</checkbox>
+
+<radio-group>
+    <radio value="1">John</radio>
+    <radio value="2">Bob</radio>
+</radio-group>
+
+<block>
+    <input placeholder="123" maxlength="10"></input>
+</block>
