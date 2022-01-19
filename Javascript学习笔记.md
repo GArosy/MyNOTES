@@ -22,11 +22,44 @@
 > - 在标签中填写 onclick 事件调用函数时，不是 **`onclick=函数名`**， 而是 **`onclick=函数名+()`**
 > - 外部 `.js`文件不使用 `<script>` 标签，直接写代码
 
-## JavaScript语法
+## JavaScript 语法
 
 ### 语句
 
-在HTML中，JavaScript通过语句向浏览器发出命令，语句间用`;`分隔。
+在HTML中，JavaScript通过语句向浏览器发出命令
+
+- 一条语句通常用`;` 作为结束符。
+- 复杂语句：
+  - 将左花括号放在第一行的结尾。
+  - 左花括号前添加一空格。
+  - 将右花括号独立放在一行。
+  - 不要以分号结束一个复杂的声明。
+
+函数：
+
+```
+function toCelsius(fahrenheit) {
+    return (5 / 9) * (fahrenheit - 32);
+}
+```
+
+循环：
+
+```
+for (i = 0; i < 5; i++) {
+    x += i;
+}
+```
+
+条件语句：
+
+```
+if (time < 20) {
+    greeting = "Good day";
+} else {
+    greeting = "Good evening";
+}
+```
 
 
 
@@ -402,9 +435,135 @@ function ischina(str) {
 }
 ```
 
+
+
+### JavaScript 表单
+
+#### JavaScript 表单验证
+
+判断表单字段(`fname`)值是否存在，如果不存在，就弹出信息阻止表单提交：
+
+```
+<scirpt>
+function validateForm() {
+	var x = document.forms["myForm"]["fname"].value;
+	if (x == null || x == "") {
+		alert("需要输入名字");
+		return false;
+	}
+}
+</script>
+```
+
+通过 HTML 代码调用以上代码：
+
+```
+<form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
+名字 <input type="text" name="fname">
+<input type="submit" value="提交">
+</form>
+```
+
+#### HTML 约束验证
+
+HTML5 新增了 HTML 表单的验证方式：约束验证。基于：
+
+- HTML 输入属性
+- CSS 伪类选择器
+- DOM 属性和方法
+
+
+
+### JavaScript 验证 API
+
+> APIs (application programming interfaces)，即应用程序编程接口。API由服务器（Server）提供，通过API，计算机可以读取、编辑网站的数据。
+
+==待补充==
+
+
+
+###  this
+
+面向对象语言中 this 表示当前对象的一个**引用**。
+
+this指向的是该this所在的最里层的object对象。
+
+- 在方法中，this 表示该方法所属的对象。
+- 如果单独使用，this 表示全局对象。
+- 在函数中，this 表示全局对象。
+- 在函数中，在严格模式下，this 是未定义的(undefined)。
+- 在事件中，this 表示接收事件的元素。
+- 类似 call() 和 apply() 方法可以将 this 引用到任何对象。
+
+
+
+### let 和 const
+
+`let` 声明的变量只在 `let` 命令所在的**代码块** `{}` 内有效。
+
+`const` 声明一个只读的**常量**，声明时必须进行**初始化**,一旦声明，常量的值就不能改变。
+
+> const 的本质: const 定义的变量并非常量，并非不可变，它定义了一个常量引用一个值。使用 const 定义的对象或者数组，其实是可变的。下面的代码并不会报错：
+>
+> ```
+> // 创建常量对象
+> const car = {type:"Fiat", model:"500", color:"white"};
+> // 修改属性:
+> car.color = "red";
+> // 添加属性
+> car.owner = "Johnson";
+> ```
+
+### JSON
+
+JSON （**J**ava**S**cript **O**bject **N**otation）是用于存储和传输数据的轻量级数据交换格式，通常用于服务端向网页传递数据 。
+
+可以理解为，**JSON** 是 **JS对象** 的字符串表示法。它使用文本表示一个 JS 对象的信息，JSON本质是一个**字符串**（，这里仅仅指结构上的同一性，要在`{...}` 前后加上`'` 才能成为 JSON 字符串）。
+
+```
+{"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"}, 
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]}
+```
+
+#### 语法规则
+
+- 数据为 `键:值` 对
+- 数据由 `,` 分隔。
+- 大括号`{}`保存对象
+- 方括号`[]`保存数组
+
+附 [JSON格式验证](https://c.runoob.com/front-end/53/) 工具
+
+#### 转换方法
+
+```
+var text = '{ "sites" : [' +
+'{ "name":"Runoob" , "url":"www.runoob.com" },' +
+'{ "name":"Google" , "url":"www.google.com" },' +
+'{ "name":"Taobao" , "url":"www.taobao.com" } ]}';	// 创建JSON格式的数据
+
+var obj = JSON.parse(text);	// 使用JavaScript内置函数将JSON字符串转换为JS对象
+```
+
+**注意**： `parse()` 方法只能解析**字符串格式**的JSON 。
+
+```
+var obj = { sites : [
+{ name:"Runoob" , url:"www.runoob.com" },
+{ name:"Google" , url:"www.google.com" },
+{ name:"Taobao" , url:"www.taobao.com" } ]};	// 创建JS对象
+
+var text = JSON.stringify(obj);	// 使用JavaScript内置函数将JS对象转换为JSON字符串
+```
+
+
+
 ### 错误
 
-`try` 语句允许执行错误的代码块，`catch` 语句在 `try` 代码块发生错误时将被执行， `try` 和 `catch` 是成对出现的。
+`try` 语句允许执行错误的代码块，`catch` 语句在 `try` 代码块发生错误时将被执行， `try` 和 `catch` 是**成对出现**的。
 
 ```
 try {
@@ -418,5 +577,114 @@ finally {
 }
 ```
 
+`throw` 语句用于抛出一个用户自定义的异常，而当前函数的执行将被停止（`throw` 之后的语句并不会被执行）。通常配合 `try` 和 `catch` 一起使用，起到控制程序流的作用。
 
+例如：
+
+```
+function myFunction() {
+  var message, x;
+  message = document.getElementById("p01");
+  message.innerHTML = "";
+  x = document.getElementById("demo").value;
+  try { 
+    if(x == "") throw "值是空的";
+    if(isNaN(x)) throw "值不是一个数字";
+    x = Number(x);
+    if(x > 10) throw "太大";
+    if(x < 5) throw "太小";
+  }
+  catch(err) {
+    message.innerHTML = "错误: " + err + ".";
+  }
+  finally {
+    document.getElementById("demo").value = "";
+  }
+}
+```
+
+
+
+
+
+## JS HTML DOM
+
+通过 HTML DOM，可访问 JavaScript HTML 文档的所有元素。
+
+### HTML DOM
+
+当网页被加载时，浏览器会创建页面的**文档对象模型** (Document Object Model)。
+
+HTML DOM 模型被构造为**对象**的树：
+
+![HTML DOM 树](https://www.runoob.com/images/pic_htmltree.gif)
+
+
+
+
+
+## JavaScript 特性
+
+### 调试
+
+#### console.log() 方法
+
+JavaScript 中，`print` 功能可由 `alert()` 和 `console.log()` 实现，但 `alert()` 会将所有内容隐式转换为字符串，且弹窗会阻塞后续的脚本执行，因此推荐使用 `console.log()` 在控制台中调试代码。
+
+#### debugger 关键字
+
+用于停止执行 JavaScript，并调用调试函数。（等于设置断点）
+
+
+
+### 变量提升
+
+JavaScript 中，变量可以在使用后声明，也就是变量可以先使用再声明。因为JS具有 **hoisting 声明提升** 的特性：函数声明和变量声明总是会被解释器悄悄地被"提升"到方法体的最顶部。
+
+需要注意的是，只有声明的变量会提升，初始化的则不会：
+
+```
+var x = 5; // 初始化 x
+
+elem = document.getElementById("demo"); // 查找元素
+elem.innerHTML = x + " " + y;           // 显示 x 和 y
+
+var y = 7; // 初始化 y
+```
+
+以上代码中的 `y` 输出了 `undefined` ，因为初始化的 `y=7` 并不会被提升
+
+```
+var x = 5; // 初始化 x
+var y;     // 声明 y
+
+elem = document.getElementById("demo"); // 查找元素
+elem.innerHTML = x + " " + y;           // 显示 x 和 y
+
+y = 7;    // 设置 y 为 7
+```
+
+
+
+### 严格模式
+
+通过在脚本或函数的头部添加 `use strict;` 表达式来声明，严格模式下不能使用未声明的变量。
+
+严格模式的限制有：
+
+- 不允许使用未声明的变量
+- 不允许删除变量或对象
+- 不允许删除函数
+- 不允许变量重名
+- 不允许使用八进制
+- 不允许使用转义字符
+- 不允许对只读属性赋值
+- ……
+
+> 为什么使用严格模式:
+>
+> - 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为;
+> - 消除代码运行的一些不安全之处，保证代码运行的安全；
+> - 提高编译器效率，增加运行速度；
+> - 为未来新版本的Javascript做好铺垫。
 
