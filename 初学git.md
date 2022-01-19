@@ -106,3 +106,23 @@ $ git commit -m "描述信息" #将暂存区的文件提交，存入分支，形
 
     把远程库中的更新**合并**到（**pull=fetch+merge**）本地库中，**–-rebase**的作用是取消掉本地库中刚刚的commit，并把他们**接到**更新后的版本库之中。
 
+- `pull` 代码时报错 `error: Your local changes to the following files would be overwritten by merge:` 
+
+  警告本地库中的文件会被git服务器上的代码覆盖，解决方法：
+
+  - 方法1：保留本地代码，并把git上的代码pull到本地，本地代码会被暂时封存：
+
+    ```
+    git stash
+    git pull origin master
+    git stash pop
+    ```
+
+  - 方法2：完全覆盖本地代码，直接回退到上一个版本，再pull：
+
+    ```
+    git reset --hard
+    git pull origin master
+    ```
+
+    
