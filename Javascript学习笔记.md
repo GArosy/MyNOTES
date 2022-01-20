@@ -561,6 +561,19 @@ var text = JSON.stringify(obj);	// 使用JavaScript内置函数将JS对象转换
 
 
 
+### void
+
+`void()` 操作符指定计算一个表达式但不返回值，括号内的表达式始终会被运行。
+
+```
+void(func())
+javascript:void(func())
+```
+
+
+
+
+
 ### 错误
 
 `try` 语句允许执行错误的代码块，`catch` 语句在 `try` 代码块发生错误时将被执行， `try` 和 `catch` 是**成对出现**的。
