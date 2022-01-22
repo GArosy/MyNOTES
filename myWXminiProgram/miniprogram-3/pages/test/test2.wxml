@@ -1,2 +1,4 @@
 <!--pages/test/test2.wxml-->
+<navigator url="/pages/test/test">页面跳转</navigator>
+<button bindtap="navi">页面跳转</button>
 <button type="primary" bindtap="ClickMe">ClickMe</button>

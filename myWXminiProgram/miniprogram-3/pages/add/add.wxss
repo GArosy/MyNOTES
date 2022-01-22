@@ -1,0 +1,8 @@
+/* pages/add/add.wxss */
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 20px;
+  padding: 5px;
+}

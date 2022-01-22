@@ -1,15 +1,41 @@
 {
     "pages": [
+        "pages/index/index",
+        "pages/add/add",
+        "pages/me/me",
         "pages/test/test2",
         "pages/test/test",
-        "pages/index/index",
         "pages/logs/logs"
     ],
     "window": {
-        "backgroundTextStyle": "light",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark",
+        "backgroundColor": "#f4f4f6",
         "navigationBarBackgroundColor": "#fff",
-        "navigationBarTitleText": "Weixin",
+        "navigationBarTitleText": "上柏羽毛球社团",
         "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "color": "",
+        "list": [{
+                "pagePath": "pages/index/index",
+                "text": "",
+                "iconPath": "icons/home.png",
+                "selectedIconPath": "/icons/home-1.png"
+            },
+            {
+                "pagePath": "pages/add/add",
+                "text": "",
+                "iconPath": "icons/plus.png",
+                "selectedIconPath": "icons/plus-1.png"
+            },
+            {
+                "pagePath": "pages/me/me",
+                "text": "",
+                "iconPath": "icons/me.png",
+                "selectedIconPath": "icons/me-1.png"
+            }
+        ]
     },
     "style": "v2",
     "sitemapLocation": "sitemap.json"

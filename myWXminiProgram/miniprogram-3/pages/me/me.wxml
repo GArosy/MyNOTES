@@ -1,0 +1,4 @@
+<!--pages/me/me.wxml-->
+
+<view class="text">推荐好友</view>
+<view class="text">联系客服</view>
