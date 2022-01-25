@@ -1,0 +1,12 @@
+<!--components/head-tabbar/head-tabbar.wxml-->
+<view class="head-tabbar">
+    <view 
+      wx:for="{{headtabbar}}"
+      wx:key="id"
+      class="tabbar-title {{item.isActive?'title-active':''}}"
+      bindtap="handleTap"
+      data-index="{{index}}"
+    >
+      {{item.name}}
+    </view>
+</view>

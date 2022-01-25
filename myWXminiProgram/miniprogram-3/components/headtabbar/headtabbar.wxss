@@ -1,0 +1,20 @@
+/* components/head-tabbar/head-tabbar.wxss */
+.head-tabbar {
+  background-color: white;
+  display: flex;
+  width: 750rpx;
+  margin-bottom: 20rpx;
+}
+.tabbar-title {
+  padding: 20rpx;
+  color: gray;
+  width: 100rpx;
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title-active {
+  color: black;
+  border-bottom: 5rpx solid black;
+}
