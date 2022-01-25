@@ -17,6 +17,12 @@ Page({
       url: '../logs/logs'
     })
   },
+  toAct(e) {
+    wx.navigateTo({
+      url: '../act/act'
+    })
+  },
+
   onLoad() {
     if (wx.getUserProfile) {
       this.setData({

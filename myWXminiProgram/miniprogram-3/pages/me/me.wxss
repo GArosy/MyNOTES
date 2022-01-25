@@ -3,6 +3,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 20px;
-  padding: 5px;
+  margin-left: 20rpx;
+  padding: 5rpx;
 }

@@ -3,6 +3,7 @@
         "pages/index/index",
         "pages/add/add",
         "pages/me/me",
+        "pages/act/act",
         "pages/test/test2",
         "pages/test/test",
         "pages/logs/logs"

@@ -1,2 +1,6 @@
 <!--pages/add/add.wxml-->
+<view class="logo">
+    <image/>
+</view>
+
 <view class="text">发布活动</view>

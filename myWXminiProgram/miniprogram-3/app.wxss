@@ -1,10 +1,29 @@
 /**app.wxss**/
+page {
+  height: 100%;
+  background-color: #f4f4f6;
+}
+.logo {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;    /*图片居中 */
+  position: fixed;
+  z-index: -1;
+}
+.logo image {
+  background-image: url(https://s2.loli.net/2022/01/25/qRoyscnAvYpQViC.png);
+  background-size: 100% 100%;
+  width: 300rpx;
+  height: 300rpx;
+}
 .container {
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 200rpx 0;
+  padding: 20rpx;
   box-sizing: border-box;
 } 
