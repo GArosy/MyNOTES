@@ -514,6 +514,20 @@ this指向的是该this所在的最里层的object对象。
 > car.owner = "Johnson";
 > ```
 
+
+
+### forEach
+
+[(17条消息) JavaScript forEach()的用法_路虽远，行则必至！-CSDN博客_前端foreach用法](https://luckylifes.blog.csdn.net/article/details/99290078?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&utm_relevant_index=2)
+
+
+
+### 箭头函数 =>
+
+[(17条消息) ES6新特性箭头函数语法、如何正确使用箭头函数_Hayley2016的博客-CSDN博客_箭头函数](https://blog.csdn.net/qq_32614411/article/details/80897256)
+
+
+
 ### JSON
 
 JSON （**J**ava**S**cript **O**bject **N**otation）是用于存储和传输数据的轻量级数据交换格式，通常用于服务端向网页传递数据 。

@@ -1,0 +1,23 @@
+<!--pages/act/act.wxml-->
+
+<view class="logo">
+  <image/>
+</view>
+
+<view class="container">
+  <headtabbar></headtabbar>
+  <view class="actCards" bindtap="toAct">
+    <view>
+      <text>日期</text>
+    </view>
+    <view>
+      <text>地点</text>
+    </view>
+    <view>
+      <text>发起人</text>
+    </view>
+    <view>
+      已报名
+    </view>
+  </view>
+</view>

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "headtabbar":"../../components/headtabbar/headtabbar"
+  }
+}

@@ -3,5 +3,36 @@
     <image/>
 </view>
 
-<view class="text">推荐好友</view>
-<view class="text">联系客服</view>
+<!-- 调用微信自带的获取用户信息的方法，展示头像和昵称 -->
+<view class="userinfo">
+    <block wx:if="{{canIUseOpenData}}">
+        <view class="userinfo-avatar">
+            <open-data type="userAvatarUrl"></open-data>
+        </view>
+        <view class="userinfo-name">
+            <open-data type="userNickName"></open-data>
+        </view>
+    </block>
+    <block wx:elif="{{!hasUserInfo}}">
+      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
+      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+</view>
+
+<view class="me-support">
+    <!-- 调用自带的 button contact 接口 -->
+    <button open-type="contact" class="contact" style="width: 750rpx; margin: 0rpx; padding: 30rpx 0rpx 30rpx 50rpx; text-align: left;">
+        联系客服
+    </button>
+    <!-- 分割线 -->
+    <view class="divLine"></view>  
+    <!-- 调用自带的 button share 接口 -->
+    <button open-type="share" class="contact" style="width: 750rpx; margin: 0rpx; padding: 30rpx 0rpx 30rpx 50rpx; text-align: left;">
+        推荐好友
+    </button>
+</view>

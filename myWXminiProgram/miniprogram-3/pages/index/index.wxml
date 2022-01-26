@@ -4,33 +4,34 @@
 </view>
 
 <view class="container">
-  <headtabbar></headtabbar>
+  <!-- 头部导航 -->
+  <headtabbar></headtabbar> 
+
+  <!-- 活动卡片 -->
   <view class="actCards" bindtap="toAct">
-    <view>
-      <text>日期</text>
+    <view class="actHead">
+      <view class="actDate">
+        <text space="nbsp">1-28 20:00</text>
+      </view>
+      <view class="actAddress">
+        <text>东方体育中心9号场</text>
+      </view>
     </view>
-    <view>
-      <text>地点</text>
+
+    <view class="actOthers">
+      <text>报名截止</text>
     </view>
-    <view>
+    <view class="actOthers">
       <text>发起人</text>
     </view>
-    <view>
-      已报名
+    <view class="actBottom">
+      <text>已报名</text>
     </view>
+    <button
+      style="width: 200rpx; margin: 0rpx 20rpx 20rpx 430rpx;" class="signButton" hover-class="signButtonAct"
+    >
+      我要报名
+    </button>
   </view>
-  <view class="actCards" bindtap="toAct">
-    <view>
-      <text>日期</text>
-    </view>
-    <view>
-      <text>地点</text>
-    </view>
-    <view>
-      <text>发起人</text>
-    </view>
-    <view>
-      已报名
-    </view>
-  </view>
+  
 </view>
