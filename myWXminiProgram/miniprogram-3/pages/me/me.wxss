@@ -41,9 +41,3 @@
   background-color: white;
   font-weight: normal;
 }
-.divLine {
-  width: 100%;
-  height: 1rpx;
-  background-color: rgb(230, 230, 230);
-  z-index: 1;
-}

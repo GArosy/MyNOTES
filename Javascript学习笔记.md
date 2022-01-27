@@ -495,7 +495,7 @@ this指向的是该this所在的最里层的object对象。
 - 在事件中，this 表示接收事件的元素。
 - 类似 call() 和 apply() 方法可以将 this 引用到任何对象。
 
-
+> [JS中this关键字详解 - 沙沙起 - 博客园 (cnblogs.com)](https://www.cnblogs.com/lisha-better/p/5684844.html)
 
 ### let 和 const
 

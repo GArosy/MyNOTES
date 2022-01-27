@@ -27,7 +27,7 @@
 <view class="me-support">
     <!-- 调用自带的 button contact 接口 -->
     <button open-type="contact" class="contact" style="width: 750rpx; margin: 0rpx; padding: 30rpx 0rpx 30rpx 50rpx; text-align: left;">
-        联系客服
+        联系作者
     </button>
     <!-- 分割线 -->
     <view class="divLine"></view>  
