@@ -526,6 +526,10 @@ this指向的是该this所在的最里层的object对象。
 
 [(17条消息) ES6新特性箭头函数语法、如何正确使用箭头函数_Hayley2016的博客-CSDN博客_箭头函数](https://blog.csdn.net/qq_32614411/article/details/80897256)
 
+### 数值取整
+
+[JavaScript四种数值取整方法 - 后除 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mazey/p/8447093.html)
+
 
 
 ### JSON
