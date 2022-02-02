@@ -719,3 +719,15 @@ y = 7;    // 设置 y 为 7
 > - 提高编译器效率，增加运行速度；
 > - 为未来新版本的Javascript做好铺垫。
 
+## 参考手册
+
+### JavaScript 对象
+
+#### Array 对象
+
+##### Array 对象方法
+
+`slice()` 方法
+
+- 从已有的数组中返回选定的元素，不会改变原始数组。
+- `array.slice(start, end)` 包含 `start` 但不包含 `end` 

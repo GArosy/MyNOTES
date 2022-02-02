@@ -48,26 +48,26 @@ function insertionSort() {
     }
     return arr;
 }
-console.log(insertionSort());
+// console.log(insertionSort());
 
 // 4. 希尔排序
 // 插入排序的高效实现，共执行了9次move
 function shellSort() {
     var gap = 1;
-    while (gap < len/2) { // 动态定义增量间隔
-        gap = gap*2;
+    while (gap < len / 2) { // 动态定义增量间隔
+        gap = gap * 2;
     }
-    for (gap; gap > 0; gap = Math.floor(gap/2)) { // 使用 Math.floor() 对gap的缩小量取整
+    for (gap; gap > 0; gap = Math.floor(gap / 2)) { // 使用 Math.floor() 对gap的缩小量取整
         console.log(gap);
         for (var i = gap; i < len; i++) { // i为组索引，对每个组逐一进行插入排序
-            var j = i- gap;
+            var j = i - gap;
             var insertion = arr[i];
-            while (j>= 0 && arr[j]>insertion) {
-                arr[j+gap] = arr[j];
+            while (j >= 0 && arr[j] > insertion) {
+                arr[j + gap] = arr[j];
                 j -= gap;
                 // console.log("move")
             }
-            arr[j+gap] = insertion; 
+            arr[j + gap] = insertion;
         }
     }
     return arr;
@@ -76,6 +76,36 @@ function shellSort() {
 
 
 // 5. 归并排序
+// “分而治之”，性能不受输入数据的影响，时间复杂度始终为 n*logn
+function mergeSort(arr) { // 自上而下的递归方法
+    if (len < 2) {
+        return arr;
+    }
+    console.log(arr);
+    var middle = Math.floor(len / 2),
+        left = arr.slice(0, middle),
+        right = arr.slice(middle);
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+    var result = [];
+    while (left.length && right.length) {
+        if (left[0] <= right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+    while (left.length) {
+        result.push(left.shift());
+    }
+    while (right.length) {
+        result.push(right.shift());
+    }
+}
+console.log(mergeSort());
+
 
 // 6. 快速排序
 
