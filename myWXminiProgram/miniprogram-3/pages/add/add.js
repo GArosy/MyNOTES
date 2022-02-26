@@ -149,9 +149,19 @@ Page({
     this.setData(data);
   },
   numPickerChange(e) {
+    // console.log(e);
     this.setData({
-      numPeople: e.detail.value
+      numPeople: this.data.numRange[e.detail.value]
     })
+  },
+  addressChange(e) {
+    // console.log(e);
+    this.setData({
+      address: e.detail.value
+    })
+  },
+  formSubmit(e) {
+    console.log('form发生了submit事件，携带数据为：', e.detail.value)
   },
   
 

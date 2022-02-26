@@ -6,7 +6,7 @@
 <view style="height: 20rpx;"></view>
 
 <view class="container">
-    <view class="actCards">
+    <view class="addCards">
         <view class="text-ini">
             <view class="text-ini-big">
                 发起活动
@@ -17,65 +17,72 @@
         </view>
 
         <!-- 分割线 -->
+        <view style="height: 25rpx;"></view>
         <view class="divLine"></view>
-        <view style="height: 10rpx;"></view>
+        <view style="height: 25rpx;"></view>
 
         <!-- 填写活动信息 -->
         <view class="form-ini">
-            <view class="form-date">
-                <view>活动时间</view>
-                <picker 
-                    style="width: 350rpx;text-align: right;"
-                    mode="multiSelector" 
-                    bindchange="datePickerChange" 
-                    bindcolumnchange="datePickerColumnChange"
-                    value="{{datePickerIndex}}"
-                    range="{{datePickerArray}}"
-                >
-                    <input 
-                        disabled="true"
-                        name="inp-actdate" 
-                        value="{{time}}" 
-                        placeholder="选择时间" 
-                        placeholder-style="text-align: right;" 
-                    />
-                </picker>
-            </view>
-            <view class="form-date">
-                <view>活动地点</view>
-                <input 
-                    style="width: 350rpx;text-align: right;"
-                    name="inp-actadd" 
-                    maxlength="13"
-                    value="{{address}}" 
-                    placeholder="填写地点" 
-                    placeholder-style="text-align: right;" 
-                    confirm-type="next"
-                />
-            </view>
-            <view class="form-date">
-                <view>最大人数</view>
-                <picker 
-                    mode="selector"
-                    bindchange="numPickerChange"
-                    range="{{numRange}}"
-                >
-                    <input
+            <form catchsubmit="formSubmit">
+                <view class="form-item">
+                    <view class="form-txt">活动时间</view>
+                    <picker 
                         style="width: 350rpx;text-align: right;"
+                        mode="multiSelector" 
+                        bindchange="datePickerChange" 
+                        bindcolumnchange="datePickerColumnChange"
+                        value="{{datePickerIndex}}"
+                        range="{{datePickerArray}}"
+                    >
+                        <input 
+                            disabled="true"
+                            name="inp-actdate" 
+                            value="{{time}}" 
+                            placeholder="选择时间" 
+                            placeholder-style="text-align: right;" 
+                        />
+                    </picker>
+                </view>
+                <view class="form-item">
+                    <view class="form-txt">活动地点</view>
+                    <input 
+                        style="width: 350rpx;text-align: right;"
+                        bindinput="addressChange"
                         name="inp-actadd" 
                         maxlength="13"
-                        value="{{numPeople}}" 
-                        placeholder="选择人数" 
+                        value="{{address}}" 
+                        placeholder="填写地点" 
                         placeholder-style="text-align: right;" 
                         confirm-type="next"
                     />
-                </picker>
-            </view>
-            <button
-            style="width: 200rpx; margin:  30rpx 20rpx 0rpx 402rpx;" class="iniButton" hover-class="iniButtonAct"
-            >
-                发起活动
-            </button>
+                </view>
+                <view class="form-item">
+                    <view class="form-txt">最大人数</view>
+                    <picker 
+                        mode="selector"
+                        bindchange="numPickerChange"
+                        range="{{numRange}}"
+                    >
+                        <input
+                            style="width: 350rpx;text-align: right;"
+                            name="inp-peoplenum" 
+                            value="{{numPeople}}" 
+                            placeholder="选择人数" 
+                            placeholder-style="text-align: right;" 
+                            confirm-type="next"
+                        />
+                    </picker>
+                </view >
+                <view class="ini-button-wrap">    
+                    <button
+                    style="width: 200rpx; margin: 0rpx;"
+                    class="iniButton" hover-class="iniButtonAct"
+                    form-type="submit"
+                    >
+                        发起活动
+                    </button>
+                </view>
+            </form>
         </view>
     </view>
 </view>

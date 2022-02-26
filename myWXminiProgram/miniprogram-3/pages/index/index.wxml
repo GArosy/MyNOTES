@@ -27,11 +27,15 @@
     <view class="actBottom">
       <text>已报名</text>
     </view>
-    <button
-      style="width: 200rpx; margin: 0rpx 20rpx 20rpx 430rpx;" class="signButton" hover-class="signButtonAct"
-    >
-      我要报名
-    </button>
+    <view class="button-wrap">
+      <button
+        style="width: 200rpx; margin: 0rpx;" 
+        class="signButton" 
+        hover-class="signButtonAct"
+      >
+        我要报名
+      </button>
+    </view>
   </view>
   
 </view>

@@ -20,6 +20,12 @@ Component({
       },
       {
         id:1,
+        name:"我参与的",
+        isActive:false,
+        url:"../../pages/index/index"
+      },
+      {
+        id:2,
         name:"往期活动",
         isActive:false,
         url:"../../pages/acted/acted"

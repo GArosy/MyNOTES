@@ -77,18 +77,21 @@ function shellSort() {
 
 // 5. 归并排序
 // “分而治之”，性能不受输入数据的影响，时间复杂度始终为 n*logn
-function mergeSort(arr) { // 自上而下的递归方法
-    if (len < 2) {
-        return arr;
+function mergeSort(a) { // 自上而下的递归方法，函数带参数
+    // console.log("_______________ slice begin _______________");
+    var leng = a.length; // 重新设置数组长度变量
+    if (leng < 2) {
+        return a;
     }
-    console.log(arr);
-    var middle = Math.floor(len / 2),
-        left = arr.slice(0, middle),
-        right = arr.slice(middle);
+    var middle = Math.floor(leng / 2),
+        left = a.slice(0, middle),
+        right = a.slice(middle);
+    // console.log("leftArray:" + left + "\n" + "rightArray:" + right + "\n" + "_______________ slice over _______________");
     return merge(mergeSort(left), mergeSort(right));
 }
 
 function merge(left, right) {
+    // console.log("___ merge begin ___");
     var result = [];
     while (left.length && right.length) {
         if (left[0] <= right[0]) {
@@ -103,8 +106,10 @@ function merge(left, right) {
     while (right.length) {
         result.push(right.shift());
     }
+    // console.log("result:" + result+"\n"+"___ merge over ___");
+    return result;
 }
-console.log(mergeSort());
+// console.log(mergeSort(arr));
 
 
 // 6. 快速排序

@@ -1,6 +1,7 @@
 /**index.wxss**/
-.actHead{
-    width: 594rpx;
+.actHead {
+    box-sizing: border-box;
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
@@ -8,35 +9,42 @@
     align-items: center;
     margin-top: 20rpx;
     margin-bottom: 10rpx;
-    padding: 10rpx 20rpx;
+    padding: 10rpx 30rpx 10rpx 20rpx;
     border-left: 8rpx solid black;
 }
-.actDate{
+
+.actDate {
     /* flex: 2; */
     font-size: 35rpx;
     font-weight: 900;
 }
-.actAddress{
+
+.actAddress {
     /* flex: 1; */
     font-weight: 900;
     color: gray;
 }
-.actOthers{
+
+.actOthers {
     color: gray;
     padding: 6rpx 28rpx;
 }
-.actBottom{
+
+.actBottom {
     color: gray;
     padding: 5rpx 10rpx 15rpx 28rpx;
 }
-.signButton{
-    position: static;
+
+
+.signButton {
+    width: auto;
     padding: 8rpx;
     margin: 0rpx 0rpx 20rpx 0rpx;
     background-color: black;
     color: white;
 }
-.signButtonAct{
+
+.signButtonAct {
     padding: 8rpx;
     background-color: gray;
     color: white;
