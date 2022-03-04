@@ -4,60 +4,463 @@
 <head>
     <meta charset="utf-8">
     <title>Product Landing Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <style>
+        /* global element styling */
+
+        @import 'https://fonts.googleapis.com/css?family=Lato:400,700';
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #eee;
+            font-family: 'Lato', sans-serif;
+        }
+
+        header {
+            position: fixed;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            top: 0;
+            min-height: 75px;
+            pad: 0 20px;
+            background-color: #eee;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-wrap: wrap;
+            }
+        }
+
+        #page-wrapper {
+            position: relative;
+        }
+
+        nav {
+            font-weight: 400;
+        }
+
+        @media (max-width: 650px) {
+            nav {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 0 50px;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            nav li {
+                padding-bottom: 5px;
+            }
+        }
+
+        nav>ul {
+            /* 子选择器 */
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 35vw;
+        }
+
+        @media (max-width: 650px) {
+            nav>ul {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ddd;
+        }
+
+        footer>ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+
+        footer>ul>li {
+            margin: 0 10px;
+        }
+
+        footer>span {
+            display: block;
+            text-align: end;
+            margin: 10px 10px;
+            font-size: 0.75em;
+            color: #555;
+        }
+
+        #g-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 200px;
+            margin-top: 50px;
+        }
+
+        #g-form>h2 {
+            margin-bottom: 20px;
+            word-wrap: break-word;
+            /* 允许换行 */
+        }
+
+        #g-form input[type='submit'] {
+            max-width: 200px;
+            width: 100%;
+            height: 30px;
+            margin: 15px 0;
+            border: 0;
+            background-color: #f1c40f;
+            transition: background-color 0.5s;
+        }
+
+        #g-form input[type='email'] {
+            max-width: 300px;
+            width: 100%;
+            padding: 8px;
+            outline: #eee;
+            border: 1px solid orange;
+            border-radius: 5px;
+        }
+
+        #g-form input[type='email']:focus {
+            max-width: 300px;
+            width: 100%;
+            padding: 8px;
+            outline: orange solid 1px;
+            border: 1px solid orange;
+            border-radius: 5px;
+            transition: outline .5s;
+        }
+
+        #g-form input[type='submit']:hover {
+            background-color: orange;
+            transition: background-color 0.5s;
+        }
+
+        @media (max-width: 650px) {
+            #g-form {
+                margin-top: 120px;
+            }
+        }
+
+        #features {
+            margin-top: 30px;
+        }
+
+        /* global classes styling */
+
+        #features .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 125px;
+            width: 20vw;
+            color: orange;
+        }
+
+        @media (max-width: 650px) {
+            #features .icon {
+                display: none;
+            }
+        }
+
+        #features .desc {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 125px;
+            width: 80vw;
+            padding: 5px;
+        }
+
+        @media (max-width: 650px) {
+            #features .desc {
+                width: 80%;
+                text-align: center;
+                padding: 0;
+                margin: 0 auto;
+                height: 150px;
+            }
+
+            #features .desc>p {
+                text-align: left;
+            }
+
+            #features {
+                margin-top: 0;
+            }
+        }
+
+        #how-it-works {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        #how-it-works>iframe {
+            max-width: 700px;
+            height: 500px;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .btn {
+            padding: 0 20px;
+            margin: 15px 0;
+            height: 40px;
+            font-size: 1em;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .grid {
+            display: flex;
+        }
+
+        .logo {
+            width: 60vw;
+        }
+
+        @media (max-width: 650px) {
+            .logo {
+                margin-top: 15px;
+                width: 100;
+                position: relative;
+            }
+        }
+
+        .logo>img {
+            width: 100%;
+            height: 100%;
+            max-width: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-items: center;
+            text-align: center;
+            margin-left: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .logo>img {
+                margin: 0 auto;
+            }
+        }
+
+        #pricing {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: calc(100%/3);
+            height: auto;
+            margin: 0 10px;
+            border: 1px solid #000;
+        }
+
+        .product>.level {
+            padding: 15px 0;
+            width: 100%;
+            background-color: #ddd;
+            color: #000;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .product>h2 {
+            margin-top: 15px;
+        }
+
+        .product>ol {
+            margin-top: 15px;
+        }
+
+        .product>ol>li {
+            padding: 5px 0;
+        }
+
+        .product>button {
+            background-color: orange;
+            transition: background-color 0.5s;
+        }
+
+        @media (max-width: 800px) {
+            #pricing {
+                flex-direction: column;
+            }
+
+            .product {
+                max-width: 300px;
+                min-width: 200px;
+                width: 100%;
+                margin: 0 auto;
+                margin-bottom: 10px;
+            }
+        }
+
 
     </style>
 </head>
 
-<body>
-    <!-- 导航栏区域 -->
-    <header id="header">
-        <img src="https://cdn.freecodecamp.org/testable-projects-fcc/images/product-landing-page-logo.png"
-            alt="product-landing-page-logo" id="header-img">
-        <nav id="nav-bar">
-            <div class="nav-link">
-                <div>Features</div>
+<body translate="no">
+    <div id="page-wrapper">
+
+        <!-- 导航栏区域 -->
+        <header id="header">
+            <div class="logo">
+                <img id="header-img"
+                    src="https://cdn.freecodecamp.org/testable-projects-fcc/images/product-landing-page-logo.png"
+                    alt="product-landing-page-logo">
             </div>
-            <div class="nav-link">
-                <div>How it works</div>
-            </div>
-            <div class="nav-link">
-                <div>Pricing</div>
-            </div>
-        </nav>
-    </header>
-    <!-- 表单区域 -->
-    <div>
-        <h2>Handcrafted, home-made masterpieces</h2>
-        <form action="https://www.freecodecamp.com/email-submit" id="form" method="post">
-            <input type="email" id="email" placeholder="Enter your email address">
-            <button type="submit" id="submit">GET STARTED</button>
-        </form>
-    </div>
-    <!-- feature区域 -->
-    <div class="feature">
-        <div>
-            <img src="" alt="">
-            <h2>Premium Materials</h2>
-            <p>Our trombones use the shiniest brass which is sourced locally. This will increase the longevity of your
-                purchase.</p>
+
+            <nav id="nav-bar">
+                <ul>
+                    <li><a class="nav-link" href="#features">Features</a></li>
+                    <li><a class="nav-link" href="#how-it-works">How it works</a></li>
+                    <li><a class="nav-link" href="#pricing">Pricing</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 表单区域 -->
+        <section id="g-form">
+            <h2>Handcrafted, home-made masterpieces</h2>
+            <form id="form" action="https://www.freecodecamp.com/email-submit" method="post">
+                <input id="email" type="email" placeholder="Enter your email address">
+                <input id="submit" type="submit" class="btn" value="GET STARTED">
+            </form>
+        </section>
+
+        <!-- feature区域 -->
+        <div class="container">
+            <section id="features">
+                <div class="grid">
+
+                    <div class="icon"><i class="fa fa-3x fa-fire"></i></div>
+
+                    <div class="desc">
+                        <h2>Premium Materials</h2>
+                        <p>
+                            Our trombones use the shiniest brass which is sourced locally. This
+                            will increase the longevity of your purchase.
+                        </p>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="icon"><i class="fa fa-3x fa-truck"></i></div>
+                    <div class="desc">
+                        <h2>Fast Shipping</h2>
+                        <p>
+                            We make sure you recieve your trombone as soon as we have finished
+                            making it. We also provide free returns if you are not satisfied.
+                        </p>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="icon"><i class="fa fa-3x fa-battery-full" aria-hidden="true"></i></div>
+                    <div class="desc">
+                        <h2>Quality Assurance</h2>
+                        <p>
+                            For every purchase you make, we will ensure there are no damages or
+                            faults and we will check and test the pitch of your instrument.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 视频区域 -->
+            <section id="how-it-works">
+                <iframe id="video"
+                    src="//player.bilibili.com/player.html?aid=636864449&bvid=BV1Nb4y1x721&cid=516332825&page=1&high_quality=1&danmaku=0"
+                    scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="allowfullscreen"> </iframe>
+            </section>
+
+            <!-- 价格区域 -->
+            <section id="pricing">
+                <div class="product" id="tenor">
+                    <div class="level">Tenor Trombone</div>
+                    <h2>$600</h2>
+                    <ol>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                    </ol>
+                    <button class="btn">SELECT</button>
+                </div>
+                <div class="product" id="bass">
+                    <div class="level">Tenor Trombone</div>
+                    <h2>$900</h2>
+                    <ol>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                    </ol>
+                    <button class="btn">SELECT</button>
+                </div>
+                <div class="product" id="valve">
+                    <div class="level">Tenor Trombone</div>
+                    <h2>$1200</h2>
+                    <ol>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                        <li>Lorem ipsum.</li>
+                    </ol>
+                    <button class="btn">SELECT</button>
+                </div>
+            </section>
+
+            <!-- 页脚区域 -->
+            <footer>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <span>Copyright 2022, Original Trombones</span>
+            </footer>
         </div>
-        <div>
-            <img src="" alt="">
-            <h2>Fast Shipping</h2>
-            <p>We make sure you recieve your trombone as soon as we have finished making it. We also provide free
-                returns if you are not satisfied.</p>
-        </div>
-        <div>
-            <img src="" alt="">
-            <h2>Quality Assurance</h2>
-            <p>For every purchase you make, we will ensure there are no damages or faults and we will check and test the
-                pitch of your instrument.</p>
-        </div>
-        <iframe 
-            id="video" style="height: 600px; width: 800px;"
-            src="//player.bilibili.com/player.html?aid=636864449&bvid=BV1Nb4y1x721&cid=516332825&page=1"
-            scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
     </div>
 </body>
 
