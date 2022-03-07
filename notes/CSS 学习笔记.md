@@ -72,8 +72,8 @@
 
 10. 自动填充 
 
-    auto-fill 以最小大小填充: `repeat(auto-fill, minmax(90px, 1fr))` 
+    auto-fill 以最小大小填充（留空）: `repeat(auto-fill, minmax(90px, 1fr))` 
 
-    auto-fit 自动拉伸: `repeat(auto-fit, minmax(90px, 1fr))`
+    auto-fit 自动拉伸（填满）: `repeat(auto-fit, minmax(90px, 1fr))`
 
 11. 
