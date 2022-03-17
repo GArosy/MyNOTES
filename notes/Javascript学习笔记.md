@@ -41,19 +41,49 @@
 function toCelsius(fahrenheit) {
     return (5 / 9) * (fahrenheit - 32);
 }
+
+// ES6 里允许给函数传入默认参数
+function greeting(name = "Anonymous") {
+	return "Hello" + name;
+}
 ```
 
 循环：
 
-```
+```js
 for (i = 0; i < 5; i++) {
     x += i;
 }
+
+/* 遍历对象属性 */
+const users = {
+  Alan: {
+    online: false
+  },
+  Jeff: {
+    online: true
+  },
+  Sarah: {
+    online: false
+  }
+}
+
+function countOnline(usersObj) {
+  let i = 0;
+  for (let user in usersObj) {
+    if (usersObj[user].online) {
+      i++;
+    }
+  }
+  return i;
+}
+
+console.log(countOnline(users));
 ```
 
 条件语句：
 
-```
+```js
 if (time < 20) {
     greeting = "Good day";
 } else {
@@ -209,7 +239,11 @@ JavaScript中，几乎所有事物都可以是对象。
 对象是可以包含多个值的变量，其中多个值以 `name:value` **键值对**的形式呈现，键值对之间以 `,` 分隔：
 
 ```
-var John = {sexual:male, height:175, weight:70}
+var John = {
+	sexual: "male", 
+	height: 175, 
+	weight: 70
+}；
 ```
 
 以上实例将三个**值 value** `male` `175` `70` 赋予变量 `John`，每个值有对应的 **键 key**，key + value = 键值对 = 属性。
@@ -219,7 +253,7 @@ var John = {sexual:male, height:175, weight:70}
 - **键值对 **通常被称作 **对象属性**；
 - 键值对中的 **值（变量）**通常被称作 **属性变量**；
 
-> 键必须为字符串，值可以为任意基本数据类型。
+> 键必须为**字符串**，值可以为任意基本数据类型。 如果键包含非字符串的话，JavaScript 会自动将它们转为字符串。
 >
 > 可以说，**JavaScript对象是键值对的容器**；也可以说，**JavaScript对象是属性变量的容器**。
 
@@ -228,9 +262,26 @@ var John = {sexual:male, height:175, weight:70}
 访问对象属性有两种方法：
 
 ```javascript
-John.height
-John["weight"]
+John.height		// 点操作符：静态的。右侧必须是一个以属性名称命名的标识符。
+John[weight]	// 方括号操作符：动态的。括号里必须是一个结果为字符串的表达式，在程序运行时可以修改和创建。可以省略单个单词/数字的引号
+Jhon["his friends"]	// 如果属性名中包含空格，就必须使用引号将它们包裹起来
+
 ```
+
+测试对象属性的方法：
+
+- `.hasOwnProperty()`  检查对象是否有指定的属性。 找到该属性时返回 `true`，找不到该属性时返回 `false` 
+
+  ```
+  const myObj = {
+    top: "hat",
+    bottom: "pants"
+  };
+  
+  myObj.hasOwnProperty("top");
+  ```
+
+   `hasOwnProperty` 是定义在 `Object.prototype` 上的一个方法
 
 #### 对象方法
 
@@ -239,8 +290,8 @@ John["weight"]
 ```javascript
 <script>
 var person = {
-	firstName : John,
-	lastName : Doe,
+	firstName : "John",
+	lastName : "Doe",
 	fullName : function(){
 		return this.firstName + " " + this.lastName
 	}
@@ -530,39 +581,18 @@ HTML5 新增了 HTML 表单的验证方式：约束验证。基于：
 
 
 
-###  this
+### 随机数
 
-面向对象语言中 this 表示当前对象的一个**引用**。
+使用 `Math.random()` 生成一个在 0（**包括0**）到 1（**不包括1**）之间的随机**小数**。
 
-this指向的是该this所在的最里层的object对象。
+可以搭配 `Math.floor()` 向下取整得到随机整数：
 
-- 在方法中，this 表示该方法所属的对象。
-- 如果单独使用，this 表示全局对象。
-- 在函数中，this 表示全局对象。
-- 在函数中，在严格模式下，this 是未定义的(undefined)。
-- 在事件中，this 表示接收事件的元素。
-- 类似 call() 和 apply() 方法可以将 this 引用到任何对象。
+```
+integer = Math.floor(Math.random() * 10);	// 0-10的随机整数
+integer = Math.floor(Math.random() * (max - min + 1) + min)	// min-max的随机整数
+```
 
-> [JS中this关键字详解 - 沙沙起 - 博客园 (cnblogs.com)](https://www.cnblogs.com/lisha-better/p/5684844.html)
 
-### let 和 const
-
-`let` 声明的变量只在 `let` 命令所在的**代码块** `{}` 内有效，同名的变量只能声明一次，不可被覆盖。
-
-`const` 声明一个只读的**常量**，声明时必须进行**初始化**，一旦声明，常量的值就不能改变。
-
-> const 的本质: const 定义的变量并非常量，并非不可变，它定义了一个常量引用一个值。使用 const 定义的**对象**或者**数组**，其实是可变的。下面的代码并不会报错：
->
-> ```
-> // 创建常量对象
-> const car = {type:"Fiat", model:"500", color:"white"};
-> // 修改属性:
-> car.color = "red";
-> // 添加属性
-> car.owner = "Johnson";
-> ```
-
- 对于不可变值，开发人员通常使用**大写变量**命名，对可变值（对象和数组）使用小写或驼峰命名 。 
 
 
 
@@ -572,9 +602,7 @@ this指向的是该this所在的最里层的object对象。
 
 
 
-### 箭头函数 =>
 
-[(17条消息) ES6新特性箭头函数语法、如何正确使用箭头函数_Hayley2016的博客-CSDN博客_箭头函数](https://blog.csdn.net/qq_32614411/article/details/80897256)
 
 ### 数值取整
 
@@ -702,6 +730,466 @@ HTML DOM 模型被构造为**对象**的树：
 
 
 
+## 函数
+
+###  **立即调用函数表达（IIFE）** 
+
+JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
+
+```js
+(function () {
+  console.log("Chirp, chirp!");
+})();
+```
+
+ 这是一个匿名函数表达式，立即执行并输出 `Chirp, chirp!`。  函数表达式末尾的两个括号（）会让它被立即执行或调用。 这种模式被叫做立即调用函数表达式（immediately invoked function expression) 或者IIFE。 
+
+## 面向对象编程
+
+### 创建对象
+
+#### 1. 构造函数模式
+
+ `Constructors` 是**创建对象**的函数。 函数给这个新对象定义属性和行为。 可将它们视为创建的新对象的蓝图。 
+
+```js
+function Bird(name, color) {
+  this.name = name;
+  this.color = color;
+  this.numLegs = 2;
+}
+
+let blueBird = new Bird("Albert", "blue");
+```
+
+ **构造函数遵循一些惯例规则** ：
+
+- 构造函数函数名的**首字母大写**，这是为了方便我们区分构造函数（ `constructors`）和其他非构造函数。
+- 构造函数使用 `this` 关键字来给它将创建的这个对象设置新的属性。 在构造函数里面，`this` 指向的就是它新创建的这个对象。
+- 构造函数定义了属性和行为就可创建对象，而不是像其他函数一样需要设置返回值。
+
+ 并且，通过构造函数创建对象的时候要使用 `new` 操作符。 只有这样，JavaScript 才知道要给 `Bird` 这个构造函数创建一个新的实例：`blueBird`。 如果不使用 `new` 操作符来新建对象，那么构造函数里面的 `this` 就无法指向新创建的这个对象实例，从而产生不可预见的错误。 
+
+**验证对象的构造函数**：
+
+ 凡是通过构造函数创建出的新对象，这个对象都叫做这个构造函数的**实例** `instance` ，可以通过 `instanceof`  操作符，将对象与构造函数之间做比较，根据对象是否通过这个构造函数创建返回 `true` 或者 `false` 。以上文代码为例：
+
+```js
+let crow = new Bird("Alex", "black");
+crow instanceof Bird;	// 返回 true
+
+let canary = {
+	name: "Mike",
+    color: "yellow",
+    numLegs: 2
+}
+canary instanceof Bird;	// 返回 false
+```
+
+由于 `constructor` 可以被改写，不建议通过判断 `instance.constructor === Func` 验证对象的构造函数。
+
+**构造函数的问题**：
+
+构造函数定义的方法会在每个实例上都创造一遍，包括重复的变量（如上文的 `numLegs: 2`）。如果实例规模巨大，这会产生许许多多的重复变量。
+
+#### 2. 原型模式
+
+每个函数都会存在一个 `prototype` 属性，它是一个可以在所有实例之间共享的对象。在 `Bird.prototype` 中为 `numLegs` 属性赋值，可以使 `Bird` 构造的所有实例拥有共同的 `numLegs` 属性和值。
+
+```js
+Bird.prototype.numLegs = 2;
+```
+
+>  [帮你彻底搞懂JS中的prototype、__proto__与constructor（图解）_码飞_CC的博客-CSDN博客_prototype](https://chen-cong.blog.csdn.net/article/details/81211729?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2.pc_relevant_default&utm_relevant_index=5) 
+
+![图解原型]( https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70#pic_center )
+
+无论何时，只要创建一个函数，JavaScript 就会为其创建一个 `prototype` 属性，指向该函数的**原型对象** `Bird.prototype` 。而原型对象会自动获得一个名为 `constructor` 的属性，指回其对应的构造函数 `Bird` 。
+
+此外，原型对象（凡是对象都）会包含一个隐藏属性 `[[prototype]]` ，浏览器通过定义 `__proto__` 实现了对它的访问（`[[prototype]]` 是官方所定义的属性，而 `__proto__` 是浏览器其所做的实现，两者意义相同）。 `[[prototype]]` 指向这个对象的原型对象（可以理解为它的父对象），被指向的原型对象的 `[[prototype]]` 又指向更上一层的原型对象（祖父对象），以此类推，直到顶端的 `Object.prototype` ，它的 `[[prototype]]` 指向 `null` 。
+
+实例的父对象即是构造函数的原型对象，实例与构造函数之间并没有直接联系，而与构造函数的原型对象有继承关系。
+
+当访问一个对象的属性时，如果该对象不存在这个属性，那么就会去它的 `[[prototype]]` 属性指向的父对象中寻找，如果父对象也不存在这个属性就继续向上寻找直到返回 `null` 为止。这就是通过原型对象定义的属性和方法可以传递至所有实例的原理，每个实例只是继承了其构造函数的原型对象的属性。
+
+以上通过 `[[prototype]]` 属性来连接各个对象直到 `null` 的过程即所谓的 **原型链**。JavaScript 所调用的各种方法都是靠 `[[prototype]]` 继承而来的。
+
+```js
+function Bird() {};
+
+console.log(Bird.prototype);
+// {
+// 	constructor: f Bird(),
+// 	__proto__: Object
+// }
+
+/*  [[prototype]]是官方所定义的属性，而__proto__是浏览器其所做的实现，两者意义相同 */
+
+console.log(Bird.prototype.constructor === Bird);
+// true
+// 构造函数 和 原型对象可以循环引用  
+
+console.log(Bird.prototype.__proto__ === Object.prototype);
+console.log(Object.prototype.constructor === Object);
+console.log(Bird.prototype.__proto__.constructor === Object);
+console.log(Object.__proto__ === null);
+console.log(Bird.prototype.__proto__.__proto__ === null);
+// true
+```
+
+通过对原型对象调用 `isPrototypeOf()` 方法，验证传入对象的原型对象是否为此原型对象：
+
+```js
+console.log(Bird.prototype.isPrototypeOf(Alex));		// true
+console.log(Object.prototype.isPrototypeOf(Alex));		// true
+// 只要原型链中包含这个原型，就返回 true，instanceof()同理
+```
+
+
+
+### 继承
+
+#### 1. 原型链
+
+(1) 原型链继承
+
+原型链是ECMAScript的主要继承方式，其基本思想就是通过原型继承多个引用类型的属性和方法。每个构造函数都有一个原型对象，原型有一个属性指回构造函数，而实例有一个内部指针指向原型。如果这个原型是另一个构造函数的实例，那就意味着他有一个指针指向这一构造函数的原型。这样就在实例和原型之间构造了一条**原型链**。
+
+```js
+function SuperType() {									// 定义SuperType
+	this.prop = true;									// 定义属性
+}
+
+SuperType.prototype.getSuperValue = () => this.prop;	// 定义方法
+
+function SubType() {									// 定义SuperType
+    this.subprop = false;								// 定义属性
+}
+
+SubType.prototype = new SuperType();					// 继承SuperType
+
+SubType.prototype.getSubValue = () => this.subprop;		// 定义方法
+
+let instance = new SubType();
+console.log(instance.getSuperValue)						// true
+```
+
+以上代码分别定义了两个类型：`SuperType` `SubType` ，并分别定义了属性和方法。`SubType` 通过将 `SuperType` 的实例赋值给自己的 `SubType.prototype` ，实现了对 `SuperType` 的继承。这意味着 `SuperType` 实例可以访问的所有属性和方法也会存在于 `SubType.prototype` 。
+
+此例实现继承的关键是 `SubType` 没有使用默认原型，而是替换成了 `Supertype` 的实例。
+
+还要注意，将 `SuperType` 的实例赋值给 `SubType.prototype ` 后，`SubType.prototype.constructor` 属性也被重写为指向 `SuperType` 。
+
+(2) 默认原型
+
+默认情况下，所有引用类型都继承自 `Object` ，任何函数的默认原型都是一个 `Object` 实例，其 `[[prototype]]` 属性指向 `Object.prototype` 。这也是为什么自定义类型能够继承 `toString()` `valueOf()` 等默认方法的原因。
+
+(3) 关于方法
+
+- 子类需要覆盖或添加父类没有的方法时，必须在原型赋值之后进行。
+
+- 以对象字面量方式创建原型方法会破坏原型链，这相当于重写了原型链：
+
+  ```js
+  function SuperType() {
+      this.superproperty = true;
+  };
+  function SubType() {};
+  
+  SubType.prototype = new SuperType();
+  
+  SubType.prototype = {
+      getSubValue() {},
+      someOtherMethod() {}
+  };
+  
+  let instance = new SubType();
+  console.log(instance.superproperty);	// 出错！
+  ```
+
+(4) 原型链的问题
+
+- 父类型的实例属性会变成子类型的原型属性，这导致子类型的所有实例都会共享这个原型上的引用值，而针对某一实例的修改等于直接修改了原型，其他实例都会被改动；（**只能共享不能独享**）
+
+  ```js
+  function SuperType() {
+  	this.colors = ["red", "blue"];
+  }
+  function SubType() {};
+  
+  SubType.prototype = new SuperType();
+  
+  let instance1 = new SubType();
+  instance1.colors.push("green");
+  console.log(instance1.colors);	// 'red, blue, green'
+  
+  let instance2 = new SubType();
+  console.log(instance2.colors);	// 'red, blue, green'
+  ```
+
+  
+
+- 子类型在实例化时不能给父类型的构造函数传参；
+
+以上问题导致原型链基本不会被单独使用。
+
+#### 2. 借用构造函数
+
+(1) 解决继承
+
+为解决原型属性包含父类引用值的继承问题，可在子类构造函数中调用父类构造函数。
+
+```js
+function SuperType() {
+    this.colors = ["red", "blue"];
+}
+
+function SubType() {
+    SuperType.call(this);	// 继承SuperType
+}
+
+let instance1 = new SubType();
+instance1.colors.push("green");
+console.log(instance1.colors);	// "red,blue,green"
+
+let instance2 = new SubType();
+console.log(instance2.colors);	// "red,blue"
+```
+
+通过使用 `call()` 方法，在执行 `new SubType()` 创建实例时，会自动运行 `SuperType` 构造函数中的所有初始化引用类型值的代码，这样每个实例都会有自己的 `color` 属性了。
+
+(2) 解决传参
+
+借用构造函数可以在子类构造函数中向父类构造函数传参：
+
+```js
+function SuperType(name) {
+    this.name = name;
+}
+
+function SubType() {
+    SuperType.call(this, "Nicholas");	// 继承SuperType并传参
+    this.age = 29；
+}
+```
+
+(3) 借用构造函数的问题
+
+- 借用构造函数的缺点也是构造函数模式的缺点：必须在构造函数中定义方法，因此函数不能复用；（**只能独享不能共享**）
+
+ 因此借用构造函数基本上也不能单独使用。
+
+#### 3. 组合继承
+
+组合继承（伪经典继承）综合了原型链和构造函数，将属性和方法分别继承，使用原型链继承传递方法，使用借用构造函数传递属性：
+
+```js
+function SuperType(name) {						// 定义父类型
+    this.name = name;
+    this.colors = ["red", "blue"];
+}
+
+SuperType.prototype.sayName = function() {
+    console.log(this.name);
+}
+
+function SubType(name, age) {					// 定义子类型
+    SuperType.call(this, name);					// 借用构造函数继承属性，二次调用
+    this.age = age;
+}
+
+SubType.prototype = new SuperType();			// 原型链继承方法，一次调用
+
+SubType.prototype.sayAge = function() {
+    console.log(this.age);
+};
+
+let instance1 = new SubType("Niko", "29");
+instance1.colors.push("green");
+console.log(instance1.colors);
+instance1.sayName();
+
+let instance2 = new SubType("Greg", "27");
+console.log(instance2.colors);
+instance2.sayName();
+```
+
+此例使用原型链继承继承父类型原型上的方法，使用借用构造函数继承父类型的引用值属性。虽然 `SuperType` 的实例属性依旧成为了 `SubType` 的原型属性，但由于在构造 `instance1` 实例的过程中间接调用了 `SuperType()` ，在 `instance1` 中创建了 `colors` 和 `name` 属性，屏蔽了原型上的同名属性，所以 `instance1.colors.push("green");` 是在实例内部直接修改实例的，不会再到原型链中搜寻 `colors` 属性，原型链继承的独享问题得到了解决。
+
+组合继承保留了 `instanceof` 操作符和 `isPrototypeOf()` 方法识别合成对象的能力。
+
+然而以上代码中最后出现了两组 `colors` 和 `name` 属性，一组在 `SubType` 的原型上，一组在实例上， 这是**调用了两次父类函数**的结果。因此组合式继承可能存在性能问题。
+
+#### 4. 原型式继承
+
+```js
+// Crockford 给出的函数
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+```
+
+这个 `object()` 函数会创建一个临时构造函数 `F()`，将传入的对象赋值给这个构造函数的原型，然后返回这个临时类型的一个实例。本质上，`object()` 是对传入对象进行了一次浅拷贝。
+
+```js
+let person = {
+    name: "Nicholas",
+    friends: ["Tom", "Jerry"]
+};
+
+let anotherPerson = object(person);
+anotherPerson.name = "Greg";
+anotherPerson.friends.push("Bob");
+
+let yetAnotherPerson = object(person);
+yetAnotherPerson.name = "Linda";
+yetAnotherPerson.friends.push("Barbie");
+
+console.log(person.friends);
+// ['Tom', 'Jerry', 'Bob', 'Barbie']
+```
+
+ES5通过添加 `Object.create()` 方法将原型式继承的概念规范化了，这个方法接收两个参数：作为新对象原型的对象，和给新对象定义额外属性的对象（可选）。只有第一个参数时：
+
+```js
+let person = {
+    name: "Nicholas",
+    friends: ["Tom", "Jerry"]
+};
+
+let anotherPerson = Object.create(person);		// 与上文代码的object()效果相同
+anotherPerson.name = "Greg";
+anotherPerson.friends.push("Bob");
+
+let yetAnotherPerson = Object.create(person);	// 与上文代码的object()效果相同
+yetAnotherPerson.name = "Linda";
+yetAnotherPerson.friends.push("Barbie");
+
+console.log(person.friends);
+// ['Tom', 'Jerry', 'Bob', 'Barbie']
+```
+
+第二个参数中，每个新增属性都通过各自的描述符来描述。这种方式添加的属性会**屏蔽**原型对象上的同名属性：
+
+```js
+let person = {
+    name: "Nicholas",
+    friends: ["Tom", "Jerry"]
+};
+
+let anotherPerson = Object.create(person,{
+    name: {
+        value: "Greg"
+    }
+});
+
+console.log(anotherPerson.name);
+// Greg
+```
+
+原型式继承无需单独创建构造函数，而是直接通过 `Object.create()` 方法针对模板对象进行复制，避免了实例间的相互影响。（**不仅可以共享，也可利用属性屏蔽做到独享**）
+
+#### 5. 寄生式继承
+
+与原型式继承类似，寄生式继承将对基准对象浅拷贝和对其的改动打包成一个函数，形成 `拷贝->增强->返回` 的工厂模式：
+
+ ```js
+function createAnother(original) {
+    let clone = Object.create(original);		// 通过调用函数创建一个新对象
+    clone.sayHi = function() {					// 增强这个对象
+        console.log("hi");
+    };
+    return clone;								// 返回这个对象
+}
+
+let person = {
+    name: "Nicholas",
+    friends: ["Tom", "Jerry"]
+};
+
+let anotherPerson = createAnother(person);		// 注意createAnother()，不是构造函数，不需new操作符
+
+anotherPerson.sayHi();							// Hi
+console.log(anotherPerson.friends);				// ['Tom', 'Jerry']
+ ```
+
+与构造函数模式类似，通过寄生式继承为对象添加函数会导致函数无法重用。
+
+#### 6. 寄生式组合继承
+
+寄生式组合继承在组合式继承的基础上，将原型式继承的拷贝思想加入其中，再利用寄生式继承的工厂模式思想打包了一个函数，以代替组合式继承中原型链继承的代码，解决了重复调用父类型的问题：
+
+```js
+function inheritPrototype(subType, superType) {
+	let superPrototype = Object.create(superType.prototype);	// 创建对象
+    superPrototype.constructor = subType;						// 重新指向
+    subType.prototype = superPrototype;							// 赋值对象
+}
+```
+
+我们知道原型链继承需要对父类进行一次实例化才能赋值，这是组合式继承重复调用问题的根源。而 `inheritPrototype` 函数创建父类原型的一个副本，再赋值给子类的原型，在不调用父类型的情况下将两个类型连接形成原型链，避免了 `SubType.prototype` 上出现不必要的属性。
+
+调用 `inheritPrototype()` 就可以实现前面例子中的子类型原型赋值：
+
+```js
+function inheritPrototype(subType, superType) {
+	let superPrototype = Object.create(superType.prototype);	// 创建对象
+    superPrototype.constructor = subType;						// 重新指向
+    subType.prototype = superPrototype;							// 赋值对象
+}
+
+function SuperType(name) {						// 定义父类型
+    this.name = name;
+    this.colors = ["red", "blue"];
+}
+
+SuperType.prototype.sayName = function() {
+    console.log(this.name);
+}
+
+function SubType(name, age) {					// 定义子类型
+    SuperType.call(this, name);					
+    this.age = age;
+}
+
+/* SubType.prototype = new SuperType(); */		// 原型链继承方法导致重复调用父类型
+inheritPrototype(SubType, SuperType);			// 调用inheritPrototype实现子类型原型赋值
+
+SubType.prototype.sayAge = function() {
+    console.log(this.age);
+};
+
+let instance1 = new SubType("Niko", "29");
+instance1.colors.push("green");
+console.log(instance1.colors);
+instance1.sayName();
+
+let instance2 = new SubType("Greg", "27");
+console.log(instance2.colors);
+instance2.sayName();
+```
+
+寄生式组合继承可以算是引用类型继承的最佳模式。
+
+###  this 指针
+
+面向对象语言中 this 表示当前对象的一个**引用**。
+
+this指向的是该this所在的最里层的object对象。
+
+- 在方法中，this 表示该方法所属的对象。
+- 如果单独使用，this 表示全局对象。
+- 在函数中，this 表示全局对象。
+- 在函数中，在严格模式下，this 是未定义的(undefined)。
+- 在事件中，this 表示接收事件的元素。
+- 类似 call() 和 apply() 方法可以将 this 引用到任何对象。
+
+> [JS中this关键字详解 - 沙沙起 - 博客园 (cnblogs.com)](https://www.cnblogs.com/lisha-better/p/5684844.html)
+
+
+
 
 
 ## JavaScript 特性
@@ -724,7 +1212,7 @@ JavaScript 中，变量可以在使用后声明，也就是变量可以先使用
 
 需要注意的是，只有声明的变量会提升，初始化的则不会：
 
-```
+```js
 var x = 5; // 初始化 x
 
 elem = document.getElementById("demo"); // 查找元素
@@ -735,7 +1223,7 @@ var y = 7; // 初始化 y
 
 以上代码中的 `y` 输出了 `undefined` ，因为初始化的 `y=7` 并不会被提升
 
-```
+```js
 var x = 5; // 初始化 x
 var y;     // 声明 y
 
@@ -769,9 +1257,256 @@ y = 7;    // 设置 y 为 7
 > - 提高编译器效率，增加运行速度；
 > - 为未来新版本的Javascript做好铺垫。
 
+
+
+## ES6 新特性
+
+### 箭头函数 =>
+
+ES6提供了定义匿名函数的语法糖：
+
+```
+const myFunc = () => {
+  const myVar = "value";
+  return myVar;
+}
+```
+
+ 当不需要函数体，只返回一个值的时候，箭头函数允许你省略 `return` 关键字和外面的大括号。 这样就可以将一个简单的函数简化成一个单行语句 :
+
+```
+const myFunc = () => "value";	// 这段代码默认会返回字符串 value
+```
+
+ 给箭头函数传递参数 :
+
+```
+const doubler = (item) => item * 2;
+doubler(4);	// 8
+```
+
+ 如果箭头函数只有一个参数，则可以省略参数外面的括号 :
+
+```
+const doubler = item => item * 2;
+```
+
+[(17条消息) ES6新特性箭头函数语法、如何正确使用箭头函数_Hayley2016的博客-CSDN博客_箭头函数](https://blog.csdn.net/qq_32614411/article/details/80897256)
+
+
+
+### `...` 运算符
+
+ 在ES6中，`...` 有2个含义，分别表示 `扩展运算符（spread）` 和 `剩余运算符（rest）`。 
+
+
+
+- 剩余运算符：传入参数数量不确定时，rest参数...args` 将离散的参数合成数组，可以使用任意的数组方法。
+
+  ```
+  const [a, b, ...arr] = [1, 2, 3, 4, 5, 7];
+  console.log(a, b);
+  console.log(arr);
+  // 1, 2
+  // [3, 4, 5, 7]
+  // rest 操作符只能对数组列表最后的元素起作用
+  ```
+
+  
+
+- 扩展运算符： 把数组或类数组对象解压成一组用逗号隔开的参数。
+
+- `...` 运算符在形参上，为剩余运算符；在实参上，为扩展运算符。
+
+ [剩余参数 - JavaScript | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Rest_parameters) 
+
+
+
+### 解构赋值
+
+ 解构赋值是 ES6 引入的新语法，用来从数组和对象中提取值，并优雅地对变量进行赋值 
+
+解构对象：
+
+```js
+const user = { name: 'John Doe', age: 34 };
+
+// 解构并提取对象的值
+// ES5
+const name = user.name;
+const age = user.age;
+// ES6
+const { name, age } = user;	// 自动创建 name 和 age 变量，并将 user 对象相应属性的值赋值给它们
+
+// 将值分配给新变量
+const { name: userName, age: userAge } = user;	// 获取 user.name 的值，将它赋给一个新的变量 userName，userAge 同理
+
+// 在函数的参数中直接解构对象
+const stats = {
+  max: 56.78,
+  min: -0.75,
+  average: 35.85
+};
+const half = ({max, min}) => (max + min) / 2.0; 
+console.log(stats);
+```
+
+解构数组：
+
+```
+const [a, b,,, c] = [1, 2, 3, 4, 5, 6];
+console.log(a, b, c);	// 1, 2, 5
+```
+
+
+
+### 简洁的声明
+
+ **对象字面量声明** 
+
+构造一个简单的 ` getMousePosition ` 函数，返回拥有 `x` `y` 属性的对象：
+
+```js
+/* ES5 */
+const getMousePosition = (x, y) => ({
+  x: x,
+  y: y
+});
+
+/* ES6 */
+const getMousePosition = (x, y) => ({x, y});
+```
+
+  ES6 提供了一个语法糖，消除了类似 `x: x` 这种冗余的写法。 你可以只写一次 `x`，解释器会自动将其转换成 `x: x` ：
+
+```js
+const createPerson = (name, age, gender) => {
+  return ({name, age, gender});
+};
+```
+
+**函数声明** 
+
+ 用 ES6 的语法在对象中定义函数的时候，可以删除 `function` 关键词和冒号 `:` 
+
+```js
+const person = {
+  name: "Taylor",
+  sayHello() {
+    return `Hello! My name is ${this.name}.`;
+  }
+};
+```
+
+
+
+### class 定义构造函数 
+
+==待补充==
+
+
+
+### 代码复用
+
+**导出函数**
+
+- 方法一：
+
+  ```js
+  export const add = (x, y) => {
+    return x + y;
+  }
+  ```
+
+- 方法二：
+
+  ```js
+  const add = (x, y) => {
+    return x + y;
+  }
+  export { add };
+  ```
+
+- 默认导出：
+
+   `export default` 用于为模块或文件声明一个返回值，在每个文件或者模块中应当只默认导出一个值。 
+
+  ```js
+  export default function add(x, y) {	// 命名函数
+    return x + y;
+  }
+  
+  export default function(x, y) {		// 匿名函数
+    return x + y;
+  }
+  ```
+
+  
+
+**导入所有内容** 
+
+```js
+import * as myMathModule from "./math_functions.js";
+```
+
+ `import` 语句会创建一个叫作 `myMathModule` 的对象。 这只是一个变量名，可以随便命名。 对象包含 `math_functions.js` 文件里的所有导出，可以像访问对象的属性那样访问里面的函数。 
+
+**导入模块** 
+
+```js
+import { add, subtract } from './math_functions.js';
+```
+
+ `import` 会在 `math_functions.js` 里找到 `add`，只导入这个函数，忽略剩余的部分。
+
+**导入默认导出** 
+
+```js
+import add from "./math_functions.js";
+```
+
+被导入的 `add` 值没有被花括号（`{}`）所包围。 `add` 只是一个变量的名字，对应 `math_functions.js` 文件的任何默认导出值。 在导入默认导出时，可以使用任何名字。 
+
+
+
+### 模板字符串
+
+` ${variable} ` 占位符
+
+```js
+const person = {
+  name: "Zodiac Hasbro",
+  age: 56
+};
+
+const greeting = `Hello, my name is ${person.name}!	
+I am ${person.age} years old.`;	// 反引号`直接输出多行字符串
+
+console.log(greeting);
+```
+
+
+
+
+
 ## 参考手册
 
 ### JavaScript 对象
+
+#### String
+
+##### 对象方法
+
+`.parseInt(string, radix)` 
+
+ 解析一个字符串 `string` ，`radix` 指定字符串中数字的基数（进制），返回一个整数。
+
+```
+const a = parseInt("11", 2);
+// 返回值为 3
+```
+
+
 
 #### Array
 
@@ -822,5 +1557,14 @@ ourArray.unshift("Happy");
 const arr1 = [1, 2, 3];
 arr1.push(4);
 // arr1 现在值为 [1, 2, 3, 4]
+```
+
+`.concat()` 
+
+连接两个数组。
+
+```
+const myConcat = (arr1,arr2) => arr1.concat(arr2);
+console.log(myConcat([1, 2], [3, 4, 5]));	// [1, 2, 3, 4, 5]
 ```
 
