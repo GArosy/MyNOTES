@@ -166,6 +166,9 @@ JavaScript 是一种**弱类型**语言（**动态**语言）。这意味着你�
   - 符号（ES6新增） `Symbol` : `typeof v === "symbol"`
 - 引用类型
   - 对象 `Object` ：任何 `constructed` 对象实例的特殊非数据结构类型，也用做数据结构：`new Object()`，`new Array()`，`new Map()`，`new Date()`，和几乎所有通过 `new [keyword]` 创建的东西。
+  - 数组 `Array`
+  - `Map` 
+  - `Set` 
 
 如果对象是数组 `Array`、日期 `Date` 、`null`，我们无法通过 `typeof` 判断其类型，因为返回值都是 `object`。
 
@@ -302,11 +305,11 @@ JavaScript变量可以使用**函数**或**自动转换**成为一个新变量�
   myVar = true			// toString 转换为 "true"
   ```
 
-
-
 - 数组 <-> 字符串
 
   >  [JS数组转字符串（3种方法）和字符串转数组（2种） - 云+社区 - 腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1847208) 
+
+
 
 ## 二、变量、作用域与内存
 
@@ -594,6 +597,29 @@ function ischina(str) {
 
 #### String
 
+`.parseInt(string, radix)` 
+
+ 解析一个字符串 `string` ，`radix` 指定字符串中数字的基数（进制），返回一个整数。
+
+```
+const a = parseInt("11", 2);
+// 返回值为 3
+```
+
+`.split(separator, limit)` 
+
+将给定字符串拆分为字符串数组，使用第一个参数中提供的指定分隔符将其分隔为子字符串，第二个参数用于指定返回的数组的最大长度。 
+
+```js
+var str="Hello world";
+var n=str.split("", 5);
+var m=str.split(" ");
+console.log(n);
+console.log(m);
+// ['H', 'e', 'l', 'l', 'o']
+// ['Hello', 'world']
+```
+
 
 
 ### 单例内置对象
@@ -612,20 +638,424 @@ function ischina(str) {
 
 可以搭配 `Math.floor()` 向下取整得到随机整数：
 
-```
+```js
 integer = Math.floor(Math.random() * 10);	// 0-10的随机整数
 integer = Math.floor(Math.random() * (max - min + 1) + min)	// min-max的随机整数
 ```
 
 
 
-## 四、JavaScript 表单脚本
+## 四、集合引用类型
+
+ 遍历`Array`可以采用下标循环，遍历`Map`和`Set`就无法使用下标。为了统一集合类型，ES6标准引入了新的`iterable`类型，`Array`、`Map`和`Set`都属于`iterable` （可迭代）类型。 
+
+
+
+### Object
+
+`Object.keys()` 
+
+ 传入一个对象作为参数，生成包含对象所有键的数组。 
+
+`Object.prototype.toString()` 
+
+  每个对象都有一个 `toString()` 方法返回一个表示该对象的字符串。 
+
+### Array
+
+`.slice()`
+
+从已有的数组中返回选定的元素，不会改变原始数组。
+
+```js
+const arr = [1, 2, 3, 4];
+const sli = arr.slice(1,3);
+// sli 现在值为 [2, 3]
+// array.slice(start, end) 包含 start 但不包含 end 
+```
+
+`.splice()` 
+
+向/从数组添加/删除项目，并返回删除的项目。会改变原始数组。
+
+- `index` 必需。整数，指定在什么位置添加/删除项目，使用负值指定从数组末尾开始的位置。 
+- `howmany` 可选。要删除的项目数。如果设置为 0，则不会删除任何项目。 
+- `item1, ..., itemX` 可选。要添加到数组中的新项目。 
+
+```js
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.splice(2, 1, "Lemon", "Kiwi");
+```
+
+`.shift()`
+
+用来弹出一个数组**头部**的值
+
+`.pop()`
+
+用来弹出一个数组**末尾**的值
+
+```
+const threeArr = [1, 4, 6];
+const oneDown = threeArr.pop();
+// threeArr 现在值为 [1, 4]
+// oneDown 现在值为 6
+```
+
+`.unshift()`
+
+将一个值压入到数组的**头部**。
+
+```
+const ourArray = ["Stimpson", "J", "cat"];
+ourArray.shift();
+ourArray.unshift("Happy");
+// ourArray 现在值为 ["Happy", "J", "cat"]
+```
+
+`.push()`
+
+将一个值压入到数组的**末尾**。
+
+```
+const arr1 = [1, 2, 3];
+arr1.push(4);
+// arr1 现在值为 [1, 2, 3, 4]
+```
+
+`.concat()`
+
+连接两个数组。
+
+```
+const myConcat = (arr1,arr2) => arr1.concat(arr2);
+console.log(myConcat([1, 2], [3, 4, 5]));	// [1, 2, 3, 4, 5]
+```
+
+`.from()` 
+
+对一个类似数组或可迭代对象创建一个新的，浅拷贝的数组实例。 可用于将字符串转为数组。
+
+- `arrayLike`想要转换成数组的伪数组对象或可迭代对象。
+
+- `mapFn` 可选，如果指定了该参数，新数组中的每个元素会执行该回调函数。
+- `thisArg` 可选参数，执行回调函数 `mapFn` 时 `this` 对象。
+
+```js
+// 从 String 生成数组
+Array.from('foo');
+// [ "f", "o", "o" ]
+```
+
+`.join()` 
+
+用于把数组中的所有元素放入一个字符串。参数用于指定分隔符：
+
+```js
+var a = ["00", "01", "02", "03", "04"];
+var b = a.join();
+var c = a.join('');
+var d = a.join('-');
+console.log(b,c,d);
+// 00,01,02,03,04
+// 0001020304
+// 00-01-02-03-04
+```
+
+`.reverse()` 
+
+ 将数组中元素的位置颠倒，并返回该数组。 
+
+`.reduce()` 
+
+这是一个常用的「函数式编程」技术。
+
+**语法：**
+
+```js
+arr.reduce(function(prev,cur,index,arr){...}, init);
+```
+
+reduce() 的参数包含一个「回调函数」和一个「初始值 init」，其中回调函数包含四个参数：
+
+- `prev` 上一次调用回调时的返回值，或者初始值 init；不提供初始值时为第一项的值；
+- `cur` 当前正在处理的数组元素； 
+- `index` 当前正在处理的数组元素的索引，若提供 init 值，则索引为0，否则索引为1； 
+- `arr` 原数组 ；
+
+其中常用的是 `prev` `cur` 参数。
+
+**使用例：** 
+
+```js
+const arr = [3, 9, 4, 3, 6, 0, 9];
+
+// 求数组各项之和
+let sum = arr.reduce(function(prev, cur) {
+	return prev + cur
+},0);
+// init为0，所以prev开始时为0，cur的值为第一项3，相加之后返回3作为下一轮回调的prev值，再与下一项cur相加，直至完成所有数组项的求和
+
+// 求数组项最大值
+let max = arr.reduce(function(prev, cur) {
+	return Math.max(prev, cur);
+})
+// 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
+```
+
+### Map
+
+JavaScript中默认的对象表达方式 `{}` 可以视为其他语言中的 `Map` 或 `Dic` 数据结构，即一组键值对。但JavaScript的键必须是字符串，在需要使用其他数据类型作为键时引发了诸多不便。
+
+为解决这个问题，ES6引入了新的数据结构 `Map` 。
+
+`Map` 是键值对的集合，并且能够记住键的原始插入顺序。比起 `Object` 结构的「字符串——值」对应，`Map` 提供了「值——值」的对应。此外，`Map` 具有极快的查找速度。
+
+|          | Map                                   | Object                                     |
+| -------- | ------------------------------------- | ------------------------------------------ |
+| 键值类型 | 键值可以是任意值                      | 键值只能是String或者Symbols                |
+| 是否有序 | √                                     | ×                                          |
+| 查询特性 | size可属性直接获取一个Map的键值对个数 | 键值对个数只能手动计算                     |
+| 迭代特性 | 可迭代                                | 需要先获取键的数组然后再进行迭代           |
+| 意外的键 | 默认情况不包含任何键                  | 原型链上的键名有可能和对象上的键名产生冲突 |
+
+#### 初始化
+
+初始化 `Map` 需要一个二维数组，或者直接初始化一个空`Map`。其构造函数为 `Map()` 。
+
+```js
+new Map([iterable])
+```
+
+- `iterable`  一个数组或者其他可迭代对象，其元素为键值对（两个元素的数组，例如: `[[ 1, 'one' ], [ 2, 'two' ]]`）。 每个键值对都会添加到新的 Map。`null` 会被当做 `undefined。` 
+
+```js
+// 示例
+let myMap = new Map([
+  [1, 'one'],
+  [2, 'two'],
+  [3, 'three'],
+])
+
+let m = new Map(); 	// 空Map
+m.set('Adam', 67); 	// 添加新的key-value
+m.set('Bob', 59);
+m.has('Adam'); 		// 是否存在key 'Adam': true
+m.get('Adam'); 		// 67
+m.delete('Adam'); 	// 删除key 'Adam'
+m.get('Adam'); 		// undefined
+```
+
+ 一个key只能对应一个value，所以，多次对一个key放入value，后面的值会把前面的值覆盖掉： 
+
+```js
+var m = new Map();
+m.set('Adam', 67);
+m.set('Adam', 88);
+m.get('Adam'); // 88
+```
+
+#### 属性
+
+- `Map.prototype.size` 
+
+  可访问属性，用于返回一个`Map` 对象的成员数量， 表示 `Map` 对象有多少个键值对。 
+
+  ```js
+  const map1 = new Map();
+  
+  map1.set('a', 'alpha');
+  map1.set('b', 'beta');
+  map1.set('g', 'gamma');
+  
+  console.log(map1.size);
+  // expected output: 3
+  ```
+
+  
+
+#### 方法
+
+- `Map.prototype.clear()` 
+
+   移除Map对象中的所有元素。 
+
+  
+
+- `Map.prototype.delete()` 
+
+   移除 `Map` 对象中指定的元素。 
+
+  ```js
+  myMap.delete(key);
+  ```
+
+  *key* ： 必须。从 `Map` 对象中移除的元素的**键**。 
+
+  返回值： 存在该元素，则移除它并返回 `true`；否则如果该元素不存在则返回 `false`。 
+
+  
+
+- `Map.prototype.forEach()` 
+
+   按照插入顺序依次对 `Map` 中每个键值对执行一次给定的函数。
+
+  ```js
+  myMap.forEach(callback([value][,key][,map])[, thisArg])
+  ```
+
+  `callback` 接收**三个参数**：
+
+  - 当前的 `value`
+  - 当前的 `key`
+  - 正在被遍历的 **`Map` 对象** 
+
+  如果 `forEach` 中含有 `thisArg` 参数，那么每次 `callback` 被调用时，都会被用作 `this` 的值。否则，`undefined` 将会被用作 `this` 的值。 
+
+- `Map.prototype.get()`
+
+   返回某个 `Map` 对象中的一个指定元素。 
+
+  ```js
+  myMap.get(key);
+  ```
+
+- `Map.prototype.has()`
+
+   返回一个bool值，用来表明map 中是否存在指定元素。
+
+- `Map.prototype.set()` 
+
+   为 `Map` 对象添加或更新一个指定了键（`key`）和值（`value`）的（新）键值对。 
+
+  ```js
+  myMap.set(key, value);
+  ```
+
+### Set
+
+ `Set`和`Map`类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在`Set`中，没有重复的key。 
+
+ 要创建一个`Set`，需要提供一个`Array`作为输入，或者直接创建一个空`Set`： 
+
+```js
+var s1 = new Set(); // 空Set
+var s2 = new Set([1, 2, 3]); // 含1, 2, 3
+
+// 重复元素在Set中自动被过滤：
+var s = new Set([1, 2, 3, 3, '3']);
+s; // Set {1, 2, 3, "3"}
+```
+
+#### 属性
+
+- `Set.prototype.size` 
+
+  返回 Set 对象中的值的个数 
+
+#### 方法
+
+- `Set.prototype.add(value)` 
+
+  在`Set`对象尾部添加一个元素。返回该`Set`对象。 
+
+- `Set.prototype.values()` / `keys()`
+
+  按照元素插入顺序返回一个具有 `Set` 对象每个元素值的全新 `Iterator` 对象。 
+
+
+
+### for...of 循环 
+
+`for...of` 和 `for...in` 相似，都用来遍历集合：
+
+```js
+var a = ['A', 'B', 'C'];
+var s = new Set(['A', 'B', 'C']);
+var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
+for (var x of a) { // 遍历Array
+    console.log(x);
+}
+for (var x of s) { // 遍历Set
+    console.log(x);
+}
+for (var x of m) { // 遍历Map
+    console.log(x[0] + '=' + x[1]);
+}
+// A B C
+// A B C
+// 1=x 2=y 3=z
+```
+
+ `for ... in`循环由于历史遗留问题，它遍历的实际上是对象的**属性名称**。一个`Array`数组实际上也是一个对象，它的每个元素的索引被视为一个属性。
+
+当我们手动给`Array`对象添加了额外的属性后，`for ... in`循环将带来意想不到的意外效果：
+
+```js
+var a = ['A', 'B', 'C'];
+a.name = 'Hello';
+for (var x in a) {
+    console.log(x); // '0', '1', '2', 'name'
+}
+```
+
+ `for ... in`循环将把`name`包括在内，但`Array`的`length`属性却不包括在内。
+
+ `for ... of`循环则完全修复了这些问题，它只循环集合本身的元素： 
+
+```js
+var a = ['A', 'B', 'C'];
+a.name = 'Hello';
+for (var x of a) {
+    console.log(x); // 'A', 'B', 'C'
+}
+```
+
+### forEach() 方法
+
+ 具有`iterable`类型的集合都可以通过  `forEach()` 方法进行迭代：
+
+```js
+// Array 为例：
+var a = ['A', 'B', 'C'];
+a.forEach(function (element, index, array) {
+    // element: 指向当前元素的值
+    // index: 指向当前索引
+    // array: 指向对象本身
+    console.log(element + ', index = ' + index);
+});
+// A, index = 0
+// B, index = 1
+// C, index = 2
+
+// Set 为例：
+var s = new Set(['A', 'B', 'C']);
+s.forEach(function (element, sameElement, set) {
+    console.log(element);
+});
+// A
+// B
+// C
+
+// Map 为例：
+var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
+m.forEach(function (value, key, map) {
+    console.log(value);
+});
+// x
+// y
+// z
+```
+
+
+
+## 五、JavaScript 表单脚本
 
 ### JavaScript 表单验证
 
 判断表单字段(`fname`)值是否存在，如果不存在，就弹出信息阻止表单提交：
 
-```
+```js
 <scirpt>
 function validateForm() {
 	var x = document.forms["myForm"]["fname"].value;
@@ -639,7 +1069,7 @@ function validateForm() {
 
 通过 HTML 代码调用以上代码：
 
-```
+```js
 <form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
 名字 <input type="text" name="fname">
 <input type="submit" value="提交">
@@ -750,7 +1180,7 @@ HTML DOM 模型被构造为**对象**的树：
 
 ## 六、函数
 
-###  **立即调用函数表达（IIFE）** 
+###  立即调用函数表达（IIFE）
 
 JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
 
@@ -1510,6 +1940,168 @@ const person = {
 ### class 定义构造函数 
 
 ==待补充==
+
+
+
+### Map
+
+JavaScript中默认的对象表达方式 `{}` 可以视为其他语言中的 `Map` 或 `Dic` 数据结构，即一组键值对。但JavaScript的键必须是字符串，在需要使用其他数据类型作为键时引发了诸多不便。
+
+为解决这个问题，ES6引入了新的数据结构 `Map` 。
+
+`Map` 是键值对的集合，并且能够记住键的原始插入顺序。比起 `Object` 结构的「字符串——值」对应，`Map` 提供了「值——值」的对应。此外，`Map` 具有极快的查找速度。
+
+|          | Map                                   | Object                                     |
+| -------- | ------------------------------------- | ------------------------------------------ |
+| 键值类型 | 键值可以是任意值                      | 键值只能是String或者Symbols                |
+| 是否有序 | √                                     | ×                                          |
+| 查询特性 | size可属性直接获取一个Map的键值对个数 | 键值对个数只能手动计算                     |
+| 迭代特性 | 可迭代                                | 需要先获取键的数组然后再进行迭代           |
+| 意外的键 | 默认情况不包含任何键                  | 原型链上的键名有可能和对象上的键名产生冲突 |
+
+#### 初始化
+
+初始化 `Map` 需要一个二维数组，或者直接初始化一个空`Map`。其构造函数为 `Map()` 。
+
+```js
+new Map([iterable])
+```
+
+- `iterable`  一个数组或者其他可迭代对象，其元素为键值对（两个元素的数组，例如: `[[ 1, 'one' ], [ 2, 'two' ]]`）。 每个键值对都会添加到新的 Map。`null` 会被当做 `undefined。` 
+
+```js
+// 示例
+let myMap = new Map([
+  [1, 'one'],
+  [2, 'two'],
+  [3, 'three'],
+])
+
+let m = new Map(); 	// 空Map
+m.set('Adam', 67); 	// 添加新的key-value
+m.set('Bob', 59);
+m.has('Adam'); 		// 是否存在key 'Adam': true
+m.get('Adam'); 		// 67
+m.delete('Adam'); 	// 删除key 'Adam'
+m.get('Adam'); 		// undefined
+```
+
+ 一个key只能对应一个value，所以，多次对一个key放入value，后面的值会把前面的值覆盖掉： 
+
+```js
+var m = new Map();
+m.set('Adam', 67);
+m.set('Adam', 88);
+m.get('Adam'); // 88
+```
+
+#### 属性
+
+- `Map.prototype.size` 
+
+  可访问属性，用于返回一个`Map` 对象的成员数量， 表示 `Map` 对象有多少个键值对。 
+
+  ```js
+  const map1 = new Map();
+  
+  map1.set('a', 'alpha');
+  map1.set('b', 'beta');
+  map1.set('g', 'gamma');
+  
+  console.log(map1.size);
+  // expected output: 3
+  ```
+
+  
+
+#### 方法
+
+- `Map.prototype.clear()` 
+
+   移除Map对象中的所有元素。 
+
+  
+
+- `Map.prototype.delete()` 
+
+   移除 `Map` 对象中指定的元素。 
+
+  ```js
+  myMap.delete(key);
+  ```
+
+  *key* ： 必须。从 `Map` 对象中移除的元素的**键**。 
+
+  返回值： 存在该元素，则移除它并返回 `true`；否则如果该元素不存在则返回 `false`。 
+
+  
+
+- `Map.prototype.forEach()` 
+
+   按照插入顺序依次对 `Map` 中每个键值对执行一次给定的函数。
+
+  ```js
+  myMap.forEach(callback([value][,key][,map])[, thisArg])
+  ```
+
+  `callback` 接收**三个参数**：
+
+  - 当前的 `value`
+  - 当前的 `key`
+  - 正在被遍历的 **`Map` 对象** 
+
+  如果 `forEach` 中含有 `thisArg` 参数，那么每次 `callback` 被调用时，都会被用作 `this` 的值。否则，`undefined` 将会被用作 `this` 的值。 
+
+- `Map.prototype.get()`
+
+   返回某个 `Map` 对象中的一个指定元素。 
+
+  ```js
+  myMap.get(key);
+  ```
+
+- `Map.prototype.has()`
+
+   返回一个bool值，用来表明map 中是否存在指定元素。
+
+- `Map.prototype.set()` 
+
+   为 `Map` 对象添加或更新一个指定了键（`key`）和值（`value`）的（新）键值对。 
+
+  ```js
+  myMap.set(key, value);
+  ```
+
+### Set
+
+ `Set`和`Map`类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在`Set`中，没有重复的key。 
+
+ 要创建一个`Set`，需要提供一个`Array`作为输入，或者直接创建一个空`Set`： 
+
+```js
+var s1 = new Set(); // 空Set
+var s2 = new Set([1, 2, 3]); // 含1, 2, 3
+
+// 重复元素在Set中自动被过滤：
+var s = new Set([1, 2, 3, 3, '3']);
+s; // Set {1, 2, 3, "3"}
+```
+
+#### 属性
+
+- `Set.prototype.size` 
+
+  返回 Set 对象中的值的个数 
+
+#### 方法
+
+- `Set.prototype.add(value)` 
+
+  在`Set`对象尾部添加一个元素。返回该`Set`对象。 
+
+- `Set.prototype.values()` / `keys()`
+
+  按照元素插入顺序返回一个具有 `Set` 对象每个元素值的全新 `Iterator` 对象。 
 
 
 
