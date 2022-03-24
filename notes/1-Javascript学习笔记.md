@@ -1,6 +1,6 @@
 # JavaScript Note
 
-## 基本用法
+## 零、基本用法
 
 ### 内联脚本
 
@@ -14,7 +14,7 @@
 
 ### 外部脚本
 
-在HTML中声明并调用外部`.JS`，外部文件可被多个网页使用。
+在HTML中声明并调用外部`.js`，外部文件可被多个网页使用。
 ```JS
 <script src="myScript.js"></script>
 ```
@@ -22,11 +22,11 @@
 > - 在标签中填写 onclick 事件调用函数时，不是 **`onclick=函数名`**， 而是 **`onclick=函数名+()`**
 > - 外部 `.js`文件不使用 `<script>` 标签，直接写代码
 
-## JavaScript 语法
+## 一、JavaScript 语言基础
 
-### 语句
+### 语法
 
-在HTML中，JavaScript通过语句向浏览器发出命令
+在HTML中，JavaScript通过**语句**向浏览器发出命令
 
 - 一条语句通常用`;` 作为结束符。
 - 复杂语句：
@@ -35,18 +35,14 @@
   - 将右花括号独立放在一行。
   - 不要以分号结束一个复杂的声明。
 
-函数：
+注释：
 
 ```
-function toCelsius(fahrenheit) {
-    return (5 / 9) * (fahrenheit - 32);
-}
-
-// ES6 里允许给函数传入默认参数
-function greeting(name = "Anonymous") {
-	return "Hello" + name;
-}
+//这是一条注释
+/* 这是多行注释 */
 ```
+
+### 语句
 
 循环：
 
@@ -101,6 +97,19 @@ if (time < 20) {
 |          |      |
 |          |      |
 
+转义字符：
+
+| 代码 | 输出   |
+| ---- | ------ |
+| `\'` | 单引号 |
+| `\"` | 双引号 |
+| `\\` | 反斜杠 |
+| `\n` | 换行符 |
+| `\r` | 回车符 |
+| `\t` | 制表符 |
+| `\b` | 退格   |
+| `\f` | 换页符 |
+
 
 
 ###  关键字
@@ -124,15 +133,24 @@ if (time < 20) {
 
 
 
-### 注释
+### 函数
 
-```
-//这是一条注释
+```js
+function toCelsius(fahrenheit) {
+    return (5 / 9) * (fahrenheit - 32);
+}
+
+// ES6 里允许给函数传入默认参数
+function greeting(name = "Anonymous") {
+	return "Hello" + name;
+}
 ```
 
 
 
 ### 数据类型
+
+#### 基本类型
 
 JavaScript 是一种**弱类型**语言（**动态**语言）。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据。
 
@@ -145,9 +163,9 @@ JavaScript 是一种**弱类型**语言（**动态**语言）。这意味着你�
   - 布尔 `Boolean` : `typeof false === "boolean"`
   - 对空 `Null` : `typeof null === "object"`
   - 未定义 `Undefined` : `typeof v === "undefined"`
-  - `Symbol` : `typeof v === "symbol"`
-
-- 对象 `Object` ：任何 `constructed` 对象实例的特殊非数据结构类型，也用做数据结构：`new Object`，`new Array`，`new Map`，`new Date`，和几乎所有通过 `new keyword` 创建的东西。
+  - 符号（ES6新增） `Symbol` : `typeof v === "symbol"`
+- 引用类型
+  - 对象 `Object` ：任何 `constructed` 对象实例的特殊非数据结构类型，也用做数据结构：`new Object()`，`new Array()`，`new Map()`，`new Date()`，和几乎所有通过 `new [keyword]` 创建的东西。
 
 如果对象是数组 `Array`、日期 `Date` 、`null`，我们无法通过 `typeof` 判断其类型，因为返回值都是 `object`。
 
@@ -155,25 +173,157 @@ JavaScript 是一种**弱类型**语言（**动态**语言）。这意味着你�
 >
 > - `null`：表示一个空对象引用，类型为 `object`，通常在主动释放一个应用对象时使用；
 
-#### 字面量
+#### 类型转换
 
-在编程语言中，一般**固定值**称为字面量。
+##### constructor 属性
 
-- 数字字面量 $Number$ ：`3.14` `1001` `123e5`
-- 字符串字面量 $String$ ：`"Hello"` `'Hello'`
-- 表达式字面量：`1 + 2` `2 * 3`
-- 数组字面量 $Array$ ：`[1, 2, 3, 5, 1001]`
-- 对象字面量 $Object$ ：`{ Name:"Arosy", Age:"23" }`
-- 函数字面量 $Function$ ：`function myFunction(a, b) {return a + b;}`
+constructor 属性返回所有 JavaScript 变量的**构造函数**：
 
-#### 变量
+```js
+"John".constructor                 // 返回函数 String()  { [native code] }
+(3.14).constructor                 // 返回函数 Number()  { [native code] }
+false.constructor                  // 返回函数 Boolean() { [native code] }
+[1,2,3,4].constructor              // 返回函数 Array()   { [native code] }
+{name:'John', age:34}.constructor  // 返回函数 Object()  { [native code] }
+new Date().constructor             // 返回函数 Date()    { [native code] }
+function () {}.constructor         // 返回函数 Function(){ [native code] }
+```
 
-在编程语言中，变量是用于储存数据值的**名称**。JavaScript使用关键字`var`定义变量，使用`=`为变量赋值：
+因此，可以使用 constructor 属性来判断对象的数据类型（例如是否包含字符串“Array”）：
 
-```javascript
-var age, height;
+```
+<script>
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+document.getElementById("demo").innerHTML = isArray(fruits);
+function isArray(myArray) {
+    return myArray.constructor.toString().indexOf("Array") > -1;
+}
+</script>
+```
+
+##### JavaScript类型转换
+
+JavaScript变量可以使用**函数**或**自动转换**成为一个新变量或其他数据类型。
+
+- 数字 > 字符串
+
+  全局方法 `String()` 可将任何类型的数字、字母、表达式转换为字符串：
+
+  ```
+  String(x)
+  String(123)
+  String(100 + 23)
+  ```
+
+  `Number` 方法 `toString()` 具有同样的效果
+
+  ```
+  x.toString()
+  (123).toString()
+  (100 + 23).toString()
+  ```
+
+- 日期 > 字符串
+
+  - `Date()` 直接返回字符串
+
+  - 全局方法 `String(new Date())`
+
+  - ```
+    obj = new Date()
+    obj.toString()
+    ```
+
+  更多 `Date` 方法：
+
+  | 方法              | 描述                                        |
+  | :---------------- | :------------------------------------------ |
+  | getDate()         | 从 Date 对象返回一个月中的某一天 (1 ~ 31)。 |
+  | getDay()          | 从 Date 对象返回一周中的某一天 (0 ~ 6)。    |
+  | getFullYear()     | 从 Date 对象以四位数字返回年份。            |
+  | getHours()        | 返回 Date 对象的小时 (0 ~ 23)。             |
+  | getMilliseconds() | 返回 Date 对象的毫秒(0 ~ 999)。             |
+  | getMinutes()      | 返回 Date 对象的分钟 (0 ~ 59)。             |
+  | getMonth()        | 从 Date 对象返回月份 (0 ~ 11)。             |
+  | getSeconds()      | 返回 Date 对象的秒数 (0 ~ 59)。             |
+  | getTime()         | 返回 1970 年 1 月 1 日至今的毫秒数。        |
+
+- 字符串 > 数字
+
+  全局方法 `Number()`
+
+  ```
+  Number("3.14")		//3.14
+  Number(" ")			//0
+  Number("12 23")		//NaN 非数字
+  ```
+
+  另，此方法也可将布尔值转换为数字：
+
+  ```
+  Number(false)		//0
+  Number(true)		//1
+  ```
+
+- 一元运算符 `+`
+
+  `+` 可用于将变量转换为数字，如果变量不能被转换，结果仍为数字，但值为 `NaN` ：
+
+  ```
+  var x = "5"
+  var y = "abc"		
+  var z = + x			// 返回 5
+  var z = + y			// 返回 NaN
+  ```
+
+- 自动转换类型
+
+  当 JavaScript 尝试操作一个 "错误" 的数据类型时，会自动转换为 "正确" 的数据类型
+
+  ```
+  5 + null    		// 返回 5         null 转换为 0
+  "5" + null  		// 返回"5null"   	null 转换为 "null"
+  "5" + 1     		// 返回 "51"      1 转换为 "1" 
+  "5" - 1     		// 返回 4         "5" 转换为 5
+  ```
+
+  > 减法>字符串>加法
+
+- 自动转换为字符串
+
+  当尝试输出一个变量时，JavaScript会自动调用变量的 `toString()` 方法：
+
+  ```
+  document.getElementById('demo').innerHTML = myVar;
+  myVar = {name:"John"}	// toString 转换为 "[object Object]"
+  myVar = [1,2,3,4]		// toString 转换为 "1,2,3,4"
+  myVar = new Date()		// toString 转换为 "Fri Jan 18 2021 09:08:55 GMT+0200"
+  myVar = 123				// toString 转换为 "123"
+  myVar = true			// toString 转换为 "true"
+  ```
+
+
+
+- 数组 <-> 字符串
+
+  >  [JS数组转字符串（3种方法）和字符串转数组（2种） - 云+社区 - 腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1847208) 
+
+## 二、变量、作用域与内存
+
+### 变量
+
+在编程语言中，变量是用于储存数据值的**名称**。JavaScript使用关键字`var` **声明**变量，使用`=`为变量**赋值**：
+
+```js
+var age, height;		// 声明
 age = 23;
-height = 175;
+height = 175;			// 赋值
+
+var v1,v2,v3 = 'hello';	// 声明了v1,v2,声明并赋值了v3
+var v4=v5=v6='hello';	// 声明并赋值了v4,v5,v6
+
+console.log(v1,v2,v3); 	// undefined undefined "hello"
+console.log(v4,v5,v6); 	// hello hello hello
 ```
 
 在ES6中， 引入了名为 `let` 和 `const` 的关键字，这是对 JavaScript 的一次重大更新，以解决与 `var` 关键字有关的潜在问题.
@@ -203,36 +353,418 @@ height = 175;
 
 > 字面量是一个**值**，变量是一个**名称**。
 
-> 作用域：
->
-> JavaScript中，作用域为可访问的变量、对象、函数的集合。
->
-> 在函数内部声明的变量，为**局部变量**，具有局部作用域。局部变量在函数开始执行时创建，在执行完成后销毁。局部变量只作用于函数内，所以不同函数可以使用相同名称的变量。
->
-> 在函数外部定义的变量，为**全局变量**，具有全局作用域，网页中所有脚本和函数均可使用。全局变量在页面关闭时销毁。
->
-> 一个程序中有可能具有相同名称的局部变量和全局变量。 在这种情况下，局部变量将会优先于全局变量。
->
-> 没有被声明的变量默认为**全局变量**。
+### 作用域
+
+JavaScript中，作用域为可访问的变量、对象、函数的集合。
+
+在函数内部声明的变量，为**局部变量**，具有局部作用域。局部变量在函数开始执行时创建，在执行完成后销毁。局部变量只作用于函数内，所以不同函数可以使用相同名称的变量。
+
+在函数外部定义的变量，为**全局变量**，具有全局作用域，网页中所有脚本和函数均可使用。全局变量在页面关闭时销毁。
+
+一个程序中有可能具有相同名称的局部变量和全局变量。 在这种情况下，局部变量将会优先于全局变量。
+
+没有被声明的变量默认为**全局变量**。
+
+### 垃圾回收
+
+==待补充==
 
 
 
-### 转义字符
+## 三、基本引用类型
 
-| 代码 | 输出   |
-| ---- | ------ |
-| `\'` | 单引号 |
-| `\"` | 双引号 |
-| `\\` | 反斜杠 |
-| `\n` | 换行符 |
-| `\r` | 回车符 |
-| `\t` | 制表符 |
-| `\b` | 退格   |
-| `\f` | 换页符 |
+### 正则表达式
+
+ECMAScript 通过 `RegExp` 类型支持正则表达式：
+
+```
+let expression = /pattern/flags;
+```
+
+#### 常用方法
+
+1. 字符串方法：
+
+   - `search()` 方法用于检索与正则式相匹配的字符串，并返回字符串的起始位置：
+
+     ```js
+     let str = "Hello world!";
+     let n = str.search(/World/i);
+     console.log(n);	//6
+     ```
+
+   - `match()` 方法用于提取找到的实际匹配项：
+
+     ```js
+     let ourStr = "Regular expressions";
+     let ourRegex = /expressions/;
+ourStr.match(ourRegex); // expressions
+     ```
+
+   - `replace()` 方法用于替换在字符串中与正则式相匹配的字符串。第一个参数接收正则表达式匹配模式 ，第二个用于替换匹配的字符串或用于执行某些操作的函数。
+
+     ```js
+     let wrongText = "The sky is silver.";
+     let silverRegex = /silver/;
+     wrongText.replace(silverRegex, "blue");
+     // The sky is blue.
+     ```
+     
+      还可以使用 `$` 访问替换字符串中的捕获组。 
+     
+     ```js
+     "Code Camp".replace(/(\w+)\s(\w+)/, '$2 $1');
+     // Camp Code
+     ```
+   
+
+
+2. RegExp 实例方法：
+
+   - `test()` 用于检测字符串是否匹配某个模式，返回**布尔值**。常用于验证用户输入。
+
+   ```js
+   let text = "000-00-0000";
+   let pattern = /\d{3}-\d{2}-\d{4}/;
+   
+   if(pattern.test(text)) {
+       return "The pattern was matched."
+   };
+   ```
+
+   - `exec()` 用于检测字符串的匹配，返回一个**数组**存放匹配结果，数组中第一个元素是匹配整个模式的字符串，其他元素是与表达式中的**捕获组**匹配的字符串。如果未匹配则返回 `null`。
+
+     返回的数组包含两个额外的属性：
+
+     - `index` 字符串中匹配模式的起始位置；
+
+     - `input` 要查找的字符串；
+
+   ```js
+   let text = "mom and dad and baby";
+   let pattern = /mom( and dad( and baby)?)?/gi;
+   
+   let matches = pattern.exec(text);
+   
+   console.log(matches.index);		// 0
+   console.log(matches.input);		// "mom and dad and baby"
+   console.log(matches[0]);		// "mom and dad and baby"
+   console.log(matches[1]);		// " and dad and baby"
+   console.log(matches[2]);		// " and baby"
+   ```
+
+   如果没有设置全局标记，`exec()` 只会返回第一个匹配项。
+
+#### 修饰符与表达式模式
+
+| 修饰符 | 描述                                                     |
+| :----- | :------------------------------------------------------- |
+| i      | 执行对大小写不敏感的匹配。                               |
+| g      | 执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。 |
+| m      | 执行多行匹配。                                           |
+| y      | 粘附模式，只查找从 `lastIndex` 及之后的字符串。          |
+| s      | dotAll 模式，表示元字符 `.` 匹配任何字符。               |
+
+| 元字符 | 描述                                                         |
+| :----- | :----------------------------------------------------------- |
+| \      | 将下一字符标记为特殊字符、文本、反向引用或八进制转义符。     |
+| [ ]    | 字符集。匹配包含的任一字符。例如，“[abc]”匹配“plain”中的“a”。 |
+| ( )    | 匹配括号中的 *pattern* 并捕获该匹配的子表达式。可以使用 \$0…\$9 属性从结果“匹配”集合中检索捕获的匹配。 |
+| { }    | *n* 和 *m* 是非负整数，其中 *n* <= *m*。匹配至少 *n* 次，至多 *m* 次。例如，“o{1,3}”匹配“fooooood”中的头三个 o。'o{0,1}' 等效于 ‘o?'。 |
+| ^      | 匹配输入字符串开始的位置。                                   |
+| $      | 匹配输入字符串结尾的位置。                                   |
+| \|     | 匹配 *x* 或 *y*。例如，`z|food` 匹配“z”或“food”。`(z|f)ood` 匹配“zood”或“food” |
+| +      | 一次或多次匹配前面的字符或子表达式。例如，“zo+”与“zo”和“zoo”匹配，但与“z”不匹配。+ 等效于 `{1,}`。 |
+| *      | 零次或多次匹配前面的字符或子表达式。例如，zo* 匹配“z”和“zoo”。* 等效于 `{0,}`。 |
+| ?      | 零次或一次匹配前面的字符或子表达式。例如，“do(es)?”匹配“do”或“does”中的“do”。? 等效于 `{0,1}`。 |
+| .      | 匹配除 \n 以外的任何字符                                     |
+| \n     | 换行符匹配                                                   |
+| \d     | 查找数字。                                                   |
+| \D     | 非数字字符匹配。等效于 `[^0-9]`                              |
+| \s     | 匹配任何空白字符。包括空格、制表符、换页符等。与 `[ \f\n\r\t\v]` 等效。 |
+| \S     | 匹配任何非空白字符。与 `[^ \f\n\r\t\v]` 等效。               |
+| \w     | 匹配任何字类字符，包括下划线。与 `[A-Za-z0-9_]` 等效。       |
+| \W     | 与任何非单词字符匹配。与 `[^A-Za-z0-9_]` 等效。              |
+| \b     | 匹配单词边界。                                               |
+| \uxxxx | 查找以十六进制数 xxxx 规定的 Unicode 字符。                  |
+| \num   | 匹配 *num*，此处的 *num* 是一个正整数。到捕获匹配的反向引用。例如，`(.)\1` 匹配两个连续的相同字符。 |
+
+#### 贪婪匹配和惰性匹配
+
+ 贪婪（greedy）匹配会匹配到符合正则表达式匹配模式的字符串的最长可能部分，并将其作为匹配项返回。 另一种方案称为惰性（lazy）匹配，它会匹配到满足正则表达式的字符串的最小可能部分。 
+
+例如正则表达式 `/t[a-z]*i/` 应用于字符串 `"titanic"`。 这个正则表达式是一个以 `t` 开始，以 `i` 结束，并且中间有一些字母的匹配模式。 **正则表达式默认是贪婪匹配**，因此匹配返回为 `["titani"]` 。 
+
+可以使用 `?` 字符来将其变成惰性匹配，调整后的正则表达式 `/t[a-z]*?i/` 匹配字符串 `"titanic"` 返回 `["ti"]`。
+
+又例如：
+
+```js
+let text = "<h1>Winter is coming</h1>";
+let myRegex = /<.*>/;					// 贪婪匹配
+let result = text.match(myRegex);		// <h1>Winter is coming</h1>
+
+let text = "<h1>Winter is coming</h1>";
+let myRegex = /<.*?>/;					// 加入问号变惰性匹配
+let result = text.match(myRegex);		// <h1>
+```
+
+#### 先行断言
+
+先行断言 （Lookaheads）是告诉 JavaScript 在字符串中向前查找的匹配模式。 当想要在同一个字符串上搜寻多个匹配模式时，这可能非常有用。
+
+有两种先行断言：正向先行断言（positive lookahead）和负向先行断言（negative lookahead）。
+
+正向先行断言会查看并确保搜索匹配模式中的元素存在，但实际上并不匹配。 正向先行断言的用法是 `(?=...)`，其中 `...` 就是需要存在但不会被匹配的部分。
+
+另一方面，负向先行断言会查看并确保搜索匹配模式中的元素不存在。 负向先行断言的用法是 `(?!...)`，其中 `...` 是希望不存在的匹配模式。 如果负向先行断言部分不存在，将返回匹配模式的其余部分。
+
+先行断言的更实际用途是检查一个字符串中的两个或更多匹配模式。 这里有一个简单的密码检查器，密码规则是 3 到 6 个字符且至少包含一个数字：
+
+```js
+let password = "abc123";
+let checkPass = /(?=\w{3,6})(?=\D*\d)/;
+checkPass.test(password);
+```
+
+大于 5 个字符且有两个连续数字的密码：
+
+```js
+let sampleWord = "astronaut";
+let pwRegex =  /(?=\w{6})(?=\w*\d{2})/;
+let result = pwRegex.test(sampleWord);
+```
+
+####  捕获组重用
+
+当你想要匹配一个像下面这样多次出现的单词，
+
+```js
+let repeatStr = "row row row your boat";
+```
+
+你可以使用 `/row row row/`。但如果你不知道重复的特定单词，怎么办？ **捕获组**可以用于找到重复的子字符串。
+
+捕获组是通过把要捕获的正则表达式放在括号中来构建的。 在这个例子里， 目标是捕获一个包含字母数字字符的词，所以捕获组是将 `\w+` 放在括号中：`/(\w+)/`。
+
+分组匹配的子字符串被保存到一个临时的“变量”， 可以使用同一正则表达式和反斜线及捕获组的编号来访问它（例如：`\1`）。 捕获组按其开头括号的位置自动编号（从左到右），从 1 开始。
+
+下面的示例是匹配被空格隔开的两个相同单词：
+
+```js
+let repeatRegex = /(\w+) \1 \1/;
+repeatRegex.test(repeatStr); // Returns true
+repeatStr.match(repeatRegex); // Returns ["row row row", "row"]
+```
+
+在字符串上调用 `.match()` 方法将返回一个数组，其中包含它最终匹配到的子字符串及其捕获组。
+
+##### 实例
+
+```js
+/* 删除开头和结尾的空白 */
+let hello = "   Hello, World!  ";
+let wsRegex = /^\s+|\s+$/g; // 注意添加全局模式
+let result = hello.replace(wsRegex, ""); 
+
+
+/*校验邮件地址是否合法*/
+function isEmail(str){
+	var reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
+	return reg.test(str)
+}
+
+
+/*校验是否中文名称组成 */
+function ischina(str) {
+    var reg=/^[\u4E00-\u9FA5]{2,4}$/;
+    return reg.test(str);
+}
+```
+
+#### RegExp 对象
+
+==待补充==
+
+### 原始值包装类型
+
+#### Boolean
+
+#### Number
+
+#### String
 
 
 
-### 对象
+### 单例内置对象
+
+#### Global
+
+#### Math
+
+##### 数值取整
+
+[JavaScript四种数值取整方法 - 后除 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mazey/p/8447093.html)
+
+##### 随机数
+
+使用 `Math.random()` 生成一个在 0（**包括0**）到 1（**不包括1**）之间的随机**小数**。
+
+可以搭配 `Math.floor()` 向下取整得到随机整数：
+
+```
+integer = Math.floor(Math.random() * 10);	// 0-10的随机整数
+integer = Math.floor(Math.random() * (max - min + 1) + min)	// min-max的随机整数
+```
+
+
+
+## 四、JavaScript 表单脚本
+
+### JavaScript 表单验证
+
+判断表单字段(`fname`)值是否存在，如果不存在，就弹出信息阻止表单提交：
+
+```
+<scirpt>
+function validateForm() {
+	var x = document.forms["myForm"]["fname"].value;
+	if (x == null || x == "") {
+		alert("需要输入名字");
+		return false;
+	}
+}
+</script>
+```
+
+通过 HTML 代码调用以上代码：
+
+```
+<form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
+名字 <input type="text" name="fname">
+<input type="submit" value="提交">
+</form>
+```
+
+### HTML 约束验证
+
+HTML5 新增了 HTML 表单的验证方式：约束验证。基于：
+
+- HTML 输入属性
+- CSS 伪类选择器
+- DOM 属性和方法
+
+
+
+### JavaScript 验证 API
+
+> APIs (application programming interfaces)，即应用程序编程接口。API由服务器（Server）提供，通过API，计算机可以读取、编辑网站的数据。
+
+==待补充==
+
+
+
+
+
+
+
+### forEach
+
+[(17条消息) JavaScript forEach()的用法_路虽远，行则必至！-CSDN博客_前端foreach用法](https://luckylifes.blog.csdn.net/article/details/99290078?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&utm_relevant_index=2)
+
+
+
+### JSON
+
+JSON （**J**ava**S**cript **O**bject **N**otation）是用于存储和传输数据的轻量级数据交换格式，通常用于服务端向网页传递数据 。
+
+可以理解为，**JSON** 是 **JS对象** 的字符串表示法。它使用文本表示一个 JS 对象的信息，JSON本质是一个**字符串**（，这里仅仅指结构上的同一性，要在`{...}` 前后加上`'` 才能成为 JSON 字符串）。
+
+```
+{"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"}, 
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]}
+```
+
+#### 语法规则
+
+- 数据为 `键:值` 对
+- 数据由 `,` 分隔。
+- 大括号`{}`保存对象
+- 方括号`[]`保存数组
+
+附 [JSON格式验证](https://c.runoob.com/front-end/53/) 工具
+
+#### 转换方法
+
+```
+var text = '{ "sites" : [' +
+'{ "name":"Runoob" , "url":"www.runoob.com" },' +
+'{ "name":"Google" , "url":"www.google.com" },' +
+'{ "name":"Taobao" , "url":"www.taobao.com" } ]}';	// 创建JSON格式的数据
+
+var obj = JSON.parse(text);	// 使用JavaScript内置函数将JSON字符串转换为JS对象
+```
+
+**注意**： `parse()` 方法只能解析**字符串格式**的JSON 。
+
+```
+var obj = { sites : [
+{ name:"Runoob" , url:"www.runoob.com" },
+{ name:"Google" , url:"www.google.com" },
+{ name:"Taobao" , url:"www.taobao.com" } ]};	// 创建JS对象
+
+var text = JSON.stringify(obj);	// 使用JavaScript内置函数将JS对象转换为JSON字符串
+```
+
+
+
+### void
+
+`void()` 操作符指定计算一个表达式但不返回值，括号内的表达式始终会被运行。
+
+```
+void(func())
+javascript:void(func())
+```
+
+
+
+
+
+## 五、JS HTML DOM
+
+通过 HTML DOM，可访问 JavaScript HTML 文档的所有元素。
+
+### HTML DOM
+
+当网页被加载时，浏览器会创建页面的**文档对象模型** (Document Object Model)。
+
+HTML DOM 模型被构造为**对象**的树：
+
+![HTML DOM 树](https://www.runoob.com/images/pic_htmltree.gif)
+
+
+
+## 六、函数
+
+###  **立即调用函数表达（IIFE）** 
+
+JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
+
+```js
+(function () {
+  console.log("Chirp, chirp!");
+})();
+```
+
+ 这是一个匿名函数表达式，立即执行并输出 `Chirp, chirp!`。  函数表达式末尾的两个括号（）会让它被立即执行或调用。 这种模式被叫做立即调用函数表达式（immediately invoked function expression) 或者IIFE。 
+
+## 七、面向对象编程
+
+### 理解对象
 
 JavaScript中，几乎所有事物都可以是对象。
 
@@ -309,442 +841,6 @@ document.getElementById("demo").innerHTML = person.fullName();
 > 属性（包括方法）具有唯一性，如果出现两个重复属性，则以最后赋值的属性为准。
 
 
-
-### 类型转换
-
-#### constructor 属性
-
-constructor 属性返回所有 JavaScript 变量的**构造函数**：
-
-```
-"John".constructor                 // 返回函数 String()  { [native code] }
-(3.14).constructor                 // 返回函数 Number()  { [native code] }
-false.constructor                  // 返回函数 Boolean() { [native code] }
-[1,2,3,4].constructor              // 返回函数 Array()   { [native code] }
-{name:'John', age:34}.constructor  // 返回函数 Object()  { [native code] }
-new Date().constructor             // 返回函数 Date()    { [native code] }
-function () {}.constructor         // 返回函数 Function(){ [native code] }
-```
-
-因此，可以使用 constructor 属性来判断对象的数据类型（例如是否包含字符串“Array”）：
-
-```
-<script>
-var fruits = ["Banana", "Orange", "Apple", "Mango"];
-document.getElementById("demo").innerHTML = isArray(fruits);
-function isArray(myArray) {
-    return myArray.constructor.toString().indexOf("Array") > -1;
-}
-</script>
-```
-
-#### JavaScript类型转换
-
-JavaScript变量可以使用**函数**或**自动转换**成为一个新变量或其他数据类型。
-
-- 数字 > 字符串
-
-  全局方法 `String()` 可将任何类型的数字、字母、表达式转换为字符串：
-
-  ```
-  String(x)
-  String(123)
-  String(100 + 23)
-  ```
-
-  `Number` 方法 `toString()` 具有同样的效果
-
-  ```
-  x.toString()
-  (123).toString()
-  (100 + 23).toString()
-  ```
-
-- 日期 > 字符串
-
-  - `Date()` 直接返回字符串
-
-  - 全局方法 `String(new Date())`
-
-  - ```
-    obj = new Date()
-    obj.toString()
-    ```
-
-  更多 `Date` 方法：
-
-  | 方法              | 描述                                        |
-  | :---------------- | :------------------------------------------ |
-  | getDate()         | 从 Date 对象返回一个月中的某一天 (1 ~ 31)。 |
-  | getDay()          | 从 Date 对象返回一周中的某一天 (0 ~ 6)。    |
-  | getFullYear()     | 从 Date 对象以四位数字返回年份。            |
-  | getHours()        | 返回 Date 对象的小时 (0 ~ 23)。             |
-  | getMilliseconds() | 返回 Date 对象的毫秒(0 ~ 999)。             |
-  | getMinutes()      | 返回 Date 对象的分钟 (0 ~ 59)。             |
-  | getMonth()        | 从 Date 对象返回月份 (0 ~ 11)。             |
-  | getSeconds()      | 返回 Date 对象的秒数 (0 ~ 59)。             |
-  | getTime()         | 返回 1970 年 1 月 1 日至今的毫秒数。        |
-
-- 字符串 > 数字
-
-  全局方法 `Number()`
-
-  ```
-  Number("3.14")		//3.14
-  Number(" ")			//0
-  Number("12 23")		//NaN 非数字
-  ```
-
-  另，此方法也可将布尔值转换为数字：
-
-  ```
-  Number(false)		//0
-  Number(true)		//1
-  ```
-
-- 一元运算符 `+`
-
-   `+` 可用于将变量转换为数字，如果变量不能被转换，结果仍为数字，但值为 `NaN` ：
-
-  ```
-  var x = "5"
-  var y = "abc"		
-  var z = + x			// 返回 5
-  var z = + y			// 返回 NaN
-  ```
-
-- 自动转换类型
-
-  当 JavaScript 尝试操作一个 "错误" 的数据类型时，会自动转换为 "正确" 的数据类型
-
-  ```
-  5 + null    		// 返回 5         null 转换为 0
-  "5" + null  		// 返回"5null"   	null 转换为 "null"
-  "5" + 1     		// 返回 "51"      1 转换为 "1" 
-  "5" - 1     		// 返回 4         "5" 转换为 5
-  ```
-
-  > 减法>字符串>加法
-
-- 自动转换为字符串
-
-  当尝试输出一个变量时，JavaScript会自动调用变量的 `toString()` 方法：
-
-  ```
-  document.getElementById('demo').innerHTML = myVar;
-  myVar = {name:"John"}	// toString 转换为 "[object Object]"
-  myVar = [1,2,3,4]		// toString 转换为 "1,2,3,4"
-  myVar = new Date()		// toString 转换为 "Fri Jan 18 2021 09:08:55 GMT+0200"
-  myVar = 123				// toString 转换为 "123"
-  myVar = true			// toString 转换为 "true"
-  ```
-
-
-
-### 正则表达式
-
-```
-var re = /表达式主体/修饰符
-```
-
-#### 常用方法
-
-JavaScript 中，正则表达式通常用于两个字符串方法：
-
-- `search()` 方法用于检索与正则式相匹配的字符串，并返回字符串的起始位置：
-
-```
-var str = "Hello world!";
-var n = str.search(/World/i);
-document.getElementById("demo").innerHTML = n;
-// 返回 6
-```
-
-- `replace()` 方法用于替换在字符串中与正则式相匹配的字符串；
-
-```
-<p id="demo">Hello world</p>
-<button onclick="myFunction()">Click me</button>
-<script>
-function myFunction(){
-	var str = document.getElementById("demo").innerHTML;//replace()方法接收字符串并作为参数
-	var txt = str.replace(/World/i,"John");				//替换字符串
-	document.getElementById("demo").innerHTML = txt;	//输出替换后的字符串
-}
-</script>
-// 点击按钮后Hello world被替换为Hello John
-```
-
-`test()` 方法是一个正则表达式方法，用于检测字符串是否匹配某个模式，返回**布尔值**。
-
-```
-/e/.test("hello world")		//返回 ture
-```
-
-`exec()` 方法是一个正则表达式方法，用于检测字符串的匹配，返回一个**数组**存放匹配结果，未匹配则返回 `null`。
-
-```
-/e/.exec("hello world")		// 返回 e
-```
-
-#### 修饰符与表达式模式
-
-| 修饰符 | 描述                                                     |
-| :----- | :------------------------------------------------------- |
-| i      | 执行对大小写不敏感的匹配。                               |
-| g      | 执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。 |
-| m      | 执行多行匹配。                                           |
-
-| 元字符 | 描述                                        |
-| :----- | :------------------------------------------ |
-| \d     | 查找数字。                                  |
-| \s     | 查找空白字符。                              |
-| \b     | 匹配单词边界。                              |
-| \uxxxx | 查找以十六进制数 xxxx 规定的 Unicode 字符。 |
-
-| 量词 | 描述                                  |
-| :--- | :------------------------------------ |
-| n+   | 匹配任何包含至少一个 *n* 的字符串。   |
-| n*   | 匹配任何包含零个或多个 *n* 的字符串。 |
-| n?   | 匹配任何包含零个或一个 *n* 的字符串。 |
-
-`[]` 用于查找某个范围内的字符
-
-| 表达式 | 描述                       |
-| :----- | :------------------------- |
-| [abc]  | 查找方括号之间的任何字符。 |
-| [0-9]  | 查找任何从 0 至 9 的数字。 |
-| (x\|y) | 查找任何以 \| 分隔的选项。 |
-
-#### RegExp 对象
-
-#### 实例
-
-```
-/*校验邮件地址是否合法*/
-function isEmail(str){
-	var reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
-	return reg.test(str)
-}
-
-/*校验是否中文名称组成 */
-function ischina(str) {
-    var reg=/^[\u4E00-\u9FA5]{2,4}$/;
-    return reg.test(str);
-}
-```
-
-
-
-### JavaScript 表单
-
-#### JavaScript 表单验证
-
-判断表单字段(`fname`)值是否存在，如果不存在，就弹出信息阻止表单提交：
-
-```
-<scirpt>
-function validateForm() {
-	var x = document.forms["myForm"]["fname"].value;
-	if (x == null || x == "") {
-		alert("需要输入名字");
-		return false;
-	}
-}
-</script>
-```
-
-通过 HTML 代码调用以上代码：
-
-```
-<form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
-名字 <input type="text" name="fname">
-<input type="submit" value="提交">
-</form>
-```
-
-#### HTML 约束验证
-
-HTML5 新增了 HTML 表单的验证方式：约束验证。基于：
-
-- HTML 输入属性
-- CSS 伪类选择器
-- DOM 属性和方法
-
-
-
-### JavaScript 验证 API
-
-> APIs (application programming interfaces)，即应用程序编程接口。API由服务器（Server）提供，通过API，计算机可以读取、编辑网站的数据。
-
-==待补充==
-
-
-
-### 随机数
-
-使用 `Math.random()` 生成一个在 0（**包括0**）到 1（**不包括1**）之间的随机**小数**。
-
-可以搭配 `Math.floor()` 向下取整得到随机整数：
-
-```
-integer = Math.floor(Math.random() * 10);	// 0-10的随机整数
-integer = Math.floor(Math.random() * (max - min + 1) + min)	// min-max的随机整数
-```
-
-
-
-
-
-### forEach
-
-[(17条消息) JavaScript forEach()的用法_路虽远，行则必至！-CSDN博客_前端foreach用法](https://luckylifes.blog.csdn.net/article/details/99290078?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&utm_relevant_index=2)
-
-
-
-
-
-### 数值取整
-
-[JavaScript四种数值取整方法 - 后除 - 博客园 (cnblogs.com)](https://www.cnblogs.com/mazey/p/8447093.html)
-
-
-
-### JSON
-
-JSON （**J**ava**S**cript **O**bject **N**otation）是用于存储和传输数据的轻量级数据交换格式，通常用于服务端向网页传递数据 。
-
-可以理解为，**JSON** 是 **JS对象** 的字符串表示法。它使用文本表示一个 JS 对象的信息，JSON本质是一个**字符串**（，这里仅仅指结构上的同一性，要在`{...}` 前后加上`'` 才能成为 JSON 字符串）。
-
-```
-{"sites":[
-    {"name":"Runoob", "url":"www.runoob.com"}, 
-    {"name":"Google", "url":"www.google.com"},
-    {"name":"Taobao", "url":"www.taobao.com"}
-]}
-```
-
-#### 语法规则
-
-- 数据为 `键:值` 对
-- 数据由 `,` 分隔。
-- 大括号`{}`保存对象
-- 方括号`[]`保存数组
-
-附 [JSON格式验证](https://c.runoob.com/front-end/53/) 工具
-
-#### 转换方法
-
-```
-var text = '{ "sites" : [' +
-'{ "name":"Runoob" , "url":"www.runoob.com" },' +
-'{ "name":"Google" , "url":"www.google.com" },' +
-'{ "name":"Taobao" , "url":"www.taobao.com" } ]}';	// 创建JSON格式的数据
-
-var obj = JSON.parse(text);	// 使用JavaScript内置函数将JSON字符串转换为JS对象
-```
-
-**注意**： `parse()` 方法只能解析**字符串格式**的JSON 。
-
-```
-var obj = { sites : [
-{ name:"Runoob" , url:"www.runoob.com" },
-{ name:"Google" , url:"www.google.com" },
-{ name:"Taobao" , url:"www.taobao.com" } ]};	// 创建JS对象
-
-var text = JSON.stringify(obj);	// 使用JavaScript内置函数将JS对象转换为JSON字符串
-```
-
-
-
-### void
-
-`void()` 操作符指定计算一个表达式但不返回值，括号内的表达式始终会被运行。
-
-```
-void(func())
-javascript:void(func())
-```
-
-
-
-
-
-### 错误
-
-`try` 语句允许执行错误的代码块，`catch` 语句在 `try` 代码块发生错误时将被执行， `try` 和 `catch` 是**成对出现**的。
-
-```
-try {
-	...		// 抛出异常
-}
-catch(e) {
-	...		// 异常的捕获与处理
-}
-finally {
-	...		// 结束处理
-}
-```
-
-`throw` 语句用于抛出一个用户自定义的异常，而当前函数的执行将被停止（`throw` 之后的语句并不会被执行）。通常配合 `try` 和 `catch` 一起使用，起到控制程序流的作用。
-
-例如：
-
-```
-function myFunction() {
-  var message, x;
-  message = document.getElementById("p01");
-  message.innerHTML = "";
-  x = document.getElementById("demo").value;
-  try { 
-    if(x == "") throw "值是空的";
-    if(isNaN(x)) throw "值不是一个数字";
-    x = Number(x);
-    if(x > 10) throw "太大";
-    if(x < 5) throw "太小";
-  }
-  catch(err) {
-    message.innerHTML = "错误: " + err + ".";
-  }
-  finally {
-    document.getElementById("demo").value = "";
-  }
-}
-```
-
-
-
-
-
-## JS HTML DOM
-
-通过 HTML DOM，可访问 JavaScript HTML 文档的所有元素。
-
-### HTML DOM
-
-当网页被加载时，浏览器会创建页面的**文档对象模型** (Document Object Model)。
-
-HTML DOM 模型被构造为**对象**的树：
-
-![HTML DOM 树](https://www.runoob.com/images/pic_htmltree.gif)
-
-
-
-## 函数
-
-###  **立即调用函数表达（IIFE）** 
-
-JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
-
-```js
-(function () {
-  console.log("Chirp, chirp!");
-})();
-```
-
- 这是一个匿名函数表达式，立即执行并输出 `Chirp, chirp!`。  函数表达式末尾的两个括号（）会让它被立即执行或调用。 这种模式被叫做立即调用函数表达式（immediately invoked function expression) 或者IIFE。 
-
-## 面向对象编程
 
 ### 创建对象
 
@@ -1192,7 +1288,7 @@ this指向的是该this所在的最里层的object对象。
 
 
 
-## JavaScript 特性
+## 八、JavaScript 特性
 
 ### 调试
 
@@ -1259,7 +1355,7 @@ y = 7;    // 设置 y 为 7
 
 
 
-## ES6 新特性
+## 九、ES6 新特性
 
 ### 箭头函数 =>
 
@@ -1303,7 +1399,7 @@ const doubler = item => item * 2;
 
 - 剩余运算符：传入参数数量不确定时，rest参数...args` 将离散的参数合成数组，可以使用任意的数组方法。
 
-  ```
+  ```js
   const [a, b, ...arr] = [1, 2, 3, 4, 5, 7];
   console.log(a, b);
   console.log(arr);
@@ -1315,6 +1411,17 @@ const doubler = item => item * 2;
   
 
 - 扩展运算符： 把数组或类数组对象解压成一组用逗号隔开的参数。
+
+  ```js
+  let thisArray = ['rosemary', 'parsley'];
+  
+  let thatArray = ['cilantro', ...thisArray, 'coriander'];
+  
+  console.log(thatArray);
+  //['cilantro', 'rosemary', 'parsley', 'coriander']
+  ```
+
+  
 
 - `...` 运算符在形参上，为剩余运算符；在实参上，为扩展运算符。
 
@@ -1487,15 +1594,185 @@ console.log(greeting);
 
 
 
+## 错误处理与调试
+
+### try/catch 语句
+
+`try` 语句允许执行错误的代码块，`catch` 语句在 `try` 代码块发生错误时将被执行， `try` 和 `catch` 是**成对出现**的。
+
+```js
+try {
+	...		// 可能出错的代码
+}
+catch(error) {
+	...		// 出错后要做什么
+}
+finally {
+	...		// 结束处理
+}
+```
+
+如果 `try` 块有代码发生错误，代码会立即退出执行，并跳到 `catch` 块中。`catch` 块此时会接收到一个包含错误发生信息的对象（必须为其定义名称），可以通过访问其 `message` 属性输出错误信息：
+
+ ```js
+try {
+    
+} catch(error) {
+    console.log(error.message);
+}
+ ```
+
+#### 1. finally 子句
+
+`finally` 块会在抛出错误后继续运行，包括 `return` 语句：
+
+```js
+function testFinally() {
+    return 2;
+} catch(e) {
+    return 1;
+} finally {
+    return 0;
+}	// 无论如何都会返回0
+```
+
+> 只要代码中包含了 finally 子句，try 或 catch 中的 return 语句就会被忽略。
+
+#### 2. 抛出错误
+
+`throw` 操作符用于抛出一个用户自定义的异常，而当前函数的执行将被停止（`throw` 之后的语句并不会被执行）。通常配合 `try` 和 `catch` 一起使用，起到控制程序流的作用。
+
+例如：
+
+```js
+function myFunction() {
+  var message, x;
+  message = document.getElementById("p01");
+  message.innerHTML = "";
+  x = document.getElementById("demo").value;
+  try { 
+    if(x == "") throw "值是空的";
+    if(isNaN(x)) throw "值不是一个数字";
+    x = Number(x);
+    if(x > 10) throw "太大";
+    if(x < 5) throw "太小";
+  }
+  catch(err) {
+    message.innerHTML = "错误: " + err + ".";
+  }
+  finally {
+    document.getElementById("demo").value = "";
+  }
+}
+```
+
+### 调试技术
+
+#### 1. 控制台
+
+`console` 对象包含如下方法
+
+- `error()` 在控制台中记录错误消息；
+
+- `info()` 在控制台中记录信息性内容；
+
+- `log()` 在控制台中记录常规消息；
+
+- `warn()` 在控制台中记录警告消息；
+
+- `clear()` 清除日志；
+
+- `group()` 建立console命令组；
+
+  ```js
+  console.group("test group")
+  console.log(1)
+  console.log(2)
+  console.groupEnd("test group")
+  // 1
+  // 2
+  ```
+
+- `time()` 输出代码执行时间：
+
+  ```js
+  console.time()
+  f();
+  console.timeEnd()
+  // default: 0.1658465123ms
+  ```
+
+- `table()` 以表格形式输出对象：
+
+  ```js
+  console.table(
+      [
+          {id: 1, name: 'Jack'}, 
+          {id: 2, name:'Mary'}
+      ]
+  )
+  ```
+
+  输出：
+
+  | (索引) | id   | name   |
+  | :----- | :--- | :----- |
+  | 0      | 1    | 'Jack' |
+  | 1      | 2    | 'Mary' |
+
+- 
+
+#### 2. debugger  打断点
+
+#### 3. 使用 chrome devtools
+
+#### 4.  vscode debugger for chrome 
 
 
-## 参考手册
+
+## 函数式编程
+
+「函数式编程」是一种方案简单、功能独立、对作用域外没有任何副作用的编程范式（方法论），它属于「结构化编程」的一种。
+
+```
+输入 -> 处理 -> 输出
+```
+
+### 1. 特点
+
+- 功能独立——不依赖于程序的状态，低耦合度；
+- 纯函数——同一个输入永远能得到同一个输出；
+- 副作用小——可以严格地限制函数外部对状态的改变；
+
+### 2. 术语
+
+- `Callbacks` 是被传递到另一个函数中调用的函数。例如在 `filter` 中，回调函数告诉 JavaScript 以什么规则过滤数组。 
+- `first class` 函数就像其他正常值一样，可以赋值给变量、传递给另一个函数，或从其它函数返回，这种函数叫做「头等函数」（一等公民）。 在 JavaScript 中，所有函数都是头等函数。
+- `higher order` 将函数为参数或返回值的函数叫做「高阶函数」。 
+- `lambda` 当函数被传递给另一个函数或从另一个函数返回时，那些传入或返回的函数可以叫做 lambda。
+
+### 3. 实现
+
+- 函数应避免改变传入的参数、全局变量等数据；
+- 应总是**显式声明依赖关系**：如果函数依赖于一个变量或对象，那么将该变量或对象作为参数直接传递到函数中。 
+
+
+
+## 附、参考手册
 
 ### JavaScript 对象
 
-#### String
+#### Object
 
-##### 对象方法
+`Object.keys()` 
+
+ 传入一个对象作为参数，生成包含对象所有键的数组。 
+
+`Object.prototype.toString()` 
+
+  每个对象都有一个 `toString()` 方法返回一个表示该对象的字符串。 
+
+#### String
 
 `.parseInt(string, radix)` 
 
@@ -1506,22 +1783,49 @@ const a = parseInt("11", 2);
 // 返回值为 3
 ```
 
+`.split(separator, limit)` 
+
+将给定字符串拆分为字符串数组，使用第一个参数中提供的指定分隔符将其分隔为子字符串，第二个参数用于指定返回的数组的最大长度。 
+
+```js
+var str="Hello world";
+var n=str.split("", 5);
+var m=str.split(" ");
+console.log(n);
+console.log(m);
+// ['H', 'e', 'l', 'l', 'o']
+// ['Hello', 'world']
+```
+
 
 
 #### Array
 
-##### 对象方法
-
-`.slice()` 
+`.slice()`
 
 从已有的数组中返回选定的元素，不会改变原始数组。
 
-```
+```js
 const arr = [1, 2, 3, 4];
 const sli = arr.slice(1,3);
 // sli 现在值为 [2, 3]
 // array.slice(start, end) 包含 start 但不包含 end 
 ```
+
+`.splice()` 
+
+向/从数组添加/删除项目，并返回删除的项目。会改变原始数组。
+
+- `index` 必需。整数，指定在什么位置添加/删除项目，使用负值指定从数组末尾开始的位置。 
+- `howmany` 可选。要删除的项目数。如果设置为 0，则不会删除任何项目。 
+- `item1, ..., itemX` 可选。要添加到数组中的新项目。 
+
+```js
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.splice(2, 1, "Lemon", "Kiwi");
+```
+
+
 
 `.shift()`
 
@@ -1538,7 +1842,7 @@ const oneDown = threeArr.pop();
 // oneDown 现在值为 6
 ```
 
-`.unshift()` 
+`.unshift()`
 
 将一个值压入到数组的**头部**。
 
@@ -1559,7 +1863,7 @@ arr1.push(4);
 // arr1 现在值为 [1, 2, 3, 4]
 ```
 
-`.concat()` 
+`.concat()`
 
 连接两个数组。
 
@@ -1567,4 +1871,77 @@ arr1.push(4);
 const myConcat = (arr1,arr2) => arr1.concat(arr2);
 console.log(myConcat([1, 2], [3, 4, 5]));	// [1, 2, 3, 4, 5]
 ```
+
+`.from()` 
+
+对一个类似数组或可迭代对象创建一个新的，浅拷贝的数组实例。 可用于将字符串转为数组。
+
+- `arrayLike`想要转换成数组的伪数组对象或可迭代对象。
+
+- `mapFn` 可选，如果指定了该参数，新数组中的每个元素会执行该回调函数。
+- `thisArg` 可选参数，执行回调函数 `mapFn` 时 `this` 对象。
+
+```js
+// 从 String 生成数组
+Array.from('foo');
+// [ "f", "o", "o" ]
+```
+
+`.join()` 
+
+用于把数组中的所有元素放入一个字符串。参数用于指定分隔符：
+
+```js
+var a = ["00", "01", "02", "03", "04"];
+var b = a.join();
+var c = a.join('');
+var d = a.join('-');
+console.log(b,c,d);
+// 00,01,02,03,04
+// 0001020304
+// 00-01-02-03-04
+```
+
+`.reverse()` 
+
+ 将数组中元素的位置颠倒，并返回该数组。 
+
+`.reduce()` 
+
+这是一个常用的「函数式编程」技术。
+
+**语法：**
+
+```js
+arr.reduce(function(prev,cur,index,arr){...}, init);
+```
+
+reduce() 的参数包含一个「回调函数」和一个「初始值 init」，其中回调函数包含四个参数：
+
+- `prev` 上一次调用回调时的返回值，或者初始值 init；不提供初始值时为第一项的值；
+- `cur` 当前正在处理的数组元素； 
+- `index` 当前正在处理的数组元素的索引，若提供 init 值，则索引为0，否则索引为1； 
+- `arr` 原数组 ；
+
+其中常用的是 `prev` `cur` 参数。
+
+**使用例：** 
+
+```js
+const arr = [3, 9, 4, 3, 6, 0, 9];
+
+// 求数组各项之和
+let sum = arr.reduce(function(prev, cur) {
+	return prev + cur
+},0);
+// init为0，所以prev开始时为0，cur的值为第一项3，相加之后返回3作为下一轮回调的prev值，再与下一项cur相加，直至完成所有数组项的求和
+
+// 求数组项最大值
+let max = arr.reduce(function(prev, cur) {
+	return Math.max(prev, cur);
+})
+// 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
+```
+
+
 

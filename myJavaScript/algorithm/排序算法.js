@@ -1,6 +1,14 @@
 var arr = [6, 2, 5, 3, 7, 9, 1, 4, 8];
 var len = arr.length;
 
+function display() {
+    document.getElementById('demo1').innerHTML=bubbleSort();
+    document.getElementById('demo2').innerHTML=selectionSort();
+    document.getElementById('demo3').innerHTML=insertionSort();
+    document.getElementById('demo4').innerHTML=shellSort();
+    document.getElementById('demo5').innerHTML=mergeSort(arr);
+};
+
 // 1. 冒泡排序
 function bubbleSort() {
     for (var i = 0; i < len; i++) {
@@ -121,3 +129,28 @@ function merge(left, right) {
 // 9. 桶排序
 
 // 10. 基数排序
+
+// LeetCode - 回文数
+x = 121;
+var isPalindrome = function(x) {
+    const ARR = [];
+    let sum, y = 0;
+    for (let i = 1; x / i >= 1; i *= 10) {
+        let m = ((x - sum) / i) % 10;
+        ARR.push(m);
+        sum += m * i;
+    };
+    for (let j = 0 ; j < ARR.length; j++) {
+        y += ARR[j] * 10 ^ (ARR.length - j - 1);
+    }
+    if (x == y) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+function F() {
+    document.getElementById('x').innerHTML=isPalindrome();
+};
+
