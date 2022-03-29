@@ -368,6 +368,10 @@ JavaScript中，作用域为可访问的变量、对象、函数的集合。
 
 没有被声明的变量默认为**全局变量**。
 
+> 执行上下文在运行时确定，可能改变；
+>
+> 作用域在定义时已经确定，不会改变。
+
 ### 垃圾回收
 
 ==待补充==
@@ -1096,14 +1100,6 @@ HTML5 新增了 HTML 表单的验证方式：约束验证。基于：
 
 
 
-
-
-### forEach
-
-[(17条消息) JavaScript forEach()的用法_路虽远，行则必至！-CSDN博客_前端foreach用法](https://luckylifes.blog.csdn.net/article/details/99290078?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&utm_relevant_index=2)
-
-
-
 ### JSON
 
 JSON （**J**ava**S**cript **O**bject **N**otation）是用于存储和传输数据的轻量级数据交换格式，通常用于服务端向网页传递数据 。
@@ -1180,6 +1176,82 @@ HTML DOM 模型被构造为**对象**的树：
 
 ## 六、函数
 
+### 定义
+
+1. 声明：
+
+```js
+function sum (a, b) {
+	return a + b;
+}	// 末尾不加分号
+```
+
+2. 表达式：
+
+```js
+let sum = function(a, b) {
+	return a + b;
+};	// 末尾加分号
+```
+
+函数声明会在任何代码执行之前被读取并添加到执行上下文，此过程被称为「**函数声明提升**」。而表达式定义的函数不会被提升。
+
+### 函数名
+
+使用上述方法定义的函数名访问函数，并不会直接访问函数体本身。函数名是指向函数的**指针**，一个函数可以有多个函数名，增删函数名不会对其他指向这个函数的指针产生影响。
+
+因此，使用不带括号的函数名访问的是函数的**指针**，而不会执行函数。
+
+ES6中所有函数对象都会有一个**只读的** `name` 属性，有名函数会对应一个**字符串变量名**，未赋值给其他变量的匿名函数（箭头函数）对应一个**空字符串**，Function创建的函数会对应为 `anonymous` 。
+
+### 箭头函数 =>
+
+ES6提供了定义**匿名函数**的语法糖：
+
+```js
+const myFunc = () => {
+  const myVar = "value";
+  return myVar;
+}
+```
+
+ 当不需要函数体，只返回一个值的时候，箭头函数允许你省略 `return` 关键字和外面的大括号。 这样就可以将一个简单的函数简化成一个单行语句 :
+
+```js
+const myFunc = () => "value";	// 这段代码默认会返回字符串 value
+```
+
+ 给箭头函数传递参数 :
+
+```js
+const doubler = (item) => item * 2;
+doubler(4);	// 8
+```
+
+ 如果箭头函数只有一个参数，则可以省略参数外面的括号 :
+
+```js
+const doubler = item => item * 2;
+```
+
+要注意的是，箭头函数不能使用 *arguments* 、*super* 和 *new.target* ，也没有 `prototype` 属性。
+
+### 参数
+
+ECMAScript函数的参数在内部表现为一个**数组**。函数被调用时总会接收一个数组，数组元素多寡都无所谓，函数并不会关心其中包含什么。
+
+事实上，我们甚至可以在定义函数（非箭头）时不定义任何参数，直接在函数内部通过访问 `arguments` 对象传参：
+
+```js
+function sayHi() {
+	console.log('Hello ' + arguments[0] + ', ' + arguments[1]);
+}
+console.log(sayHi('Mike', 'have a nice day'));
+// Hello Mike, have a nice day
+```
+
+`arguments` 对象是一个**类数组**对象，可以用方括号访问其中的元素，参数的数量可以用 `arguments.length` 访问。
+
 ###  立即调用函数表达（IIFE）
 
 JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
@@ -1191,6 +1263,557 @@ JavaScript 中的一个常见模式就是，函数在声明后立刻执行：
 ```
 
  这是一个匿名函数表达式，立即执行并输出 `Chirp, chirp!`。  函数表达式末尾的两个括号（）会让它被立即执行或调用。 这种模式被叫做立即调用函数表达式（immediately invoked function expression) 或者IIFE。 
+
+### 函数内部
+
+#### arguments
+
+除前面讨论的特性外，`arguments` 还有一个 `callee` 属性，它是一个指向 `arguments` 对象所在函数的指针。
+
+```js
+// 典型的递归阶乘函数,如果函数名发生了改变，函数将无效
+function factorial(num) {
+	if(num <= 1) {
+		return 1;
+	} else {
+		return num * factorial(num - 1);
+	}
+}
+
+// 使用callee使函数逻辑与函数名解耦
+function factorial(num) {
+	if(num <= 1) {
+		return 1;
+	} else {
+		return num * arguments.callee(num - 1);
+	}
+}
+```
+
+#### this
+
+JS中，存放在一处的函数是可以在其他地方被调用的，这一特性是JS函数的灵活性和复用性的保证。但这也引发了一个问题：函数在其他地方被调用时，执行函数的上下文发生了变化，函数体内引用的变量脱离了原先的环境就可能失效。
+
+这时this的作用就体现了出来，它能够在函数体内获得函数当前的运行环境并指向它。
+
+在标准函数（非箭头）中，`this` 引用的是**把函数当成方法调用的上下文对象**，具体引用哪一个对象在执行时才会确定；而箭头函数中，`this` 引用的是**定义箭头函数的上下文**，并且这一绑定在执行中永远不会改变：
+
+```js
+window.color = 'red';
+let o = {
+    color: 'blue'
+};
+
+function sayColor() {
+    console.log(this.color);
+}
+
+let printColor = () => console.log(this.color);
+
+
+sayColor();
+printColor();
+// red
+
+o.sayColor = sayColor;
+o.printColor = printColor;
+o.sayColor();
+// blue
+o.printColor();
+// red
+```
+
+使用this的5种常见情况：
+
+1. 事件绑定中的this：
+
+   - 行内绑定：
+
+     在html节点内，以节点属性的方式绑定，属性值是一段可执行的 JS 代码段
+
+     ```html
+     <input type="button" value="按钮" onclick="clickFun()">
+     <script>
+         function clickFun(){
+             this // 此函数的运行环境在全局window对象下，因此this指向window;
+         }
+     </script>
+     
+     <input type="button" value="按钮" onclick="this">
+     <!-- 运行环境在节点对象中，因此this指向本节点对象 -->
+     ```
+
+   - 动态绑定与事件监听：
+
+     在JS内通过访问DOM获得html节点对象，再为节点对象的onclick属性赋值一个匿名方法。函数在执行时处于节点对象的环境下，this自然就指向了本节点对象。
+
+     ```html
+     <input type="button" value="按钮" id="btn">
+     <script>
+         var btn = document.getElementById('btn');
+         btn.onclick = function(){
+             this ;  // this指向本节点对象
+         }
+     </script>
+     ```
+
+2. 构造函数中的this：
+
+   执行new关键字创建一个实例时，JS引擎会将构造函数中的this绑定到实例对象中。
+
+3. window 定时器中的this：
+
+   `setInterval()` 是window对象下内置的一个方法，接受两个参数，第一个参数是一个函数或者是一段可执行的 JS 代码，第二个参数则是执行前面函数或者代码的时间间隔（ms）； 
+
+   ```js
+   var obj = {
+       fun:function(){
+           this ;
+       }
+   }
+   
+   setInterval(obj.fun, 1000);      // fun不带括号，因此调用的是存放在全局变量的函数体，this指向window对象
+   setInterval('obj.fun()', 1000);  // this指向obj对象
+   ```
+
+4. call() / apply() 方法:
+
+   强制指定函数调用时this的指向。
+
+
+
+#### caller
+
+这个属性引用**调用当前函数的函数**，如果当前函数在全局作用域则为 `Null` ：
+
+```js
+function outer() {
+    inner();
+}
+function inner() {
+    console.log(inner.caller);
+}
+
+outer;
+// outer() {
+//     inner();
+// }
+```
+
+#### new.target
+
+ES6新增了**检测函数是否正在被 `new` 关键字调用**的 `new.target` 属性。
+
+如果函数被正常调用，`new.target` 的值为 `undefined` ；如果被 `new` 调用，则 `new.target` 将引用被调用的构造函数。
+
+ ```js
+function F() {
+    console.log(new.target);
+}
+
+F();
+// undefined
+let o = new F();
+// F() {
+//     console.log(new.target);
+// }
+ ```
+
+### 共用属性与方法
+
+每个函数都有两个属性：
+
+#### length
+
+保存函数定义的命名参数个数
+
+```js
+function sum(sum1, sum2, sum3) {
+	return sum1 +sum2 +sum3;
+}
+console.log(sum.length);
+// 3
+```
+
+#### prototype
+
+保存引用类型所有实例方法
+
+还有三个方法：
+
+#### apply()
+
+`apply(this, arguments)`
+
+- *this* 任意**指定**调用函数的上下文对象；
+
+- *arguments* *可选*，参数数组；
+
+#### call()
+
+`call(this, arg1, arg2...)`
+
+- *this* 任意**指定**调用函数的上下文对象；
+
+- *arg* *可选*，逐个传入参数；
+
+以上这两个方法作用相同，仅传参形式不同。它们主要用来**控制函数的调用上下文**，即函数体内 `this` 值：
+
+```js
+window.color = 'red';
+let o = {
+    color: 'blue'
+};
+
+function sayColor() {
+    console.log(this.color);
+}
+
+sayColor();
+// red
+sayColor.call(this);
+// red
+sayColor.call(window);
+// red
+sayColor.call(o);
+// blue
+```
+
+#### bind()
+
+`bind([object])` 
+
+创建一个新的函数实例，其`this` 值会被直接**绑定**到 `[object]` 对象。
+
+```js
+window.color = 'red';
+let o = {
+    color: 'blue'
+};
+
+function sayColor() {
+    console.log(this.color);
+}
+
+let objectSayColor = sayColor.bind(o);
+objectSayColor();
+// blue
+```
+
+无论在哪里调用 `objectSayColor()` ，它的执行上下文对象始终为 `o` 
+
+### 高阶函数
+
+接收另一个函数作为参数的函数叫做高阶函数（ Higher-order function ）：
+
+```js
+function sum(x, y, f) {
+	return f(x) + f(y);
+}
+```
+
+#### map / reduce
+
+`map()` 和 `reduce()` 都定义在 `Array` 对象方法上。
+
+**map:**
+
+ `map()`方法按照原始数组元素顺序依次处理元素，返回一个新的数组，数组中的元素为原始数组调用函数处理后的值。**可看作是对原数组进行映射**。 
+
+举例说明，比如我们有一个函数 f(x)=x^2^，要把这个函数作用在一个数组`[1, 2, 3, 4, 5, 6, 7, 8, 9]`上，就可以用`map`实现如下： 
+
+ ![map](https://www.liaoxuefeng.com/files/attachments/925425803658112/0) 
+
+```js
+function pow(x) {
+    return x * x;
+}
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let result = arr.map(pow);
+console.log(results);
+// [1, 4, 9, 16, 25, 36, 49, 64, 81]
+```
+
+事实上，`map()`作为高阶函数，起到了把运算规则抽象的作用，我们不但可以计算简单的f(x)=x^2^，还可以计算任意复杂的函数，比如，把`Array`的所有数字转为字符串：
+
+```js
+var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+arr.map(String); // ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+```
+
+只需要一行代码。
+
+> 扩展： **在原型上实现 map 方法** 
+>
+> ```js
+> const s = [23, 65, 98, 5];
+> 
+> Array.prototype.myMap = function(callback) {
+>   const newArray = [];
+>   // this指向Array，forEach() 迭代Array的每一项
+>   this.forEach(function(a) {
+>     newArray.push(callback(a));
+>   })
+>   return newArray;
+> };
+> 
+> const new_s = s.myMap(function(item) {
+>   return item * 2;
+> });
+> ```
+
+
+
+**reduce:**
+
+ `reduce()`方法是让数组中的**前项和后项做某种计算，并累计最终值**。 
+
+```js
+arr.reduce(callback(prev,cur,index,arr){...}, init);
+```
+
+reduce() 的参数包含一个「回调函数」和一个「初始值 init」，其中回调函数包含四个参数：
+
+- `prev` 上一次调用回调时的返回值，或者初始值 init；**不提供初始值时为第一项的值**；
+- `cur` 当前正在处理的数组元素； 
+- `index` 当前正在处理的数组元素的索引，**若提供 init 值，则索引为0，否则索引为1**； 
+- `arr` 原数组 ；
+
+其中常用的是 `prev` `cur` 参数。
+
+`reduce()`把一个函数依次作用在这个`Array`的`[x1, x2, x3...]`上，这个函数必须接收两个参数，`reduce()`把结果继续和序列的下一个元素做**累积计算**，其效果就是：
+
+```js
+[x1, x2, x3, x4].reduce(f) = f(f(f(x1, x2), x3), x4)
+```
+
+使用例：
+
+```js
+const arr = [3, 9, 4, 3, 6, 0, 9];
+
+// 求数组各项之和
+let sum = arr.reduce((prev, cur) => prev + cur, 0);
+// init为0，所以prev开始时为0，cur的值为第一项3，相加之后返回3作为下一轮回调的prev值，再与下一项cur相加，直至完成所有数组项的求和
+
+// 求数组各项之积
+let product = arr.reduce((prev, cur) => prev * cur);
+
+// 求数组项最大值
+let max = arr.reduce(function(prev, cur) {
+	return Math.max(prev, cur);
+})
+// 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
+```
+
+#### forEach() 方法
+
+ `forEach()` 方法用于**遍历数组的每个元素**。（return 将不起作用）
+
+ 具有`iterable`类型的集合都可以通过  `forEach()` 方法进行迭代：
+
+```js
+// Array 为例：
+var a = ['A', 'B', 'C'];
+a.forEach(function (element, index, array) {
+    // element: 指向当前元素的值
+    // index: 指向当前索引
+    // array: 指向对象本身
+    console.log(element + ', index = ' + index);
+});
+// A, index = 0
+// B, index = 1
+// C, index = 2
+
+// Set 为例：
+var s = new Set(['A', 'B', 'C']);
+s.forEach(function (element, sameElement, set) {
+    console.log(element);
+});
+// A
+// B
+// C
+
+// Map 为例：
+var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
+m.forEach(function (value, key, map) {
+    console.log(value);
+});
+// x
+// y
+// z
+```
+
+
+
+#### filter
+
+创建一个新数组，返回经过滤后的剩余元素，不会改变原数组。
+
+```js
+var newArr = arr.filter(callback(element[, index[, array]])[, thisArg])
+```
+
+- *callback()* 测试函数，根据返回 true / false 确定元素保留与否。包含参数：
+  - *element* 当前元素；
+  - *index* 当前元素索引；
+  - *array* 被遍历的数组本身；
+- *this* 执行回调函数时，用于 `this` 的值，默认为全局对象；
+
+使用例：
+
+```js
+// 过滤偶数保留奇数
+var arr = [1, 2, 4, 5, 6, 9, 10, 15];
+var result = arr.filter((x) => x % 2 !== 0);
+
+console.log(result); // [1, 5, 9, 15]
+
+// 数组去重
+var arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry'];
+// indexOf()方法返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回-1
+var result = arr.filter((element, index, array) => {
+    return array.indexOf(element) === index;
+    // 如果遍历到了重复元素，其传入indexOf的返回值为数组中这个元素第一次出现的索引，与当前索引不等。故回调函数返回false，filter会自动删去这个重复元素
+});
+
+console.log(result); // ['apple', 'strawberry', 'banana', 'pear', 'orange']
+```
+
+#### sort
+
+这是 JavaScript 自带的排序函数，它可以实现对数组的**原地排序**。但如果直接使用，可能会产生意想不到的后果：
+
+```js
+// 理想的结果:
+['Google', 'Apple', 'Microsoft'].sort(); 
+// ['Apple', 'Google', 'Microsoft'];
+
+// apple排在了最后:
+['Google', 'apple', 'Microsoft'].sort(); 
+// ['Google', 'Microsoft", 'apple']
+
+// 无法理解的结果:
+[10, 20, 1, 2].sort(); 
+// [1, 10, 2, 20]
+```
+
+第二个排序把`apple`排在了最后，是因为字符串根据ASCII码进行排序，而小写字母`a`的 UTF-16 码在大写字母之后。 
+
+数字排序的错误是因为`sort()`方法**默认把所有元素先转换为String再排序**，结果`'10'`排在了`'2'`的前面，因为字符`'1'`比字符`'2'`的 UTF-16 码小。
+
+事实上，`sort` 是一个高阶函数，它需要接收一个**比较函数**来实现自定义的排序。 
+
+如果指明了 `compareFunction` ，那么数组会按照调用该函数的返回值排序。即 a 和 b 是两个将要被比较的元素（arr[a], arr[b]）：
+
+- 如果 `compareFunction(a, b)` 小于 0 ，那么 a 会被排列到 b 之前；
+
+- 如果 `compareFunction(a, b)` 等于 0 ， a 和 b 的相对位置不变；
+
+- 如果 `compareFunction(a, b)` 大于 0 ， b 会被排列到 a 之前；
+- `compareFunction(a, b)` 必须**总是对相同的输入返回相同的比较结果**，否则排序的结果将是不确定的。
+
+使用例：
+
+```js
+// 对数字排序
+arr = [5,9,6,3,4,8,1,2,7];
+arr.sort((a, b) => a - b);
+console.log(arr);
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+// 忽略大小写对字符串排序
+arr = [
+    {name: 'Edward', age: 21}, 
+    {name: 'Nicholas', age: 25},
+    {name: 'Mike', age: 22}
+];
+arr.sort((a, b) => {
+    nameA = a.name.toUpperCase();
+    nameB = b.name.toUpperCase();
+    if (nameA === nameB) {
+        return 0;
+    }
+    return nameA - nameB;
+});
+console.log(arr);
+```
+
+#### ONTHERS
+
+`every()`
+
+`find()` 
+
+`findIndex()` 
+
+...
+
+**总结：**
+
+- **相同点：** 
+
+1. 都会循环遍历数组中的每一项；
+2.  `map()`、`forEach()`和`filter()`方法里每次执行匿名函数都支持3个参数，参数分别是：当前元素、当前元素的索引、当前元素所属的数组； 
+3. 匿名函数中的this都是指向window。
+
+-  **不同点：** 
+
+1. map()速度比forEach()快； 
+2. map()和filter()会返回一个**新数组**，不对原数组产生影响；forEach()不会产生新数组，返回undefined；reduce()函数是把数组**缩减为一个值**(比如求和、求积)； 
+3. map()里可以用return，而forEach()里用return不起作用，forEach()不能用break，会直接报错； 
+4. reduce()有4个参数，第一个参数为初始值。
+
+
+
+### 闭包
+
+#### 理解闭包
+
+JavaScript 的作用域链机制保证了外层对象无法**直接**引用内层作用域中的对象，这个机制是单向的。这是否意味着内层函数与外部是割裂的？我们永远无法访问一个内层函数中的对象吗？当然不会，名为「闭包」的组合可以解决这种割裂现象。
+
+一个函数和对其周围状态（**lexical environment，词法环境**）的引用捆绑在一起（或者说函数被引用包围），这样的组合就是**闭包**（**closure**）。也就是说，闭包让你可以**在一个内层函数中访问到包裹它的外层函数的作用域**。在 JavaScript 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来。
+
+```js
+function makeFunc() {
+    var name = "Mozilla";
+    function displayName() {
+        alert(name);
+    }
+    return displayName;
+}
+
+var myFunc = makeFunc();
+myFunc();
+```
+
+第一眼看上去，也许不能直观地看出这段代码能够正常运行。在一些编程语言中，一个函数中的局部变量仅存在于此函数的执行期间。一旦 `makeFunc()` 执行完毕，你可能会认为 `name` 变量将**不能再被访问**。
+
+然而，JavaScript中的函数在创建时会形成**闭包**：闭包是由函数以及声明该函数的词法环境组合而成的。**该环境包含了这个闭包创建时作用域内的任何局部变量**。在本例子中，`myFunc` 是执行 `makeFunc` 时创建的 `displayName` 函数实例的引用。`displayName` 的实例维持了一个对它的词法环境（变量 `name` 存在于其中）的引用。因此，当 `myFunc` 被调用时，变量 `name` 仍然可用，其值 `Mozilla` 就被传递到`alert`中。 
+
+#### 创建闭包
+
+```js
+function F() {
+    ...;
+    return function () {...};
+}
+    
+var obj = F();
+obj();
+```
+
+如上所示，一个函数的返回值是一个嵌套的内层函数，这个内层函数 `f()` 与其所在的词法环境就构成了闭包。我们可以在外层通过调用 `F()()` 就可以访问 `F()` 中的对象。
+
+
+
+#### 性能考量
+
+如果不是某些特定任务需要使用闭包，在其它函数中创建函数是不明智的，因为闭包在处理速度和内存消耗方面对脚本性能具有负面影响。
+
+由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。
+
+
 
 ## 七、面向对象编程
 
@@ -1219,7 +1842,7 @@ var John = {
 >
 > 可以说，**JavaScript对象是键值对的容器**；也可以说，**JavaScript对象是属性变量的容器**。
 
-#### 对象属性
+#### 1.对象属性
 
 访问对象属性有两种方法：
 
@@ -1245,7 +1868,7 @@ Jhon["his friends"]	// 如果属性名中包含空格，就必须使用引号将
 
    `hasOwnProperty` 是定义在 `Object.prototype` 上的一个方法
 
-#### 对象方法
+#### 2.对象方法
 
 对象**方法**定义了一个**函数**，并储存为对象的**属性**，通过 `()` 调用。
 
@@ -1276,7 +1899,7 @@ document.getElementById("demo").innerHTML = person.fullName();
 
 #### 1. 构造函数模式
 
- `Constructors` 是**创建对象**的函数。 函数给这个新对象定义属性和行为。 可将它们视为创建的新对象的蓝图。 
+`Constructors` 是**创建对象**的函数。 函数给这个新对象定义属性和行为。 可将它们视为创建的新对象的蓝图。 
 
 ```js
 function Bird(name, color) {
@@ -1386,15 +2009,15 @@ function SuperType() {									// 定义SuperType
 	this.prop = true;									// 定义属性
 }
 
-SuperType.prototype.getSuperValue = () => this.prop;	// 定义方法
+SuperType.prototype.getSuperValue = () => this.prop;	// 定义SuperType方法
 
-function SubType() {									// 定义SuperType
+function SubType() {									// 定义SubType
     this.subprop = false;								// 定义属性
 }
 
 SubType.prototype = new SuperType();					// 继承SuperType
 
-SubType.prototype.getSubValue = () => this.subprop;		// 定义方法
+SubType.prototype.getSubValue = () => this.subprop;		// 定义SubType方法
 
 let instance = new SubType();
 console.log(instance.getSuperValue)						// true
@@ -1699,22 +2322,220 @@ instance2.sayName();
 
 寄生式组合继承可以算是引用类型继承的最佳模式。
 
-###  this 指针
+### 类
 
-面向对象语言中 this 表示当前对象的一个**引用**。
+#### 1.理解类
 
-this指向的是该this所在的最里层的object对象。
+ES6 引入了「**类**」这个概念，作为对象的模板。通过`class`关键字，可以定义类。基本上，ES6 的`class`可以看作只是一个语法糖，它的绝大部分功能，ES5 都可以做到，新的`class`写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。 
 
-- 在方法中，this 表示该方法所属的对象。
-- 如果单独使用，this 表示全局对象。
-- 在函数中，this 表示全局对象。
-- 在函数中，在严格模式下，this 是未定义的(undefined)。
-- 在事件中，this 表示接收事件的元素。
-- 类似 call() 和 apply() 方法可以将 this 引用到任何对象。
+`constructor()`方法是类的默认方法，通过`new`命令生成对象实例时，自动调用该方法。一个类必须有`constructor()`方法，如果没有显式定义，一个空的`constructor()`方法会被默认添加。 
 
-> [JS中this关键字详解 - 沙沙起 - 博客园 (cnblogs.com)](https://www.cnblogs.com/lisha-better/p/5684844.html)
+```js
+class Point {
+}
 
+// 等同于
+class Point {
+  constructor() {}
+}
+```
 
+- 类必须使用`new`调用，否则会报错。这是它跟普通构造函数的一个主要区别，后者不用`new`也可以执行。 
+
+- 与 ES5 一样，实例的属性除非显式定义在其本身（即定义在`this`对象上），否则都是定义在原型上（即定义在`class`上）。 
+
+- 在类的内部可以使用`get`和`set`关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。 
+
+- 类不存在变量提升（hoist），这一点与 ES5 完全不同。 
+
+-  由于本质上，ES6 的类只是 ES5 的构造函数的一层包装，所以函数的许多特性都被`Class`继承，包括`name`属性。 
+
+  ```js
+  class Point {}
+  Point.name // "Point"
+  ```
+
+#### 2.静态方法
+
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上`static`关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。父类的静态方法，可以被子类继承。 
+
+```js
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+Foo.classMethod() // 'hello'
+
+var foo = new Foo();
+foo.classMethod()
+// TypeError: foo.classMethod is not a function
+```
+
+上面代码中，`Foo`类的`classMethod`方法前有`static`关键字，表明该方法是一个静态方法，可以直接在`Foo`类上调用（`Foo.classMethod()`），而不是在`Foo`类的实例上调用。如果在实例上调用静态方法，会抛出一个错误，表示不存在该方法。
+
+注意，如果静态方法包含`this`关键字，这个`this`指的是**类**，而不是实例。
+
+#### 3.静态属性
+
+静态属性指的是Class本身的属性，即`Class.propName`，而不是定义在实例对象（`this`）上的属性。实现方法是在实例属性的前面，加上`static`关键字；或者在外部单独为class赋值属性。 
+
+```js
+class Foo {
+    static prop = 1;
+}
+// 或：
+class Foo {
+}
+
+Foo.prop = 1;
+Foo.prop // 1
+```
+
+另外， ES2022 引入了[静态块](https://github.com/tc39/proposal-class-static-block)（static block），允许在类的内部设置一个代码块，在类生成时运行一次，主要作用是对静态属性进行初始化。 
+
+```js
+class C {
+  static x = ...;
+  static y;
+  static z;
+
+  static {
+    try {
+      const obj = doSomethingWith(this.x);
+      this.y = obj.y;
+      this.z = obj.z;
+    }
+    catch {
+      this.y = ...;
+      this.z = ...;
+    }
+  }
+}
+```
+
+上面代码中，类的内部有一个 static 代码块，这就是静态块。它的好处是将静态属性`y`和`z`的初始化逻辑，写入了类的内部，而且只运行一次。
+
+每个类只能有一个静态块，在静态属性声明后运行。静态块的内部不能有`return`语句。
+
+静态块内部可以使用类名或`this`，指代当前类。
+
+#### 4.私有方法和私有属性
+
+私有方法和私有属性，是只能在类的内部访问的方法和属性，外部不能访问。这是常见需求，有利于代码的封装，但 ES6 不提供，只能通过变通方法模拟实现。
+
+- 最简单的方法是在命名上区分：
+
+```js
+class Widget {
+
+  // 公有方法
+  foo (baz) {
+    this._bar(baz);
+  }
+
+  // 私有方法
+  _bar(baz) {
+    return this.snaf = baz;
+  }
+}
+```
+
+上面代码中，`_bar()`方法前面的**下划线**，表示这是一个只限于内部使用的私有方法。但是，这种命名是不保险的，在类的外部，还是可以调用到这个方法。 
+
+- 另一种是将私有方法移出类：
+
+```js
+class Widget {
+  foo (baz) {
+    bar.call(this, baz);	// 通过call访问外部方法
+  }
+}
+
+function bar(baz) {
+  return this.snaf = baz;
+}
+```
+
+上面代码中，`foo`是公开方法，内部调用了`bar.call(this, baz)`。这使得`bar()`实际上成为了当前类的私有方法。但这种做法不利于代码封装，不推荐使用。
+
+- 还有一种方法是利用`Symbol`值的**唯一性**，将私有方法的名字命名为一个`Symbol`值。 
+
+```js
+const bar = Symbol('bar');
+const snaf = Symbol('snaf');
+
+export default class myClass{
+  // 公有方法
+  foo(baz) {
+    this[bar](baz);
+  }
+
+  // 私有方法
+  [bar](baz) {
+    return this[snaf] = baz;
+  }
+};
+```
+
+上面代码中，`bar`和`snaf`都是`Symbol`值，一般情况下无法获取到它们，因此达到了私有方法和私有属性的效果。但是也不是绝对不行，`Reflect.ownKeys()`依然可以拿到它们。
+
+- 最后，还可以在属性名之前使用 `#` 
+
+```js
+class IncreasingCounter {
+  #count = 0;
+  get value() {
+    console.log('Getting the current value!');
+    return this.#count;
+  }
+  increment() {
+    this.#count++;
+  }
+}
+
+const counter = new IncreasingCounter();
+counter.#count // 报错
+counter.#count = 42 // 报错
+```
+
+上面代码中，`#count`就是私有属性，只能在类的内部使用（`this.#count`）。如果在类的外部使用，就会报错。 
+
+#### 5.类继承
+
+```js
+class SuperType {
+    constructor (name) {
+        this.name = name;
+    }
+    static showSentence() {
+        return `User's name is `;
+    }	// 静态方法
+    showName() {
+        return this.name;
+    }
+}
+
+class SubType extends SuperType{
+    constructor (name, age) {
+        super(name);
+        this.age = age;
+    }
+}
+let superUser = new SuperType("Jerry");
+let user = new SubType("Tom", 23);	// 创建同时覆盖父类name
+console.log(SuperType.showSentence() + user.showName() + ", age " + user.age);
+// User's name is Tom, age 23
+```
+
+类继承与原型继承的区别：
+
+1. **同时存在两条继承链**
+
+   原型继承中只有一条由`[[prototype]]`连接各个**原型对象**形成的继承链，它负责继承方法；而属性的继承要通过在子类上调用`call()`方法实现。
+
+   而class继承中多了一条由`[[prototype]]`连接各个**子类**形成的继承链（原型继承所有类的`[[prototype]]`都指向 `Function.prototype`），子类的`[[prototype]]`会指向**各自的父类**，顶级父类最后指向`Function.prototype`。这条链表示构造函数的继承，负责继承属性。
 
 
 
@@ -1840,7 +2661,7 @@ const doubler = item => item * 2;
 
   
 
-- 扩展运算符： 把数组或类数组对象解压成一组用逗号隔开的参数。
+- 扩展运算符： 把数组或类数组对象解压成一组用逗号隔开的参数。可以起到浅拷贝的作用。
 
   ```js
   let thisArray = ['rosemary', 'parsley'];
@@ -2183,6 +3004,82 @@ I am ${person.age} years old.`;	// 反引号`直接输出多行字符串
 
 console.log(greeting);
 ```
+
+
+
+### Symbol
+
+ES6引入了一种新的**原始数据类型** `Symbol`，用于防止属性名冲突，比如向第三方对象中添加属性时。它的值是唯一的，独一无二的不会重复的。
+
+-  Symbol值不能与其他类型的值进行运算，会报错。
+-  Symbol值可以显式转为字符串或布尔值，但是不能转为数值。 
+
+#### 声明
+
+声明一个Symbol有两种方式
+
+- 使用`Symbol.for()`会在系统中将Symbol登记
+- 使用`Symbol()`则不会登记
+
+```js
+// 1）直接定义
+let sym = Symbol('your description');
+console.log(sym);   // Symbol(your description)
+console.log(sym.description);   // your description
+
+// 2）Symbol.for()定义
+let sym1 = Symbol('描述一');
+let sym2 = Symbol('描述一');
+let symFor1 = Symbol.for('描述一');
+let symFor2 = Symbol.for('描述一');
+
+console.log(sym1 == sym2);    // false，直接定义的Symbol具有绝对唯一性，传入相同参数Symbol也是独立唯一的，因为参数只是描述而已；但使用Symbol.for则不会
+console.log(symFor1 == sym1);   // false，直接定义的Symbol和for定义的相互独立
+console.log(symFor1 == symFor2);    // true，for根据描述获取Symbol，如果不存在则新建一个Symbol
+```
+
+- `Symbol.keyFor` 
+
+  根据使用`Symbol.for`登记的Symbol返回描述，如果找不到返回undefined 。 
+
+#### 属性名的遍历
+
+Symbol 作为属性名，遍历对象的时候，该属性不会出现在`for...in`、`for...of`循环中，也不会被`Object.keys()`、`Object.getOwnPropertyNames()`、`JSON.stringify()`返回。
+
+但是，它也不是私有属性，有一个`Object.getOwnPropertySymbols()`方法，可以获取指定对象的所有 Symbol 属性名。该方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值。此外，也可以用内置对象方法`Reflect.ownKeys()`实现返回所有类型的键名，包括常规键名和 Symbol 键名。
+
+由于以 Symbol 值作为键名，不会被常规方法遍历得到。我们可以利用这个特性，为对象定义一些非私有的、但又希望只用于内部的方法：
+
+```js
+let size = Symbol('size');
+
+class Collection {
+  constructor() {
+    this[size] = 0;
+  }
+
+  add(item) {	// 原型方法
+    this[this[size]] = item;
+    this[size]++;
+  }
+
+  static sizeOf(instance) {	// 静态方法
+    return instance[size];
+  }
+}
+
+let x = new Collection();
+Collection.sizeOf(x) // 0
+
+x.add('foo');	// 执行原型方法不改变
+Collection.sizeOf(x) // 1
+
+Object.keys(x) // ['0']
+Object.getOwnPropertyNames(x) // ['0']
+Object.getOwnPropertySymbols(x) // [Symbol(size)]
+```
+
+上面代码中，对象`x`的`size`属性是一个 Symbol 值，所以`Object.keys(x)`、`Object.getOwnPropertyNames(x)`都无法获取它。这就造成了一种非私有的内部方法的效果。 
 
 
 

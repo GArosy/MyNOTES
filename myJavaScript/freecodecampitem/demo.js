@@ -19,3 +19,11 @@ yetAnotherPerson.friends.push("Barbie");
 
 console.log(person.friends);
 // ['Tom', 'Jerry', 'Bob', 'Barbie']
+
+function createAnother(original) {
+    let clone = object(original);
+    clone.sayHi = function() {
+        console.log("hi");
+    };
+    return clone;
+}

@@ -151,6 +151,6 @@ var isPalindrome = function(x) {
 };
 
 function F() {
-    document.getElementById('x').innerHTML=isPalindrome();
+    document.getElementById('x').innerHTML=bubbleSort();
 };
 

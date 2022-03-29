@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .btn {
+            font-size: 30px;
+            width: 150px;
+            margin: 20px;
+            padding: 30px;
+            text-align: center;
+            color: black;
+            background-color: silver;
+        }
+        .btn:hover {
+            cursor: pointer;
+            color: white;
+            background-color: black;
+        }
+    </style>
+    <title>闭包绑定按钮</title>
+</head>
+<body>
+    <div class="btn">xxa</div>
+    <div class="btn">xxb</div>
+    <div class="btn">xxc</div>
+    <div class="btn">xxd</div>
+
+    <script>
+        // 无闭包，输出都是4
+        var _div = document.getElementsByTagName('div');
+        for(var i = 0; i < _div.length; i++) {
+            _div[i].onclick = function() {
+                console.log(i);
+            }
+        }
+        
+        // 加入闭包
+        var _div = document.getElementsByTagName('div');
+        for(var i = 0; i < _div.length; i++) {
+            _div[i].onclick = function() {
+                console.log(i);
+            }
+        }
+    </script>
+</body>
+</html>

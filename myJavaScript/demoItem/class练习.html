@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>class练习</title>
+</head>
+
+<body>
+  <h1>class练习</h1>
+  <script>
+    // 1.创建class
+    // class User {
+    //     show() {}
+    //     print() {
+    //         console.log('类');
+    //     }
+    // }
+    // new一个对象
+    // let obj = new User;
+    // obj.print();
+
+
+    // 2.含参数的构造函数写法
+    // function Article(title) {
+    //   this.title = title;
+    // }
+    // let a = new Article("this is a title");
+    // console.log(a.title);
+    // 含参数的类写法
+    // class User {
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   getName() {
+    //     return this.name;
+    //   }
+    // }
+    // let b = new User('this is a b name');
+    // console.log(b.name);
+    // console.log(b.getName());
+
+
+    // 3.class工作原理 == 构造函数
+    // class User {
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   show() { };
+    // }
+    // // console.log(User === User.prototype.constructor); // true
+    // function Func() {
+    //   this.name = name;
+    // }
+    // // console.log(F === F.prototype.constructor); // true
+    // Func.prototype.show = function () { };
+    // console.dir(User);
+    // console.dir(Func);
+
+
+    // 4.对象属性的声明
+    // class User {
+    //   site = 'user site';
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   changeSite(value) {
+    //     this.site = value;
+    //   }
+    // }
+    // let a = new User('userA');
+    // a.changeSite('a.com');
+    // console.log(a);
+    // let b = new User('userB');
+    // console.log(b);
+
+
+    // 5.class声明的方法不能遍历
+
+
+    // 6.class对this指针默认使用严格模式（指向undefined）
+
+
+    // 7.静态属性
+    //    共用属性可定义为一个静态属性，节省内存
+    // class Request{
+    //   static host = 'https://www.baidu.com';  // 静态属性
+    //   api(url) {
+    //     return Request.host + `/${url}`;
+    //   }
+    // }
+    // let obj1 = new Request();
+    // console.log(obj1.host);  // undefined，静态属性无法直接访问！
+    // console.log(obj1.api('article')); // https://www.baidu.com/article
+
+
+    // 8.静态方法的实现原理
+    //    以函数为例：
+    // function User() { }
+    // User.prototype.show = function () {  //通过原型链访问的普通方法
+    //   console.log("prototype.show");
+    // }
+    // User.show = function () {
+    //   console.log("static.show");       //1.直接作为构造函数属性的静态方法
+    // }
+    // User.__proto__.show = function () {
+    //   console.log("static.show");       //2.定义在 Function.prototype 的静态方法
+    // }
+    //    class中实现：
+    // class User {
+    //   show() {
+    //     console.log("prototype.show");  //普通方法
+    //   }
+    //   static show() {
+    //     console.log("static.show");     //1.static关键字创建的静态方法！
+    //   }
+    // }
+    // User.show = function() {
+    //   console.log("static.show");       //2.直接作为class属性的静态方法
+    // }
+    // User.__proto__.show = function() {
+    //   console.log("static.show");       //3.定义在 Function.prototype 的静态方法
+    // }
+    // //    以上show()名字相同，作用效果相同，但相互独立
+    // console.dir(User);
+
+    // 一个使用静态函数的实例：
+    // class Member {
+    //   constructor(name, age, sex) {
+    //     this.name = name;
+    //     this.age = age;
+    //     this.sex = sex;
+    //   }
+    //   static create(...args) {
+    //     return new this(...args);
+    //   }
+    // }
+    // let tom = Member.create('Tom', '23', 'male');
+    // console.log(tom); // {name: 'Tom', age: '23', sex: 'male'}
+    // 调用静态方法不需要实例化该类，这里利用静态方法的特性创建了一个构造方法，传参更加灵活
+
+
+    // //9. 项目：课程管理类
+    // const data = [
+    //   { name: "js", price: 100 },
+    //   { name: "mysql", price: 200 },
+    //   { name: "vue", price: 98 }
+    // ]
+    // class Lesson {
+    //   constructor(data) {
+    //     this.model = data;
+    //   }
+    //   price() {
+    //     return this.model.price;
+    //   }
+    //   name() {
+    //     return this.model.name;
+    //   }
+    //   static createBatch(data) {
+    //     return data.map(item => new this(item));
+    //   }
+    //   static maxPrice(data) {
+    //     return data.sort((item1, item2) => item2.price() - item1.price())[0];
+    //   }
+    // }
+
+    // // let obj = new Lesson(data[0]); //逐一创建对象过于繁琐，应使用静态方法👇
+    // let lessons = Lesson.createBatch(data);
+    // let max_price_lesson = Lesson.maxPrice(lessons);
+    // console.log('Max price is: '+ max_price_lesson.price() + `, ${max_price_lesson.name()}`);
+
+
+    //10.访问器
+    // class Requset {
+    //   constructor(host) {
+    //     this.data = {};
+    //     this.host = host;
+    //   }
+    //   // 访问器set：
+    //   set host(url) {
+    //     if (!/^https?:\/\//i.test(url)) { // 正则验证url开头
+    //       throw new Error("地址错误");
+    //     }
+    //     this.data.host = url;
+    //   }
+    //   // get:
+    //   get host() {
+    //     return this.data['host'];
+    //   }
+    // }
+    // let baidu = new Requset("https://www.baidu.com"); //set host
+    // baidu.host = 'https://www.google.com';            // 修改host
+    // console.log(baidu.host);                          // get host
+
+
+    //11.属性保护
+    // 1）约定命名规则保护：下划线 _ 开头的命名默认为私有变量
+    // class User {
+    //   // 开放属性，非保护
+    //   color = 'blue';
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   _url = "https://tom.com";
+    //   set url(url) {
+    //     if(!/^https?:\/\//i.test(url)) {
+    //       throw new Error("地址错误");
+    //     }
+    //     this._url = url;
+    //   }
+    // }
+    // let tom = new User('Tom');
+    // tom.name = 'Cat Tom';
+    // console.log(tom);
+    // 2）使用symbol定义protected属性：
+    // const protecteds = Symbol();
+    // class Common {
+    //   constructor() {
+    //     this[protecteds] = {};
+    //     this[protecteds].host = "https://tom.com";
+    //   }
+    //   set host(url) {
+    //     if (!/^https?:\/\//i.test(url)) {
+    //       throw new Error("地址错误");
+    //     }
+    //     this[protecteds].host = url;
+    //   }
+    //   get host() {
+    //     return this[protecteds].host;
+    //   }
+    // }
+    // class User extends Common {  // 继承自Common
+    //   constructor(name) {
+    //     super();
+    //     this[protecteds].name = name
+    //   }
+    //   get name() {
+    //     return this[protecteds].name;
+    //   }
+    //   set name(setName) {
+    //     this[protecteds].name = setName;
+    //   }
+    // }
+    // let tom = new User('Tom');
+    // tom.host = "http://cattom.com";
+    // tom.name = 'Cat Tom';
+    // console.log(tom.host, tom.name);
+
+
+    //12.私有属性
+    // class User {
+    //   #host = "https://tom.com";  // 加#变私有
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   set url(url) {
+    //     if (!/^https?:\/\//i.test(url)) {
+    //       this.#host = url;
+    //     }
+    //   }
+    //   // #showName() {                   // 报错！方法不能直接加#
+    //   //   return this.name;
+    //   // }
+    //   #showName = () => {                // 箭头函数可以加#，因为showName本质是一个属性
+    //     return this.name;
+    //   }
+    // }
+    // let tom = new User("Tom");
+    // // tom.#host = "https://tom.com"; // 报错！
+    // tom.url = "https://tom.com";      // 只能用访问器修改！
+    // console.log(tom.#showName());
+
+
+    //13.class属性继承-原理
+    //    回顾函数继承：
+    // function Super(name) {
+    //   this.name = name;
+    // }
+    // function Sub(name) {
+    //   Super.call(this, name);                       // 继承属性 
+    // }
+    // Sub.prototype = Object.create(Super.prototype); // 继承原型方法
+    // Sub.prototype.constructor = Sub;  // 补写constructor
+    // Sub.prototype.showName = function() { // 定义子函数方法
+    //   return this.name;
+    // }
+    // let tom = new Sub("Tom");   // 创建子实例
+    // console.log(tom, tom.showName());
+    //    再来看class继承：
+    // class Super {
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   showSuper() {
+    //     console.log("Cat Tom");
+    //   }
+    // }
+    // class Sub extends Super{    // 1.extends关键字
+    //   constructor(name) {
+    //     super(name);      // 2.super()传参
+    //   }
+    // }
+    // let instance = new Sub("Tom");
+    // console.log(instance);
+    // instance.showSuper(); // Cat Tom
+
+    //14.super的原理
+    // class Super{
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   showSuper() {
+    //     console.log(this.name);
+    //   }
+    // }
+    // class Sub extends Super {
+    //   constructor(name) {
+    //     super(name);    // 类似Super.call(this，name)的作用，将name传给Super()
+    //   }
+    //   showSub() {
+    //     super.showSuper();
+    //     console.log("Sub Tom");
+    //   }
+    // }
+    // let ins = new Sub("Tom");
+    // ins.showSub();  // Tom ; Sub Tom
+
+    //15.静态继承
+    class Super {
+      static site = 'https://google.com';
+      static show() {
+        console.log("User.staticShow");
+      }
+    }
+    class Sub extends Super{
+      
+    }
+    console.dir(Sub);
+    console.dir(Super);
+  </script>
+</body>
+
+</html>
