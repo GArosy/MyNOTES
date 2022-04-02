@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异步练习</title>
+    <style>
+        div {
+            position: relative;
+            left: 0;
+            top: 0;
+            height: 100px;
+            width: 100px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+</body>
+<script>
+    // 1.异步加载图片
+    // function loadImage(src, resolve, reject) {   // 加载函数
+    //     let image = new Image();
+    //     image.src = src;
+    //     image.onload = resolve(image);
+    //     image.onerror = reject;
+    // }
+    // loadImage(
+    //     "https://cn.bing.com/th?id=OHR.Buritaca_ZH-CN7178457066_1920x1080.jpg&rf=LaDigue_1920x1080.jpg",
+    //     (img) => {
+    //         document.body.appendChild(img); // 添加子节点
+    //     },
+    //     () => console.log("加载失败")
+    // );
+    // console.log("1");
+    // // 先输出"1"，再输出"加载完成"
+
+    // 2.定时器的任务轮询
+    function interval(callback, delay) {    // 定时器的封装
+        let id = setInterval(() => {
+            callback(id);
+        }, delay);
+    }
+    interval(timeId => {
+        const div = document.querySelector('div');  // 获取div元素
+        let left = parseInt(window.getComputedStyle(div).left); //获取div左边距 
+        if (left <= 500) {
+            div.style.left = left + 1 + 'px';
+        } else {
+            div.style.left = 0;
+        }
+        console.log(left);
+    }, 1);
+    // for (let index = 0; index < 20; index++) {     // 执行主线任务优先，如果主任务耗时过长，队列任务可能难以执行
+    //     console.log(index);
+    // }
+
+    // 3.通过文件依赖了解任务排序
+    // function load(src, callback) {  // 抛入任务队列
+    //     let script = document.createElement("script");  // 创建script元素
+    //     script.src = src;   // 赋值地址
+    //     script.onload = callback;
+    //     document.body.appendChild(script);
+    // }
+    // // load("./doc1.js", () => print1());  // doc1
+    // // load("./doc2.js", () => print2());  // 依赖的doc1未加载，报错！
+    // // 两个文件此时随机加载，如果加载顺序出错就会报错，应使用回调嵌套方法：
+    // load("./doc1.js", () => {
+    //     load("./doc2.js", () => {   // 回调地狱！
+    //         print2();
+    //     })
+    // });
+    // console.log("主线任务");
+
+    // 4.ajax异步请求任务管理
+    
+</script>
+
+</html>

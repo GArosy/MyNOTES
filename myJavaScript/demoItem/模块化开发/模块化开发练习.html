@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块化开发</title>
+</head>
+
+<body>
+    <script type="module">  // 调用模块需要添加module属性！（模块属性的script具有独立作用域）
+        // 模态框、轮播图、视频播放器、后台数据请求等模块独立出不同的js文件
+        // 且只开放部分接口，模块之间具有独立的作用域
+        // 1.手写一个模块管理工具
+        // let module = (function () {
+        //     const moduleList = {};
+        //     function define(name, modules, action) {
+        //         modules.map((m,i)=>{
+        //             modules[i] = moduleList[m];
+        //         })
+        //         moduleList[name] = action.apply(null, modules);
+        //     }
+        //     return { define }
+        // })();
+        // module.define('MAX', [], function () {
+        //     return {
+        //         first(arr) {
+        //             return arr[0]
+        //         },
+        //         max(arr){
+        //             return arr.sort((a,b)=> b-a)[0];
+        //         }
+        //     }
+        // });
+        // module.define("lesson", ["MAX"], function(MAX){
+        //     let data = [
+        //         {name:'js',price:99},{name:'css',price:69}
+        //     ]
+        //     console.log(MAX.max(data,'price'));    // {name: 'js', price: 99}
+        // })
+        // console.log(module);
+        // console.log(module.moduleList);
+
+        // 2.模块的基本使用
+        import { title, show } from './module1.js'; // 导入模块的某个代码块
+        console.log(title, show);
+        show();
+
+    </script>
+</body>
+
+</html>

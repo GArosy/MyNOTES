@@ -38,11 +38,34 @@
 // }
 
 // 无重复字符的最长子串
-const x = 'abcabcbb';
-var lengthOfLongestSubstring = function(s) {
+// const x = 'abcabcbb';
+// var lengthOfLongestSubstring = function(s) {
 
-};
+// };
+
+// 77.组合
+let result = []
+       let path = []
+       var combine = function(n, k) {
+        result = []
+        backtraking(n,k,1)
+        return result
+       };
+           const backtraking = (n, k,startindex) =>{
+           if (path.length === k){     //backtracking也是递归，首先应该确定递归的终止条件
+               result.push([...path])   //复制是为了避免“引用传递”？
+               return
+           }
+           for(let i = startindex; i<=n; i++){
+               path.push(i)
+               backtraking(n,k,i+1)                    /* backtracking（递归函数）通过不断调用自己一直往深处遍历，总会遇到叶子节点，遇到了叶子节点就要返回。
+                                                             backtracking的下面部分就是回溯的操作了，撤销本次处理的结果。 */
+               path.pop()
+
+           }
+        }
+    
 
 function F() {
-    document.getElementById('demo').innerHTML=isPalindrome(x);
+    document.getElementById('demo').innerHTML=combine(4, 2);
 };

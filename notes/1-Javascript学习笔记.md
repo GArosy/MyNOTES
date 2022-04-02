@@ -1520,6 +1520,28 @@ function sum(x, y, f) {
 
  `map()`方法按照原始数组元素顺序依次处理元素，返回一个新的数组，数组中的元素为原始数组调用函数处理后的值。**可看作是对原数组进行映射**。 
 
+```js
+var new_array = arr.map(function callback(currentValue[, index[, array]]) {
+ // Return element for new_array 
+}[, thisArg])
+```
+
+*callback*
+
+生成新数组元素的函数，使用三个参数：
+
+- *currentValue*
+
+  `callback` 数组中正在处理的当前元素。
+
+- *index*可选
+
+  `callback` 数组中正在处理的当前元素的索引。
+
+- *array*可选
+
+  `map` 方法调用的数组。
+
 举例说明，比如我们有一个函数 f(x)=x^2^，要把这个函数作用在一个数组`[1, 2, 3, 4, 5, 6, 7, 8, 9]`上，就可以用`map`实现如下： 
 
  ![map](https://www.liaoxuefeng.com/files/attachments/925425803658112/0) 
@@ -3431,6 +3453,5 @@ let max = arr.reduce(function(prev, cur) {
 })
 // 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
 ```
-
 
 
