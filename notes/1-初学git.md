@@ -62,6 +62,28 @@ $ git commit -m "描述信息" #将暂存区的文件提交，存入分支，形
 
 大功告成！
 
+## 5. 拷贝仓库
+
+**git clone** 拷贝一个 Git 仓库到本地，让自己能够查看该项目，或者进行修改。
+
+拷贝项目命令格式如下：
+
+```
+ git clone [url]
+```
+
+[url]是需要拷贝的项目。 默认情况下，Git 会按照你提供的 URL 所指向的项目的名称创建你的本地项目目录。 通常就是该 URL 最后一个 / 之后的项目名称。如果你想要一个不一样的名字， 你可以在该命令后加上你想要的名称。 
+
+```
+$ git clone https://github.com/xxx/tom jerry
+Cloning into 'jerry'...
+remote: Enumerating objects: 12, done.
+remote: Total 12 (delta 0), reused 0 (delta 0), pack-reused 12
+Unpacking objects: 100% (12/12), done.
+```
+
+ 拷贝完成后，在当前目录下会生成一个 jerry 目录。
+
 ## 5. 指令列表
 
 |    指令    |                             说明                             | 备注                                                         |

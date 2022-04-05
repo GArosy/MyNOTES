@@ -76,7 +76,7 @@ console.log(a) // 打印为 {a : 200}
 > 3. 通过export方式导出，在**导入时要加{ }**，export default则不需要
 > 4. export能直接导出**变量表达式**，export default不行。
 
-## 二. 搭建服务器
+## 三. 搭建服务器
 
 **1.安装nodejs服务(从官网下载安装)，node相当于apache服务器**
 
@@ -186,3 +186,103 @@ console.log('服务器开启成功');
 开启服务器
 
 4.在浏览器输入localhost:8888/index.html访问 该文件
+
+## 四. 内置对象和模块
+
+### 1. global对象
+
+Node.js环境中唯一的全局对象，类似js中的 `window` 对象。
+
+### 2. process对象
+
+`global.process` 代表当前进程， 通过`process`对象可以拿到许多有用信息： 
+
+```js
+// 1.操作工作目录
+> process.cwd(); //返回当前工作目录
+'/Users/michael'
+
+> process.chdir('/private/tmp'); // 切换当前工作目录
+undefined
+> process.cwd();
+'/private/tmp'
+
+// 2.传入process.nextTick()的函数不会立即执行，而在下一轮事件循环中调用:
+process.nextTick(function () {
+    console.log('nextTick callback!');
+});
+console.log('nextTick was set!');
+// nextTick was set!
+// nextTick callback!
+
+// 3.程序即将退出时的回调函数:
+process.on('exit', function (code) {
+    console.log('about to exit with code: ' + code);
+});
+// Node.js进程本身的事件就由process对象来处理。如果我们响应exit事件，就可以在程序即将退出时执行某个回调函数
+```
+
+### 3. fs模块
+
+`fs`模块是node内置的文件系统模块，负责读写文件。和所有其它JavaScript模块不同的是，`fs`模块**同时提供了异步和同步的方法**。 
+
+### 4. stream模块
+
+`stream`是Node.js提供的一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。
+
+ [stream - 廖雪峰的官方网站 (liaoxuefeng.com)](https://www.liaoxuefeng.com/wiki/1022910821149312/1023025800783232) 
+
+### 5. http模块
+
+要开发HTTP服务器程序，从头处理TCP连接、解析HTTP是不现实的。这些工作实际上已经由Node.js自带的`http`模块完成了。
+
+应用程序并不直接和HTTP协议打交道，而是操作`http`模块提供的`request`和`response`对象。 
+
+- `request`对象封装了HTTP请求，我们调用`request`对象的属性和方法就可以拿到所有HTTP请求的信息；
+
+- `response`对象封装了HTTP响应，我们操作`response`对象的方法，就可以把HTTP响应返回给浏览器。
+
+#### 实例
+
+Node.js实现HTTP服务器：
+
+我们实现一个简单的Web程序 `hello.js` 它对于所有请求，都返回 `Hello!` 
+
+```js
+'use strict';
+
+// 导入http模块
+const http = require('http');
+// console.log(http);
+
+// 创建本地服务器来从其中接收数据
+const server = http.createServer((req, resp) => {
+    // 回调函数接收request和response对象
+    console.log(req.method + ':' + resp.url);
+    // 写入响应头：
+    // HTTP 状态码: 200 : OK
+    // Content Type: text/html
+    resp.writeHead(200, {'Content-Type' : 'text/html'});
+    // 将HTTP响应的HTML内容写入resp
+    resp.end('<h1>Hello!</h1>');
+});
+
+// 服务器监听8888接口：
+server.listen(8888);
+
+console.log('Server is running at http://127.0.0.1:8888/');
+// Server is running at http://127.0.0.1:8888/
+```
+
+
+
+`http.createServer([requestListener])` 是一个构造函数， 用来创建一个HTTP服务器 ,返回一个实例 `Server` 。
+
+*[requestListener]* 请求处理函数，自动添加到 `request` 事件，传递两个参数：
+
+​	`req` 请求对象
+
+​	`res` 响应对象
+
+
+

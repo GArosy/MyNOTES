@@ -1837,6 +1837,388 @@ obj();
 
 
 
+## 七、Promise与异步函数
+
+### Promise
+
+#### 含义
+
+`Promise` 对象是ES6中新增的引用类型，代表一个JS无法预测的结果的替身，通常表示一个异步操作的最终完成（失败）和其结果值。同其他引用类型一样，Promise通过`new`实例化，初始化新Promise时必须传入**执行器函数**作为参数。**Promise 新建后就会立即执行。** 
+
+```js
+let p = new Promise( () => {} );
+```
+
+`Promise` 对象使得异步方法可以像同步方法那样返回值：异步方法并不会立即返回最终的值，而是会返回一个 *promise*，以便在未来某个时候把值交给使用者。 
+
+一个 `Promise` 必然处于以下几种状态之一：
+
+- ***待定（pending）***: 初始状态，既没有被兑现，也没有被拒绝。
+- ***已兑现（fulfilled/resolved）***: 意味着操作成功完成。
+- ***已拒绝（rejected）***: 意味着操作失败。
+
+Promise的状态只能通过内部改变，内部操作在**执行器函数**中完成，通过调用它的两个参数可以实现控制Promise的状态。这两个参数通常命名为 `resolve()`（切换为**已兑现状态**）和 `reject()`（切换为**已拒绝状态并抛出错误**）。无论哪个被调用，Promise的状态都不可撤销了，只能改变一次。
+
+> 如果一个 promise 已经被兑现（fulfilled）或被拒绝（rejected），那么我们也可以说它处于*已敲定（settled）*状态，或者为了匹配另一个 promise 的状态被"锁定"了。 
+
+#### 基本用法
+
+1. **生成实例**
+
+   创造一个`Promise`实例，传入**执行器函数**作为参数。该函数的两个参数分别是`resolve`和`reject`。它们是两个函数，由 JavaScript 引擎提供，不用自己部署。 
+
+   ```js
+   const promise = new Promise(function(resolve, reject) {
+     // ... some code
+   
+     if (/* 异步操作成功 */){
+       resolve(value);
+     } else {
+       reject(error);
+     }
+   });
+   ```
+
+   `resolve`函数将`Promise`对象的状态从 pending 变为 resolved，并将异步操作的结果`value`作为参数传递出去；
+
+   `reject`函数将`Promise`对象的状态从 pending 变为 rejected，并将异步操作报出的错误`error`作为参数传递出去。
+
+2. 用`then`方法分别指定Promise对象`resolved`状态和`rejected`状态的回调函数。
+
+   ```js
+   promise.then((value) => {
+     // success
+   }, (error) => {
+     // failure
+   });
+   ```
+
+   `then`方法可以接受两个回调函数作为参数。第一个回调函数是`Promise`对象的状态变为`resolved`时调用，第二个回调函数是`Promise`对象的状态变为`rejected`时调用。这两个函数都是可选的，不一定要提供。**它们都接受`Promise`对象传出的值作为参数**。 
+
+下面是几个简单例子：
+
+```js
+function timeout(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms, 'done');
+  });
+}
+
+timeout(100).then((value) => {
+  console.log(value);
+});
+```
+
+```js
+let promise = new Promise(function(resolve, reject) {
+  console.log('Promise');
+  resolve();
+});
+
+promise.then(function() {
+  console.log('resolved.');
+});
+
+console.log('Hi!');
+
+// Promise
+// Hi!
+// resolved
+// 上面代码中，Promise 新建后立即执行，所以首先输出的是`Promise`。然后，then方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行，所以`resolved`最后输出。
+```
+
+```js
+function loadImageAsync(url) {
+  return new Promise(function(resolve, reject) {
+    const image = new Image();
+
+    image.onload = function() {
+      resolve(image);
+    };
+
+    image.onerror = function() {
+      reject(new Error('Could not load image at ' + url));
+    };
+
+    image.src = url;
+  });
+}
+// 上面代码中，使用Promise包装了一个图片加载的异步操作。如果加载成功，就调用resolve方法，否则就调用reject方法。
+```
+
+
+
+##### Promise.resolve()/reject()
+
+`Promise.resolve()`可以创建一个已经是resolve状态的Promise实例：
+
+```js
+const p1 = new Promise((resolve, reject)=>resolve());
+const p2 = Promise.resolve()
+// 这两个Promise实例实际上是一样的
+```
+
+`Promise.resolve()`方法的参数分四种情况：
+
+1. 如果参数是Promise实例，那么`Promise.resolve`将不做任何修改、原封不动地返回这个实例。 
+
+2. 参数是一个`thenable`对象（指具有`then`方法的对象），`Promise.resolve()`方法会将这个对象转为Promise对象，然后立即执行`thenable`对象的`then()`方法。 
+
+3. 参数不是具有`then()`方法的对象，或根本就不是对象，返回一个新的 Promise 对象，状态为`resolved`，其内部value为该参数。
+
+4. 不带有任何参数，直接返回一个`resolved`状态的 Promise 对象。 
+
+   
+
+`Promise.reject(reason)` 方法也会返回一个新的 Promise 实例，该实例的状态为`rejected`。 
+
+```js
+const p = Promise.reject('出错了');
+// 等同于
+const p = new Promise((resolve, reject) => reject('出错了'))
+
+p.then(null, function (s) {
+  console.log(s)
+});
+// 出错了
+```
+
+`Promise.reject()`方法的参数，会原封不动地作为`reject`的**理由**，变成后续方法的参数。 
+
+##### Promise.then()
+
+Promise 实例具有`then`方法，也就是说，`then`方法是定义在原型对象`Promise.prototype`上的。它的作用是为 Promise 实例添加状态改变时的回调函数。前面说过，`then`方法的第一个参数是`resolved`状态的回调函数，第二个参数是`rejected`状态的回调函数，它们都是可选的。 
+
+ `then`方法返回的是一个新的`Promise`实例（注意，**不是原来那个`Promise`实例**）。因此可以采用链式写法，即`then`方法后面再调用另一个`then`方法。 
+
+##### Promise.catch()
+
+`Promise.prototype.catch()`方法是`.then(null, rejection)`或`.then(undefined, rejection)`的语法糖，用于指定Promise的拒绝状态的处理程序。
+
+##### Promise.finally()
+
+finally()方法添加的处理程序在Promise为已拒绝或已兑现状态下都会执行。可以避免出现冗余代码，但这个方法无法得知Promise的状态，所以主要用来添加清理代码。
+
+#### 期约连锁与期约合成
+
+##### 期约连锁
+
+因为 `then` `catch` 方法返回的是 `Promise` 对象，所以它们可以被**链式调用**。
+
+ ![img](https://mdn.mozillademos.org/files/8633/promises.png) 
+
+我们可以用 `promise.then()`，`promise.catch()` 和 `promise.finally()` 这些方法将进一步的操作与一个变为已敲定状态的 promise 关联起来。这些方法还会返回一个新生成的 promise 对象，这个对象可以被非强制性的用来做链式调用，就像这样： 
+
+```js
+// **同步任务**
+let p = new Promise((resolve, reject) => {
+    console.log("first");
+    resolve();
+});
+
+p.then(() => {
+    console.log('second');
+    reject();
+})
+.catch(() => console.log("third"))
+.finally(()=> console.log("fourth"));
+
+console.log("主线任务");
+// first	// Promise实例在创建时立即执行
+// 主线任务	// 但是，Promise进入settled状态后，所有与该状态相关的处理程序仅仅会被排期，抛入任务队列
+// second	// 这里才开始执行then之后的处理程序
+// third
+// fourth
+```
+
+这段代码执行了一连串的**同步任务**。这显得没那么有用，因为直接顺序执行几个console.log()方法一样可以做到。下面实现一个真正的异步任务：
+
+```js
+// **异步任务**
+let p = new Promise((resolve, reject) => {
+    console.log('1秒过去了……');
+    setTimeout(resolve, 1000);
+})
+
+p.then(() => new Promise((resolve, reject) => {
+    console.log('2秒过去了……');
+    setTimeout(resolve, 1000);
+}))
+.then(() => new Promise((resolve, reject) => {
+    console.log('3秒过去了……');
+    setTimeout(resolve, 1000);
+}))
+.then(() => new Promise((resolve, reject) => {
+    console.log('4秒过去了……');
+    setTimeout(resolve, 1000);
+}));
+
+// 1秒过去了……
+// 2秒过去了……
+// 3秒过去了……
+// 4秒过去了……
+```
+
+以上代码中，每个执行器函数都返回一个Promise实例，这样就可以让每个后续Promise都等待之前的Promise，实现了**串行化异步任务**。
+
+以上代码中生成新Promise实例的执行器函数都是相同的，因此可以提取到一个**工厂函数**以简化代码：
+
+```js
+// 利用生成Promise的工厂函数简化代码
+function delayedResolve(str) {
+    return new Promise((resolve, reject) => {
+        console.log(str);
+        setTimeout(resolve, 1000);
+    });
+}
+
+delayedResolve('1秒过去了……')
+    .then(() => delayedResolve('2秒过去了……'))
+    .then(() => delayedResolve('3秒过去了……'))
+    .then(() => delayedResolve('4秒过去了……'))
+```
+
+##### 期约图
+
+链式调用可以构建一个**有向非循环**的结构，每个Promise都是其中的一个节点，处理程序则指向下一个节点：
+
+```js
+//		 A
+//	    / \
+//	  B     C
+//	 / \   / \
+//  D   E F   G
+
+let A = new Promise((resolve, reject) => {
+    console.log('A');
+    resolve();
+});
+let B = A.then(()=>console.log('B'));
+let C = A.then(()=>console.log('C'));
+B.then(()=> console.log('D'));
+B.then(()=> console.log('E'));
+C.then(()=> console.log('F'));
+C.then(()=> console.log('G'));
+
+// A
+// B
+// C
+// D
+// E
+// F
+// G
+```
+
+##### 期约合成
+
+Promise类提供了将两个或多个Promise合成一个的静态方法：`.all()` 和 `.race()`：
+
+1. **Promise.all()**
+
+   ```js
+   const p = Promise.all([p1, p2, p3]);
+   ```
+
+   `Promise.all()`方法必须接受一个**可迭代对象**作为参数，`p1`、`p2`、`p3`都是 Promise 实例，如果不是，就会先调用`Promise.resolve`方法，将参数转为 Promise 实例，再进一步处理。
+
+   另外，`Promise.all()`方法的参数可以不是数组，但必须具有 Iterator 接口，且返回的每个成员都是 Promise 实例。 
+
+   合成后`p`的状态由`p1`、`p2`、`p3`决定，分成两种情况：
+
+   **i.**
+
+   只有`p1`、`p2`、`p3`的状态**都**变成`fulfilled`，`p`的状态才会变成`fulfilled`，此时`p1`、`p2`、`p3`的返回值（Promise解决值）组成一个数组，传递给`p`的回调函数。
+
+   ```js
+   let p = Promise.all([
+       Promise.resolve('item1'),
+       Promise.resolve(),
+       Promise.resolve(2)
+   ])
+   p.then((values)=> console.log(values));
+   // ['item1', undefined, 2]
+   ```
+
+   **ii.**
+
+   只要`p1`、`p2`、`p3`之中有一个被`rejected`，`p`的状态就变成`rejected`，此时**第一个**被`reject`的实例的返回值，会传递给`p`的回调函数。
+
+   ```js
+   let p = Promise.all([
+       Promise.resolve(),
+       Promise.reject('已拒绝'),
+       Promise.reject('再次拒绝')
+   ])
+   
+   setTimeout(console.log, 0, p);  // Promise {<rejected>: '已拒绝'}
+   // 报错！ Uncaught (in promise) undefined
+   // 未使用catch，错误跑掉了
+   
+   p.catch((reason) => setTimeout(console.log, 0, reason));	// 已拒绝
+   // 无报错！
+   // 虽然只有第一个拒绝理由进入处理程序catch，但其余错误会被静默处理，不会有错误跑掉
+   ```
+
+2. **Promise.race()**
+
+   `Promise.race()`返回一组Promise中**最先解决或拒绝**的Promise的**镜像**。 
+
+   ```javascript
+   const p = Promise.race([p1, p2, p3]);
+   ```
+
+   只要`p1`、`p2`、`p3`之中有一个实例**率先**改变状态，`p`的状态就跟着改变。那个率先改变的 Promise 实例的返回值，就传递给`p`的处理程序。 
+
+   ```js
+   const p = Promise.race([
+     fetch('/resource-that-may-take-a-while'),
+     new Promise(function (resolve, reject) {
+       setTimeout(() => reject(new Error('request timeout')), 5000)
+     })
+   ]);
+   
+   p
+   .then(console.log)
+   .catch(console.error);
+   ```
+
+   上面代码中，如果 5 秒之内`fetch`方法无法返回结果，变量`p`的状态就会变为`rejected`，从而触发`catch`方法指定的回调函数。 
+
+3. 串行期约合成
+
+   ```js
+   function addTwo(x) { return x + 2 };
+   function addThree(x) { return x + 3 };
+   function addFive(x) { return x + 5 };
+   
+   // 直接方法
+   function addAll(x) {
+       return Promise.resolve(x)
+           .then(addTwo)
+           .then(addThree)
+           .then(addFive);
+   }
+   addAll(8).then(console.log);	// 18
+   
+   // reduce简化的方法
+   function addAll(x) {
+       return [addTwo, addThree, addFive]
+           .reduce((prom, fn)=> prom.then(fn), Promise.resolve(x));
+   }
+   addAll(8).then(console.log);	// 18
+   
+   // 提炼出一个通用合成函数
+   function compose(...fns) {
+       return function(x) {
+           return fns.reduce((prom, fn)=> prom.then(fn), Promise.resolve(x));
+       }
+   }
+   let addAll = compose(addTwo, addThree, addFive);
+   addAll(8).then(console.log)	// 18
+   ```
+
+   
+
 ## 七、面向对象编程
 
 ### 理解对象

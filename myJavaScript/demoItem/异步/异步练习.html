@@ -22,11 +22,13 @@
     <div></div>
 </body>
 <script>
-    // 1.异步加载图片
-    // function loadImage(src, resolve, reject) {   // 加载函数
+    // 1.通过回调实现异步加载图片
+    // function loadImage(src, resolve, reject) {   // 加载异步函数
     //     let image = new Image();
     //     image.src = src;
+    //     // 成功后执行的回调函数
     //     image.onload = resolve(image);
+    //     // 失败后执行的回调函数
     //     image.onerror = reject;
     // }
     // loadImage(
@@ -37,29 +39,29 @@
     //     () => console.log("加载失败")
     // );
     // console.log("1");
-    // // 先输出"1"，再输出"加载完成"
+    // // 执行异步函数后将从src获取图片的任务加入任务队列，紧接着执行console.log；先输出"1"，再输出"加载完成"
 
     // 2.定时器的任务轮询
-    function interval(callback, delay) {    // 定时器的封装
-        let id = setInterval(() => {
-            callback(id);
-        }, delay);
-    }
-    interval(timeId => {
-        const div = document.querySelector('div');  // 获取div元素
-        let left = parseInt(window.getComputedStyle(div).left); //获取div左边距 
-        if (left <= 500) {
-            div.style.left = left + 1 + 'px';
-        } else {
-            div.style.left = 0;
-        }
-        console.log(left);
-    }, 1);
+    // function interval(callback, delay) {    // 定时器的封装
+    //     let id = setInterval(() => {
+    //         callback(id);
+    //     }, delay);
+    // }
+    // interval(timeId => {
+    //     const div = document.querySelector('div');  // 获取div元素
+    //     let left = parseInt(window.getComputedStyle(div).left); //获取div左边距 
+    //     if (left <= 500) {
+    //         div.style.left = left + 1 + 'px';
+    //     } else {
+    //         div.style.left = 0;
+    //     }
+    //     console.log(left);
+    // }, 1);
     // for (let index = 0; index < 20; index++) {     // 执行主线任务优先，如果主任务耗时过长，队列任务可能难以执行
     //     console.log(index);
     // }
 
-    // 3.通过文件依赖了解任务排序
+    // 3.实现异步编程——回调策略
     // function load(src, callback) {  // 抛入任务队列
     //     let script = document.createElement("script");  // 创建script元素
     //     script.src = src;   // 赋值地址
@@ -75,9 +77,36 @@
     //     })
     // });
     // console.log("主线任务");
+    // 文件的依赖导致我们在调用回调函数时需要考虑加载的先后顺序，因此多个回调函数需要通过嵌套的方法组织起来。
+    // 如果有大量的回调函数需要执行，这一方式编写的代码将会越来越复杂，难以维护。
+    // 回调策略是不具有扩展性的。为解决这个问题，Promise应运而生...
 
-    // 4.ajax异步请求任务管理
-    
+    // 4.promise微任务处理机制
+    //  回调策略的不可持续性引出了Promise
+    //  pending 准备阶段
+    console.log(new Promise((resolve, reject) => {
+        // 成功状态
+        resolve('Success');
+        // 拒绝状态
+        reject('Fail')
+        // 状态处理
+    }).then(
+        value => {
+            console.log('处理成功');
+        },
+        reason => {
+            console.log('处理失败');
+        }
+    ).then(
+        value => {
+            console.log('处理成功');
+        },
+        reason => {
+            console.log('处理失败');
+        }
+    )
+    );
+
 </script>
 
 </html>
