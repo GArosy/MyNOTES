@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btnAdd">add</button>
+    <ul id="ulList">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>
+    <script>
+        // 普通写法
+        let num = 3;
+        let btn = document.getElementById("btnAdd");
+        let ul = document.getElementById("ulList");
+        let list = document.getElementsByTagName("li");
+
+        btn.addEventListener('click', () => {
+            num++;
+            let li = document.createElement("li");
+            li.innerHTML = num;
+            ul.appendChild(li);
+        }, false)
+
+        let showInner = function () {
+            alert(this.innerHTML);
+        }
+
+        for (let i = 0; i < list.length; i++) {
+            list[i].addEventListener("click", showInner, false)
+        }
+        // 普通写法中，事件不具有继承性，新添加的li元素无法绑定事件；
+
+        // 事件委托法
+        let num = 3;
+        let btn = document.getElementById("btnAdd");
+        let ul = document.getElementById("ulList");
+
+        btn.addEventListener("click", () => {   
+            num++;
+            let li = document.createElement("li");
+            li.innerHTML = num;
+            ul.appendChild(li);
+        }, false)
+
+        let showInner = function (event) {
+            let target = event.target;
+            if (target.nodeName.toLowerCase() == "li") {    // 这里nodeName返回的是大写LI，要注意转换
+                alert(target.innerHTML);
+            }
+        }
+
+        ul.addEventListener('click', showInner, false); // 只监听父级元素ul
+        // 新增的li被点击时，时间会冒泡到ul上，ul的点击事件会被触发，如果事件对象的target为li，则触发alert
+    </script>
+</body>
+
+</html>

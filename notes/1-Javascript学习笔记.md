@@ -1160,21 +1160,609 @@ javascript:void(func())
 
 
 
-## 五、JS HTML DOM
+## 五、BOM DOM
 
-通过 HTML DOM，可访问 JavaScript HTML 文档的所有元素。
+DOM描述了**处理网页内容**的方法和接口，BOM描述了**与浏览器进行交互**的方法和接口。 在BOM和DOM结构层次图中，document对象属于window对象，所以**DOM也可以看作是BOM的一部分**。
 
-### HTML DOM
+ 
 
-当网页被加载时，浏览器会创建页面的**文档对象模型** (Document Object Model)。
+![img](https://pic4.zhimg.com/80/v2-a66d89cf1c74eb65da275e9b6685050f_720w.jpg) 
 
-HTML DOM 模型被构造为**对象**的树：
+
+
+### BOM
+
+浏览器对象模型（Browser Object Model） 是使用JS开发Web应用程序的核心。
+
+1. window
+2. navigator
+3. screen
+4. location
+5. document
+6. history
+
+BOM负责的范围：
+
+- **A区** 浏览器的标签页，地址栏，搜索栏，书签栏，窗口放大还原关闭按钮，菜单栏等等 
+- **B区 **浏览器的右键菜单
+- **C区** document加载时的状态栏，显示http状态码等
+- **D区** 滚动条scroll bar
+
+### DOM
+
+文档对象模型（Document Object Model）是HTML和XML/HTML文档的编程接口API。
+
+DOM独立于平台和编程语言。它可被任何编程语言诸如Java、JavaScript 和 VBScript 使用。它提供了与网页无关的浏览器功能对象。它是真正跨平台、语言无关的表示和操作网页的方式。
+
+javascript实现DOM接口的对象对应的是`document`对象，JS通过该对象来对HTML/XML文档进行增删改查。
+
+DOM负责的范围：
+
+- **E区** document。其中包含index.html，CSS和JS等等，部署在服务器上，我们可以通过浏览器的地址栏输入URL然后回车将这个document加载到本地，浏览，右键查看源代码等。 
+
+
+
+任何HTML或XML文档都可以用DOM表示一个由**节点**构成的**树**结构。HTML中每种标记都可以表示为这个树形结构中的一个节点（属性、类型、注释甚至换行）。DOM中共有12种节点类型，可在节点的`nodeType`属性中查看（由数值常量表示）。
+
+
 
 ![HTML DOM 树](https://www.runoob.com/images/pic_htmltree.gif)
 
+#### Node接口
+
+JavaScript通过`Node类型`来实现DOM的Node接口，所有节点类型都继承Node类型的基本属性和方法。开发最常用到的节点是 `Node.ELEMENT_NODE`(1) 、 `Node.ATTRIBUTE_NODE`(2) 和 `Node.TEXT_NODE`(3)。
+
+**有关节点的属性和方法：**
+
+1. 节点信息
+
+   `nodeName` 与 `nodeValue` 属性保存关于节点的信息。
+
+2. 节点关系
+
+   - 节点的 `childNodes` 属性包含一个 `nodeList` 类数组对象，用于有序指向这个节点的子节点，其中第一个和最后一个子节点可用 `firstChild`/`lastChild` 表示。同理，childNodes中所有同胞节点指向同一个 `parentNode`。
+
+   - 同胞节点之间可用 `previousSibling`/`nextSibling` 导航。
+
+   - `hasChildNodes()` 方法可以查询节点是否有一个或多个子节点。
+
+   - `ownerDocument` 属性指向本节点自己所在的文档本身。
+
+3. 操作节点
+
+   DOM中所有关系指针都是**只读的**。DOM提供了一些操作节点的方法：
+
+   - 增：
+
+     `appendChild([newNode])` 用于在childNodes列表末尾添加节点。接收newNode，返回newNode。
+
+     `insertBefore([newNode], [node])` 用于在指定位置插入节点。接收newNode并插至node前面，返回newNode。
+
+   - 删：
+
+     `removeChild([node])` 用于移除指定的node，返回node。
+
+   - 改：
+
+     `replaceChild([newNode], [node])` 用于替换节点。接收newNode，替换node。
+
+   - 复制：
+
+     `cloneNode([Boolean])` 返回与调用它的节点一模一样的节点。接受一个布尔值参数，表示是否深拷贝。
+
+#### Document类型
+
+js中，表示**文档**节点的类型。浏览器中，**文档对象document**是HTMLDocument类型的实例。document是window对象的一个属性，因此是一个全局对象。它具有以下特征：
+
+- nudeType = 9
+- nodeName = #document
+- nodeValue/parentNode/ownerDocument = null
+
+duocument对象可用于获取页面信息以及操纵其外观和底层结构。
+
+**属性和方法：**
+
+1. 访问子节点
+   - `documentElement` 属性指向HTML页面中的`<html>`元素。
+   - `body` 属性指向`<body>`元素。
+   - `docType` 属性指向`<!doctype>`元素。
+2. 访问文档信息
+   - `title` 属性指向页面标题。
+   - `URL` 包含当前页面完整url。
+   - `domain` 包含当前页面域名。
+   - `referrer` 包含链接至当前页面的页面的url。
+
+3. 定位元素
+   - `getElementById()` 返回文档中匹配到的第一个出现的元素。
+   - `getElementsByTagName()` 返回包含0个或多个元素的`NodeList`，它属于一个HTMLColleciton对象。可通过`[]`、`.item()`、`.name()`取得其中某一项的引用。
+   - `getElementsByName()` 同上。常用于单选按钮。
+
+4. 特殊集合
+   - `anchors` 包含文档中所有**带name属性**的`<a>`元素。
+   - `links` 包含文档中所有**带href属性**的`<a>`元素。
+   - `form` 包含文档中所有的`<form>`元素。
+   - `images` 包含文档中所有的`<img>`元素。
+
+#### Element类型
+
+表示XML/HTML元素，对外暴露访问其子节点和属性的能力。它具有以下特征：
+
+- nodeType = 1
+- nodeName = 元素标签名
+- nodeValue = null
+
+1. 取得属性
+
+   ```html
+   <div id="div1" class="bd" title="myText">
+   ```
+
+   以上HTML元素的所有属性都可用以下js代码读取：
+
+   ```js
+   let div = document.getElementById("div1");
+   
+   // 通过访问对象属性取得
+   alert(div.id);						// div1
+   alert(div.className);				// bd
+   alert(div.title);					// myText
+   
+   // 通过DOM方法取得
+   alert(div.getAttribute("id"));		// div1
+   alert(div.getAttribute("class"));	// bd
+   alert(div.getAttribute("title"));	// myText
+   ```
+
+   `getAttribute()` 方法可以取得自定义属性的值，而自定义属性不会成为DOM对象的属性，所以无法通过访问对象属性获取属性值。
+
+   > 通过访问对象属性与通过`getAttribute()`方法获取的值不一定相同：
+   >
+   > 使用`getAttribute()`访问`style`属性返回的是CSS字符串；使用对象属性访问则返回CSSStyleDeclaration对象。
+   >
+   > 使用`getAttribute()`访问事件属性（事件处理程序，如onclick）返回的是字符串形式的源代码；使用对象属性访问则返回一个js函数
+   >
+   > 考虑以上差异，DOM编程中常常会放弃使用`getAttribute()`而只使用对象属性获取属性值。`getAttribute()`主要用于取得自定义属性的值。
+
+   
+
+2. 设置属性
+
+   `setAttribute([name],[value])` 设置属性值。接收要设置的属性名name，将它的值替换/创建为value。
+
+   同理，直接为DOM对象的属性赋值也可以做到设置属性，但无法通过直接添加DOM对象属性做到添加自定义属性。
+
+3. 删除属性
+
+   `removeAttribute()` 将整个属性从元素中移除。
+
+4. attributes属性
+
+5. 创建元素
+
+   `createElement([name])` 方法创建一个新元素。接收元素标签名name。
+
+#### Text类型
+
+它具有以下特征：
+
+- nodeType = 3
+- nodeName = “#text”
+- nodeValue = 节点中的文本
+- 不支持子节点
+
+### DOM编程
+
+1. NodeList对象
+
+   NodeList和相关的NamedNodeMap、HTMLCollection集合类型都是**实时的**类数组类型，它们基于DOM文档的实时查询，因此这里需要注意的是：
+
+   - NodeList只是结构上类似数组，数组的通用方法map()、reduce()等无法使用；
+
+   - 对其使用迭代时可能会导致无穷循环，迭代时最好初始化一个保存当前长度的变量；
+   - 每次查询都会遍历整个DOM文档，应尽可能减少操作NodeList的次数。
+
+2. 操作表格
+
+   为方便创建表格，DOM为 `<table>/<tbody>/<tr>` 元素添加了一些属性和方法：
+
+   `<table>`
+
+   - `tBodies`
+   - `tFoot`
+   - `tHead`
+   - `rows`
+   - `creatTHead()`
+   - `creatTFoot()`
+   - `deleteRow()`
+   - `insertRow()`
+
+   `<tbody>`
+
+   - `rows`
+   - `deleteRow()`
+   - `insertRow()`
+
+   `<tr>`
+
+   - `cells`
+   - `deleteCell()`
+   - `insertCell()`
+
+### MutationObserver接口
+
+MutationObserver可以在DOM被修改时异步执行回调，做到监视整个文档、某个元素甚至一个元素属性。
+
+#### 用法
+
+创建实例：调用构造函数并传入一个回调函数：
+
+```js
+let observer = new MutationObserver(() => console.log("DOM was mutated!"));
+```
+
+1. `observe([node],[MutationObserverInit])` 
+
+   以上实例并不会关联DOM的任何部分，需要利用observe方法。它接收待观察的节点和一个MutationObserverInit对象。
+
+   MutationObserverInit对象是一个键值对字典，用于配置要观察哪些方面的变化。
+
+   ```js
+   // 传入要执行的异步回调函数
+   let observer = new MutationObserver(() => console.log("<body> attributes changed"));
+   // 监视body节点发生的属性变化
+   observer.observe(document.body, { attributes: true });
+   
+   document.body.className = "cls";
+   console.log("change body class");
+   
+   // change body class
+   // <body> attributes changed
+   ```
+
+2. `MutationRecord`
+
+   每个回调函数都会收到一个MutationRecord数组，包含发生的变化和受影响部分的信息。如果监视到了多次变化，每次变化的信息会依次传入MutationRecord。上面代码的MutationRecord如下：
+
+   ```js
+   [
+       {
+           addedNodes: NodeList,
+           attributeName: "class",
+           attributeNamespace: null,
+           nextSibling: null,
+           oldValue: null,
+           previousSibling: null,
+           removedNodes: NodeList,
+           target: body.cls,
+           type: "attributes"
+       }
+   ]
+   ```
+
+3. `disconnect()`
+
+   只要被监视的元素不被回收，回调函数就会响应DOM事件的变化而执行。可以用`disconnect`方法提前终止回调。
+
+   ```js
+   let observer = new MutationObserver(() => console.log("<body> attributes changed"));
+   observer.observe(document.body, { attributes: true });
+   
+   document.body.className = "cls";
+   
+   observer.disconnect();
+   // 无输出
+   ```
+
+#### MutationObserverInit与观察范围
+
+MutationObserverInit对象用于配置对目标节点的观察范围，有以下属性：
+
+| 属性                  | 说明                                                 |
+| --------------------- | ---------------------------------------------------- |
+| subtree               | 布尔值，是否观察目标节点的子树                       |
+| attributes            | 布尔值，是否观察目标节点的属性变化                   |
+| attributeFilter       | 字符串数组，设置要观察哪些属性的变化                 |
+| attributeOldValue     | 布尔值，MutationRecord是否要记录属性变化之前的值     |
+| characterData         | 布尔值，修改文本节点的字符数据是否触发变化事件       |
+| characterDataOldValue | 布尔值，MutationRecord是否要记录字符数据变化之前的值 |
+| childList             | 布尔值，修改目标节点的子节点是否触发变化事件         |
 
 
-## 六、函数
+
+
+
+## 事件
+
+JavaScript与HTML的交互是通过**事件**实现的。
+
+### 事件流
+
+页面触发一个事件时，会按照一定的顺序来响应事件，事件的响应过程为事件流。
+
+1. 冒泡型
+
+   IE提出的事件流是事件冒泡，即从下至上，从目标触发的元素逐级向上传播，直到window对象。
+
+2. 捕获型
+
+   Netscape提出的事件流是事件捕获，即从document逐级向下传播到目标元素。
+
+   > 由于IE低版本浏览器不支持，所以很少使用事件捕获。 
+
+3. DOM2事件流
+
+   ECMAScript在DOM2中对事件流进行了进一步规范，基本上就是上述二者的结合。
+
+   DOM2级事件规定的事件流包括三个阶段： 
+
+   （1）事件捕获阶段 
+
+   （2）处于目标阶段 
+
+   （3）事件冒泡阶段 
+
+
+
+### 事件处理程序
+
+JavaScript在浏览器中以单线程模式运行，页面加载过程中，所有的JavaScript代码会被执行完毕。这时如果需要与HTML元素进行动态交互，就只能依赖**触发事件**来执行**事件处理程序**（事件监听器），事件处理程序是一个函数，可以在事件发生时执行相应的js代码。
+
+事件处理程序的名字以`on`开头，其种类有以下几种：
+
+1. **HTML事件处理程序**
+
+   直接在HTML元素中指定事件处理程序：
+
+   ```html
+   <button onclick="show()">show</button>
+   // show()函数会在按钮被点击时执行
+   ```
+
+   这样做有以下问题：
+
+   - 时间差问题：HTML元素显示并被点击后，js代码还未加载结束，这时会发生错误。
+
+     因此，HTML事件处理程序要被封装在try/catch块中静默失败：
+
+     ```html
+     <button onclick="try{show();}catch(error){}">show</button>
+     ```
+
+   - 作用域链引发的兼容问题：HTML事件处理程序定义在全局作用域中，对作用域链的扩展在不同浏览器中可能导致不同结果。
+   - HTML与js强耦合：如需要修改一个函数，会同时涉及HTML和js的修改。
+
+2. **DOM0事件处理程序**
+
+   DOM0事件处理程序是在js中指定事件处理程序的传统方式。它先取得对操作对象的引用，然后把一个函数赋值给DOM元素的事件处理程序属性。
+
+   ```js
+   let btn = document.getElementById("btn-id");
+   btn.onclick = function() {
+       console.log(this.id);	// "btn-id"
+   }
+   ```
+
+   以上代码实现了点击按钮输出元素id，这个id通过this.id获取。可见事件处理程序会在元素的作用域中执行，即this等于元素。
+
+   DOM0事件处理程序的问题在于：
+
+   - 不能添加多个事件处理程序；
+   - 只支持**冒泡型事件流**；
+
+3. **DOM2事件处理程序**（不支持IE）
+
+   DOM2 Events 为事件处理程序的赋值和移除定义了两个方法：
+
+   - `addEventListener([event],[function],[eventStream])` 
+   - `removeEventListener([event],[function],[eventStream])` 
+
+   它们接收3个参数，要处理的事件（**不带on**）、事件处理函数、使用冒泡（false，默认）/捕获（true）事件流。
+
+   ```html
+   <button id="btnId" name="myBtn">button</button>
+   
+   <script>
+   let btn = document.getElementById("btnId");
+       
+   let showId = function () {
+       alert(this.id);
+   }
+   let sayName = function () {
+       alert(this.name);
+   }
+   
+   btn.addEventListener('click', showId, false);
+   btn.addEventListener('click', sayName, false);
+   // btnId
+   // myBtn
+   </script>
+   ```
+
+   可见DOM2方式的事件处理程序的作用域同样在元素中，而且**可以为同一个事件添加多个事件处理程序**，这是DOM2方式的最主要优势。（**事件触发顺序与事件处理程序添加顺序相同**）
+
+4. **IE事件处理程序**
+
+   IE提供了类似DOM2方法的IE事件处理程序，即`attachEvent()/detachEvent()`。它们接收两个参数：事件处理程序名称（**带on**）、事件处理函数。这里没有DOM2方式中的第三个参数来控制事件流，因为IE9之前的版本**只支持冒泡事件流**。
+
+   ```html
+   <button id="btnId" name="myBtn">button</button>
+   
+   <script>
+   let btn = document.getElementById("btnId");
+       
+   let showId = function () {
+       alert(this.id);
+   }
+   let sayName = function () {
+       alert('name');
+   }
+   
+   btn.attachEvent('onclick', showId);
+   btn.attachEvent('onclick', sayName);
+   // name
+   // undefined
+   </script>
+   ```
+
+   IE事件处理程序中，事件触发顺序与事件处理程序添加顺序相反，不仅如此，IE事件处理程序在**全局作用域**中进行，因此以上代码的this为window对象。
+
+5. **跨浏览器的事件处理程序**
+
+   为兼容IE浏览器和标准浏览器，我们可以自己编写通用的事件处理程序。
+   
+   这需要创建两个方法：
+   
+   `addHandler()` 视情况使用DOM0、DOM2或IE方式添加事件处理程序。
+   
+   `removeHandler()` 移除添加的事件。
+   
+   它们接收相同的三个参数：要操作的DOM元素、事件名称（不带on）、事件处理程序函数。
+   
+   ```js
+   var EventUtil = {
+       addHandler: function (element, event, handler) {
+           if (element.addEventListener) { // 检测元素是否有DOM2方法
+               element.addEventListener(event, handler, false);
+           } else if (element.attachEvent) { // 检测元素是否有IE方法
+               element.attachEvent("on" + event, handler);
+           } else { // 如果都不存在，使用DOM0方法
+               element["on" + event] = handler;
+           }
+       },
+       removeHandler: function (element, event, handler) {
+           if (element.removeEventListener) {
+               element.removeEventListener(event, handler, false);
+           } else if (element.detachEvent) {
+               element.detachEvent("on" + event, handler);
+           } else {
+               element["on" + event] = null;
+           }
+       }
+   }
+   
+   // 使用方法
+   let btn = document.getElementById("btnId");
+   let handler = function() {
+       console.log("clicked");
+   }
+   EventUtil.addHandler(btn, "click", handler);
+   ```
+
+### 事件对象
+
+DOM中发生的所有事件，其相关信息都会被收集储存在 `event` 对象中。
+
+1. DOM事件对象
+
+   不论以何种方法指定事件处理程序，event对象都会作为事件处理程序函数的唯一参数传入其中。
+
+   ```js
+   let btn = document.getElementById("btn");
+   btn.addEventListener("click", (event)=>{
+   	console.log(event.type);
+   }, false);
+   // click
+   ```
+
+   不同类型的事件生成的事件对象会包含不同的属性和方法，但它们拥有一些公共的属性方法：
+
+   | 属性/方法         | 类型   | 说明                                                      |
+   | ----------------- | ------ | --------------------------------------------------------- |
+   | bubbles           | 布尔值 | 事件流是否冒泡                                            |
+   | cancelable        | 布尔值 | 是否可以取消事件的默认行为                                |
+   | currentTarget     | 元素   | 事件处理程序当前所在元素（this始终指向它）                |
+   | eventPhase        | 整数   | 事件传播的当前阶段。1：捕获阶段；2：到达目标；3：冒泡阶段 |
+   | target            | 元素   | 事件的目标节点                                            |
+   | type              | 字符串 | 事件类型                                                  |
+   | stopPropagation() | 函数   | 阻断所有后续事件捕获或事件冒泡（bubbles须为true）         |
+   | preventDefault()  | 函数   | 阻止事件的默认行为（cancelable须为true）                  |
+
+   > IE中使用事件对象存在一定的兼容性问题
+
+2. 事件委托
+
+   利用事件冒泡，只指定一个事件处理程序，就可以管理某一类的所有事件：
+
+   ```html
+   <button id="btnAdd">add</button>
+   <ul id="ulList">
+       <li>1</li>
+       <li>2</li>
+       <li>3</li>
+   </ul>
+   <script>
+   // 普通写法
+   let num = 3;
+   let btn = document.getElementById("btnAdd");
+   let ul = document.getElementById("ulList");
+   let list = document.getElementsByTagName("li");
+   
+   btn.addEventListener('click', () => {
+       num++;
+       let li = document.createElement("li");
+       li.innerHTML = num;
+       ul.appendChild(li);
+   }, false)
+   
+   let showInner = function () {
+       alert(this.innerHTML);
+   }
+   
+   for (let i = 0; i < list.length; i++) {
+       list[i].addEventListener("click", showInner, false)
+   }
+   // 普通写法中，事件不具有继承性，新添加的li元素无法绑定事件；
+   </script>
+   ```
+
+   ```html
+   <button id="btnAdd">add</button>
+   <ul id="ulList">
+       <li>1</li>
+       <li>2</li>
+       <li>3</li>
+   </ul>
+   <script>
+   // 事件委托法
+   let num = 3;
+   let btn = document.getElementById("btnAdd");
+   let ul = document.getElementById("ulList");
+   
+   btn.addEventListener("click", () => {   
+       num++;
+       let li = document.createElement("li");
+       li.innerHTML = num;
+       ul.appendChild(li);
+   }, false)
+   
+   let showInner = function (event) {
+       let target = event.target;
+       if (target.nodeName.toLowerCase() == "li") {    // 这里nodeName返回的是大写LI，要注意转换
+           alert(target.innerHTML);
+       }
+   }
+   
+   ul.addEventListener('click', showInner, false); // 只监听父级元素ul
+   // 新增的li被点击时，时间会冒泡到ul上，ul的点击事件会被触发，如果事件对象的target为li，则触发alert
+   </script>
+   ```
+
+   要注意的是，不是所有的事件都适用事件委托，只有以下事件可以：
+
+   - click
+   - mousedown
+   - mouseup
+   - keypress
+   - keydown
+   - keyup
+
+   事件委托可以做到无需遍历子节点，仅监听父级元素即可触发子节点的事件。这种方法常用于需要**为动态新增的节点**添加事件的情况。
+
+
+
+
+
+##  六、函数
 
 ### 定义
 
@@ -1839,6 +2427,8 @@ obj();
 
 ## 七、Promise与异步函数
 
+>  [Generator 函数的含义与用法 - 阮一峰的网络日志 (ruanyifeng.com)](https://www.ruanyifeng.com/blog/2015/04/generator.html) 
+
 ### Promise
 
 #### 含义
@@ -2217,7 +2807,254 @@ Promise类提供了将两个或多个Promise合成一个的静态方法：`.all(
    addAll(8).then(console.log)	// 18
    ```
 
-   
+### 异步函数
+
+异步函数，也称为 `async/await`（ES8新增），是ES6期约模式在ECMAScript**函数**中的应用。它使同步方式编写的代码能够以异步方式执行。
+
+```js
+// 创建一个在3秒后返回文字的Promise：
+let p = new Promise((resolve, reject) => setTimeout(resolve, 3000, "3秒过去了……"));
+// 要打印这句文字，必须写一个Promise处理程序，这很不方便：
+p.then((x) => console.log(x));
+// async/await关键字应运而生
+```
+
+#### async/await关键字
+
+`async` 用于**声明异步函数**，可以让函数具有异步特征，并且其中允许使用`await`关键字。`async`和`await`关键字让我们可以用一种更简洁的方式写出基于`Promise`的异步行为，而无需刻意地链式调用`promise`。 
+
+```js
+async function foo() {
+    console.log(1);
+}
+foo();
+console.log(2);
+// 1
+// 2
+```
+
+async函数一定会返回一个promise对象。如果一个async函数的返回值看起来不是promise，那么它将会被`Promise.resolve()`隐式地包装在一个promise中。
+
+```js
+async function foo() {
+   return 1
+}
+// 等同于
+function foo() {
+   return Promise.resolve(1)
+}
+```
+
+**await**
+
+正常情况下，`await`命令后面是一个 Promise 对象，返回该对象的结果。如果不是 Promise 对象，就直接返回对应的值。另一种情况是，`await`命令后面是一个`thenable`对象（即定义了`then`方法的对象），那么`await`会将其等同于 Promise 对象做处理。
+
+`await` 关键字可以暂停异步函数代码的执行，等待Promise解决。 async函数的函数体可以被看作是由0个或者多个await表达式**分割开来**的。从第一行代码直到（并**包括**）第一个await表达式（如果有的话）都是同步运行的。这样的话，一个不含await表达式的async函数是会同步运行的。然而，如果函数体内有一个await表达式，async函数就一定会异步执行。 
+
+```js
+async function foo() {
+    await 1
+}
+// 等价于
+function foo() {
+    return Promise.resolve(1).then(() => { })
+}
+```
+
+在await表达式之后的代码可以被认为是**存在在链式调用的then回调中**，多个await表达式都将加入链式调用的then回调中，返回值将作为最后一个then回调的返回值。 
+
+```js
+// 之前的例子：
+let p = new Promise((resolve, reject) => setTimeout(resolve, 3000, "3秒过去了……"));
+p.then((x) => console.log(x));
+
+// 可以写成这样：
+async function foo() {
+    let p = new Promise((resolve, reject) => setTimeout(resolve, 3000, "3秒过去了……"));
+    console.log(await p);
+}
+foo();
+```
+
+使用例1：
+
+```js
+async function foo() {
+    const result1 = await new Promise((resolve) => setTimeout(resolve, 1000, '1'));
+    console.log(result1);
+    const result2 = await new Promise((resolve) => setTimeout(resolve, 1000, '2'));
+    console.log(result2);
+}
+foo();
+// 1 (1秒后)
+// 2 (2秒后)
+```
+
+await执行两次promise，整个`foo`函数的执行将会被分为**三个阶段**。
+
+1. `foo`函数的第一行将会同步执行，检测到await关键字，然后暂停通过`foo`的进程，并将控制权交还给调用`foo`的函数（在这里是window对象）。await将会等待promise的结束。
+2. 一秒过后，第一个promise的状态改变为fulfilled，控制权将重新回到foo函数内。await关键字会**解包**这个Promise对象，将`1`作为结果返回给await表达式的左边即`result1`。接下来函数会继续进行，到达第二个await区域，此时`foo`函数的进程将再次被暂停。
+3. 两秒过后，同样当第二个promise完结的时候，`result2`将被赋值为`2`，之后函数将会正常同步执行，将默认返回`undefined` 。
+
+使用例2：await实现sleep：
+
+```js
+function sleep(delay) {
+  return new Promise(resolve=>setTimeout(resolve, delay));
+}
+
+async function foo(num) {
+  for (let index = 0; index < num; index++) {
+    console.log(index);
+    await sleep(1000);
+  }
+}
+
+foo(5);	// 间隔一秒输出：0 1 2 3 4 5
+```
+
+
+
+#### 错误处理
+
+`async`函数内部抛出错误，会导致返回的 Promise 对象变为`reject`状态。抛出的错误对象会被`catch`方法回调函数接收到。
+
+```js
+async function f() {
+  throw new Error("出错了！")
+}
+
+f().catch(console.log);	// 出错了！
+```
+
+任何一个`await`语句后面的 Promise 对象变为`reject`状态，那么**整个**`async`函数都会中断执行。 
+
+```js
+async function f() {
+  await Promise.reject("Error!");
+  await Promise.resolve("Hello");	// 不会执行！
+}
+```
+
+如果我们希望前面的异步操作即使失败，也不要影响后面的异步操作，就可以将前面的await放在 `try...catch` 结构中；或者在await后面的Promise中添加一个`catch`方法处理错误：
+
+```js
+// 方法一
+async function f() {
+  try {
+    await Promise.reject("Error!");
+	// ...
+    // 如果有多个await可以统一放在这里
+  } catch (error) { }
+  return await Promise.resolve("Hello!");
+}
+f().then(console.log);	// Hello!
+
+// 方法二
+async function f() {
+  await Promise.reject("Error!")
+    .catch(e => { });
+  return await Promise.resolve("Hello!");
+}
+f().then(console.log);	// Hello!
+```
+
+下面的例子使用`try...catch`结构，实现多次重复尝试:
+
+```js
+const superagent = require('superagent');
+const NUM_RETRY = 3;
+
+async function test() {
+  let i;
+  for (i = 0; i < NUM_RETRY; i++) {
+    try {
+      await superagent.get('http://google.com/this-throws-an-error');
+      break;
+    } catch (error) { }
+  }
+  console.log(i);
+}
+
+test();	// 3
+```
+
+#### 平行加速
+
+以下例子中，异步函数会依次暂停等待每个延时完成，虽然保证了执行顺序，但执行时间是每个延时的和：
+
+```js
+async function randomDelay(id) {
+  const delay = Math.random() * 1000;
+  return new Promise(resolve=> {
+    return setTimeout(()=> {
+      console.log(`During ${delay}ms, ${id} finished.`);
+      resolve();
+    }, delay);
+  });
+}
+
+async function foo() {
+  const timeStart = Date.now();
+  await randomDelay(0);
+  await randomDelay(1);
+  await randomDelay(2);
+  await randomDelay(3);
+  await randomDelay(4);
+  console.log(`${Date.now() - timeStart}ms elapsed.`);
+}
+
+foo();
+// During 744.274494217729ms, 0 finished.
+// During 974.8883609909567ms, 1 finished.
+// During 639.9676673141034ms, 2 finished.
+// During 724.521981197168ms, 3 finished.
+// During 400.1842126542352ms, 4 finished.
+// 3511ms elapsed.
+```
+
+如果无需保证执行顺序，那么就可以利用**平行加速**，一次性初始化所有Promise，再分别获取结果：
+
+```js
+async function randomDelay(id) {
+  const delay = Math.random() * 1000;
+  return new Promise(resolve=> {
+    return setTimeout(()=> {
+      console.log(`During ${delay}ms, ${id} finished.`);
+      resolve();
+    }, delay);
+  });
+}
+
+async function foo() {
+  const timeStart = Date.now();
+  // 一次性初始化所有Promise，延迟程序同时并发，各个程序何时结束是随机的
+  const p0 = randomDelay(0);
+  const p1 = randomDelay(1);
+  const p2 = randomDelay(2);
+  const p3 = randomDelay(3);
+  const p4 = randomDelay(4);
+  // await按完成的先后顺序输出消息
+  await p0;
+  await p1;
+  await p2;
+  await p3;
+  await p4;
+  console.log(`${Date.now() - timeStart}ms elapsed.`);
+}
+
+foo();
+// During 234.13000289539298ms, 0 finished.
+// During 247.81748959957685ms, 2 finished.
+// During 535.6425323508205ms, 4 finished.
+// During 550.9490298562847ms, 3 finished.
+// During 757.8891514420012ms, 1 finished.
+// 761ms elapsed.
+```
+
+
+
+
 
 ## 七、面向对象编程
 

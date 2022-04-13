@@ -189,6 +189,28 @@ console.log('服务器开启成功');
 
 ## 四. 内置对象和模块
 
+### 0. npm
+
+NPM是随同NodeJS一起安装的包管理工具。
+
+npm 安装 Node.js 模块语法格式如下：
+
+```
+$ npm install <Module Name>
+```
+
+以下实例，我们使用 npm 命令安装常用的 Node.js web框架模块 **express**:
+
+```
+$ npm install express
+```
+
+安装好之后，express 包就放在了工程目录下的 node_modules 目录中，因此在代码中只需要通过 `require('express')` 的方式就好，无需指定第三方包路径。
+
+```
+var express = require('express');
+```
+
 ### 1. global对象
 
 Node.js环境中唯一的全局对象，类似js中的 `window` 对象。

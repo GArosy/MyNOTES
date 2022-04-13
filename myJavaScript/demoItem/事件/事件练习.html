@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btnId" name="myBtn">button</button>
+    <!-- DOM2方法 -->
+    <!-- <script>
+            let btn = document.getElementById("btnId");
+            let showId = function () {
+                alert(this.id);
+            }
+            let sayName = function () {
+                alert(this.name);
+            }
+            btn.addEventListener('click', showId, false);
+            btn.addEventListener('click', sayName, false);
+            btn.removeEventListener('click', sayName, false);
+        </script> -->
+
+    <!-- IE方法 -->
+    <!-- <script>
+        let btn = document.getElementById("btnId");
+
+        let showId = function () {
+            alert(this.id);
+        }
+        let sayName = function () {
+            alert("anotherName");
+        }
+
+        btn.attachEvent('onclick', showId);
+        btn.attachEvent('onclick', sayName);
+        // myBtn
+        // btnId
+    </script> -->
+
+    <!-- 跨浏览器方法 -->
+    <!-- <script>
+        var EventUtil = {
+            addHandler: function (element, event, handler) {
+                if (element.addEventListener) { // 检测元素是否有DOM2方法
+                    element.addEventListener(event, handler, false);
+                } else if (element.attachEvent) { // 检测元素是否有IE方法
+                    element.attachEvent("on" + event, handler);
+                } else { // 如果都不存在，使用DOM0方法
+                    element["on" + event] = handler;
+                }
+            },
+            removeHandler: function (element, event, handler) {
+                if (element.removeEventListener) {
+                    element.removeEventListener(event, handler, false);
+                } else if (element.detachEvent) {
+                    element.detachEvent("on" + event, handler);
+                } else {
+                    element["on" + event] = null;
+                }
+            }
+        }
+
+        let btn = document.getElementById("btnId");
+        let handler = function() {
+            console.log("clicked");
+        }
+        EventUtil.addHandler(btn, "click", handler);
+    </script> -->
+</body>
+
+</html>

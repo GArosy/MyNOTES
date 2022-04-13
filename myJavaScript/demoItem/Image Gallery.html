@@ -12,29 +12,31 @@
     <h1>Snapshots</h1>
     <ul>
         <li>
-            <p href="https://s2.loli.net/2022/03/23/tbF3Ng9lQ1mGkcw.jpg" title="feiwu" onclick="showPic(this)" style="cursor: pointer;">翼雁丁真</p>
+            <a href="https://s2.loli.net/2022/03/23/tbF3Ng9lQ1mGkcw.jpg" title="feiwu" class="pic-list"
+                style="cursor: pointer;">翼雁丁真</a>
         </li>
         <li>
-            <p href="https://s2.loli.net/2022/03/23/5GXuba3Z7xF8941.jpg" title="laotan" onclick="showPic(this)" style="cursor: pointer;">易腌丁真</p>
+            <a href="https://s2.loli.net/2022/03/23/5GXuba3Z7xF8941.jpg" title="laotan" class="pic-list"
+                style="cursor: pointer;">易腌丁真</a>
         </li>
         <li>
-            <p href="https://s2.loli.net/2022/03/23/tbTWAfmy6lY3snE.jpg" title="feng" onclick="showPic(this)" style="cursor: pointer;">噫言丁真</p>
+            <a href="https://s2.loli.net/2022/03/23/tbTWAfmy6lY3snE.jpg" title="feng" class="pic-list"
+                style="cursor: pointer;">噫言丁真</a>
         </li>
     </ul>
     <img id="placeholder"
         src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.zhimg.com%2Fv2-12a424d3fbcdac9a55445cf2bbd2178c_1440w.jpg%3Fsource%3D172ae18b&refer=http%3A%2F%2Fpic1.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650610113&t=a102fcdddd4f954a0d1291982a6ab00b"
-        alt="dingzhen"
-        style="height: 600px;">
+        alt="dingzhen" style="height: 600px;">
     <p id="description">选择一个图片</p>
     <script>
         // 切换图片和描述文字
-        function showPic(whichPic) {
-            let source = whichPic.getAttribute('href');
+        function showPic() {
+            let source = this.getAttribute('href');
             let placeholder = document.getElementById('placeholder');
             placeholder.setAttribute('src', source);
             // nodeValue 属性记录节点的值，但标签元素本身的值是null，其包裹的内容在其第一个子节点中，需要使用 childNodes[0] 或 firstChild 调用
             let description = document.getElementById('description');
-            let title = whichPic.getAttribute('title');
+            let title = this.getAttribute('title');
 
             /*  ！！！
                 setAttribute() 方法只针对属性，要改变p标签的内容，只能使用赋值方式
@@ -43,7 +45,7 @@
             */
 
             description.firstChild.nodeValue = title;   // 正确赋值
-            
+
             /*  ！！！
                 此外，被赋值的变量必须为指向DOM元素的「引用值」而不是「原始值」，否则被赋值的变量只能被一个字面量单纯覆盖，不会影响到DOM元素！
                 以下代码不起作用：
@@ -51,17 +53,29 @@
                 description = title；
             */
         }
-        
+
         // 获取一元素的子元素数量
+        document.body.className = "cls";
         function countBodyChildren() {
             // getElementsByTagName() 按顺序返回带有指定标签名的对象的集合「数组」，需要调用其中某一项时，要指定它的索引！
-            let bodyElement = document.getElementsByTagName('body')[0]; 
+            let bodyElement = document.getElementsByTagName('body')[0];
             // childNodes 属性以「数组」形式记录一元素的所有子元素
             alert(bodyElement.childNodes.length);
         }
 
         // 在页面加载时执行的函数
         window.onload = countBodyChildren;
+
+        // 通过事件对象，阻止a标签的默认行为
+        let preventDefaultFunc = function(event) {
+            event.preventDefault();
+        }
+        // DOM2方法添加事件处理程序
+        let picList = document.getElementsByClassName("pic-list");  // 返回一个NodeList
+        for (let i = 0; i < picList.length; i++) {  // NodeList不能调用map方法，只能手写遍历
+            picList[i].addEventListener("click", showPic, false);
+            picList[i].addEventListener("click", preventDefaultFunc, false);
+        }
     </script>
 </body>
 
