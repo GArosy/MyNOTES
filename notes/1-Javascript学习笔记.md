@@ -1053,9 +1053,107 @@ m.forEach(function (value, key, map) {
 
 
 
-## 五、JavaScript 表单脚本
+## 五、表单脚本
 
-### JavaScript 表单验证
+用JavaScript来操作表单，可以获得用户输入的内容，或者对一个输入框设置新的内容。 
+
+### 表单基础
+
+1. form元素
+
+   `<form>`元素在js中对应HTMLFormElement类型，其属性和方法有：
+
+- acceptCharset： 一个空格分隔或逗号分隔的列表，此列表包括了服务器支持的字符编码。 
+- action： 处理表单提交的 URL。 
+- elements：表单中所有控件的HTMLCollection。
+- encytype：请求的编码类型。
+- length：控件的数量。
+- method：HTTP请求方法类型。
+- name：表单名字。
+- reset()：重置表单字段。
+- submit()：提交表单。
+- target：用于发送请求和接收响应的窗口的名字。
+
+document.forms集合可以获取页面上所有表单：
+
+```js
+let firstForm = document.forms[0];
+let Form2 = document.forms["form2"];
+```
+
+2. 输入控件
+
+   - 文本框，对应的` <input type="text"> `，用于输入文本；
+   - 口令框，对应的` <input type="password"> `，用于输入密码；
+   - 单选框，对应的` <input type="radio"> `，用于选择一项；
+   - 复选框，对应的` <input type="checkbox"> `，用于选择多项；
+   - 下拉框，对应的` <select> `，用于选择一项；
+   - 隐藏文本，对应的` <input type="hidden"> `，用户不可见，但表单提交时会把隐藏文本发送到服务器。
+
+   HTML5新增控件：
+
+   - ```html
+     <input type="date" value="2022-01-01">
+     
+     <input type="datetime-local" value="2021-12-02T20:21:12">
+     
+     <input type="color" value="#ff0000">
+     ```
+
+3. 提交表单
+
+   表单通过点击`type`属性为`submit`的`<button>`/`<input>`按钮提交，或是通过type属性为image的`<input>`元素提交。
+
+   ```html
+   <!--通用提交按钮-->
+   <input type="submit" value="Submit Form">
+   
+   <!--自定义提交按钮-->
+   <button type="submit">Submit Form</button>
+   
+   <!--图片提交按钮-->
+   <input type="image" src="image.jpg">
+   ```
+
+   以上方式在向服务器发送请求**之前**触发submit事件，这提供了一个验证表单数据的机会：
+
+   ```js
+   let form = document.getElementById("myForm");
+   form.addEventListener("submit", (event)=>{
+       // 组织表单提交
+       event.preventDefault();
+   }, false);
+   ```
+
+   此外，还能通过js中的submit()方法提交表单，在没有按钮的情况下也可以提交。但是submit事件此时不会触发。
+
+   为防止重复提交，可以在表单提交后禁用提交按钮，或者通过`onsubmit`事件处理程序取消之后的提交。
+
+4. 获取值
+
+   对于type为`text/password/hidden`的input元素或select元素，可以直接调用`value`属性获得输入值；而单选框radio/复选框checkbox的勾选与否要通过`checked`判断：
+
+   ```html
+   <input type="text" id="email">
+   <label><input type="radio" name="weekday" id="monday" value="1"> Monday</label>
+   <label><input type="radio" name="weekday" id="tuesday" value="2"> Tuesday</label>
+   
+   <script>
+   let input = document.getElementById("email");
+   input.value;
+       
+   let mon = document.getElementById('monday');
+   var tue = document.getElementById('tuesday');
+   mon.value;	// 1
+   tue.value;	// 2
+   mon.checked;	// true/false
+   tue.checked;	// true/false
+   </script>
+   ```
+
+   
+
+### 表单验证
 
 判断表单字段(`fname`)值是否存在，如果不存在，就弹出信息阻止表单提交：
 
@@ -1758,7 +1856,114 @@ DOM中发生的所有事件，其相关信息都会被收集储存在 `event` �
 
    事件委托可以做到无需遍历子节点，仅监听父级元素即可触发子节点的事件。这种方法常用于需要**为动态新增的节点**添加事件的情况。
 
+### 事件类型
 
+DOM3 Events定义了如下事件类型：
+
+- `用户界面事件UIEvent`：涉及与BOM交互的通用浏览器事件触发；
+- `焦点事件FocusEvent`：在元素获得和失去焦点时触发；
+- `鼠标事件MouseEvent`：使用鼠标在页面上操作触发；
+- `滚轮事件WheelEvent`：使用滚轮或类似设备触发；
+- `输入事件InputEvent`：向文档中输入文本时触发；
+- `键盘事件KeyboardEvent`：使用键盘在页面上操作触发；
+- `合成事件CompositionEvent`：使用IME（Input Method Editor，输入法编辑器）输入字符时触发。
+- `专有事件`
+
+#### 用户界面事件
+
+用户界面事件或UI事件不一定与用户操作有关。
+
+1. load事件
+
+   在window对象上，load事件会在整个页面（包括所有外部资源）加载完成后触发。
+
+   可以通过HTML或DOM2方式向load事件添加事件处理程序：
+
+   ```js
+   // HTML方式
+   // 一般在window发生的事件，都可以通过为body元素对应属性赋值指定
+   <body onload="console.log('loaded!')">
+   </body>
+   
+   //js方式
+   window.addEventListener("load", ()=>{console.log("loaded!")});
+   ```
+
+   另外，图片也会触发load事件。
+
+2. unload事件
+
+   在文档卸载完成后触发。一般在从一个页面导航到另一个页面时触发，常用于清理引用避免内存泄漏。
+
+3. resize事件
+4. scroll事件
+
+#### 焦点事件
+
+通常与document.hasFocus()和document.activeElement()一起使用，提供用户在页面中导航的信息。
+
+焦点从页面上的一个元素移动到另一元素时，会依次触发以下事件：
+
+1. focusout：在失去焦点的元素上触发
+2. focusin：在获得焦点的元素上触发
+3. blur：在失去焦点的元素上触发
+4. DOMFocusOut：在失去焦点的元素上触发
+5. focus：在获得焦点的元素上触发
+6. DOMFocusIn：在获得焦点的元素上触发
+
+#### 鼠标和滚轮事件
+
+- mousedown-mouseup-click-mousedown-mouseup-click-dbclick
+- mouseenter-nousemove-mouseout
+- mousewheel事件会在任何元素上触发，并冒泡到window对象。它的事件对象还有一个wheelDelta属性记录滚轮方向和距离（向前滚动+120，向后滚动-120）
+- 触摸屏设备不支持dbclick事件；mousemove事件也会触发mouseover和mouseout事件
+
+#### 键盘输入事件
+
+- keydown-keypress-keyup
+- textInput事件在字符被输入至**可编辑区域**时触发，用以代替keypress
+- 对于keydown、keyup事件，event对象的`keyCode`属性会保存一个键码
+
+#### 合成事件
+
+IME可以让用户输入物理键盘上没有的字符。合成事件用于处理IME输入时的复杂输入序列。
+
+#### HTML5事件
+
+- contextmenu事件：自定义右键菜单
+- beforeload事件：在window上触发，提供阻止页面被卸载的机会
+- DOMContentLoaded事件：与load类似，但它会在DOM树构建完成后立即触发，无需等待外部资源的加载。
+- pageshow/pagehide事件：用于暴露**往返缓存**的行为
+- hashchange事件：在URL散列值（#后面的部分）发生变化时触发
+
+#### 设备事件
+
+- orientationchange事件：判断设备水平/垂直模式
+- deviceorientation事件：设备加速计信息变化时触发
+- devicemotion事件：用于判断设备处于移动状态，而非仅仅改变朝向时触发
+
+#### 触摸及手势事件
+
+- touchstart
+- touchmove
+- touchend
+- gesturestart
+- gesturechange
+- gestureend
+
+#### 模拟事件
+
+JavaScript可以模拟任意事件的触发，这些事件会被当成浏览器创建的事件，这意味着同样会有事件冒泡，也会触发相应的处理程序。
+
+1. DOM事件模拟
+
+   `document.createEvent()`可以创建一个event对象，这个方法接收一个参数，表示要创建的事件类型字符串（DOM2为复数，DOM3为单数形式），可用值有：
+
+   - UIEvent：通用用户界面事件（鼠标、键盘事件继承自这个事件）
+   - MouseEvent：通用鼠标事件
+   - HTMLEvent：通用HTML事件
+
+   事件模拟需要使用`dispatchEvent()`方法触发事件，它接收要触发事件的event对象。
 
 
 

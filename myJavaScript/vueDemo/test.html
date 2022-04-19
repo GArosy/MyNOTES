@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue.js测试</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" name="" value="" placeholder="在这里输入文字，下面会跟着变化" v-model="message">
+        <hr>
+        <p>{{ message }}</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        const app = new Vue({
+            el:'#app',
+            data: {
+                message: 'Vue'
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -17,25 +17,25 @@
     </ul>
     <script>
         // 普通写法
-        let num = 3;
-        let btn = document.getElementById("btnAdd");
-        let ul = document.getElementById("ulList");
-        let list = document.getElementsByTagName("li");
+        // let num = 3;
+        // let btn = document.getElementById("btnAdd");
+        // let ul = document.getElementById("ulList");
+        // let list = document.getElementsByTagName("li");
 
-        btn.addEventListener('click', () => {
-            num++;
-            let li = document.createElement("li");
-            li.innerHTML = num;
-            ul.appendChild(li);
-        }, false)
+        // btn.addEventListener('click', () => {
+        //     num++;
+        //     let li = document.createElement("li");
+        //     li.innerHTML = num;
+        //     ul.appendChild(li);
+        // }, false)
 
-        let showInner = function () {
-            alert(this.innerHTML);
-        }
+        // let showInner = function () {
+        //     alert(this.innerHTML);
+        // }
 
-        for (let i = 0; i < list.length; i++) {
-            list[i].addEventListener("click", showInner, false)
-        }
+        // for (let i = 0; i < list.length; i++) {
+        //     list[i].addEventListener("click", showInner, false)
+        // }
         // 普通写法中，事件不具有继承性，新添加的li元素无法绑定事件；
 
         // 事件委托法

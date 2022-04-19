@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="1">btn1</button>
+    <button id="2">btn2</button>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+        // 原生写法
+        // window.onload = function () {
+        //     let btn1 = document.getElementById("1");
+        //     let btn2 = document.getElementById("2");
+        //     let divs = document.getElementsByTagName("div");
+
+        //     btn1.onclick = function () {
+        //         for (let i = 0; i < divs.length; i++) {
+        //             divs[i].style.border = "1px solid #000";
+        //         }
+        //     }
+        //     btn2.onclick = function () {
+        //         for (let i = 0; i < divs.length; i++) {
+        //             divs[i].textContent = `div${i}`;
+        //         }
+        //     }
+        // }
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+        // 引入jQuery
+    </script>
+    <script>
+        // jQuery写法
+        $(document).ready(function () {
+            $("#1").click(function () {
+                $("div").css("border", "1px solid black");
+            });
+            $("#2").click(function () {
+                $("div").text("div");
+            });
+    
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch</title>
+</head>
+
+<body>
+    <h1>fetch</h1>
+    <script>
+        // 分派请求
+        let r = fetch('./img.png');
+        // console.log(r); // Promise {<pending>}
+        r.then((resp) => {
+            console.log(resp);
+        })
+
+        // 读取响应
+        //  取得纯文本格式内容，需要调用text()方法：
+        // r.then((resp)=>{
+        //     resp.text()
+        //         .then((data)=> {
+        //             console.log(data);
+        //         })
+        // })
+        //  打平结构
+        r
+            .then(resp => resp.text())
+            .then((data) => console.log(data));
+
+        // 处理状态码
+        r
+            .then((resp) => {
+                console.log(resp.status);
+                console.log(resp.statusText);
+            })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="drawing" width="500" height="500" style="border: 1px solid;">
+        一幅画布
+    </canvas>
+    <script>
+        let draw = document.getElementById("drawing");
+        if (draw.getContext) {  // 测试getContext方法是否存在，确保浏览器支持canvas
+            let context = draw.getContext("2d");    // 获取2d上下文对象
+
+            context.fillStyle = "red";  // 填充色
+            context.strokeStyle = "black";  // 描边色
+            context.fillRect(10, 10, 50, 50);    // 绘制填充矩形
+            context.strokeRect(30, 30, 50, 50);    // 绘制填充矩形
+
+            context.beginPath();    // 创建路径
+            context.arc(250, 250, 200, 0, 2 * Math.PI, false);  // 绘制外圆
+            context.moveTo(440,250);    // 移动路径起点
+            context.arc(250, 250, 190, 0, 2 * Math.PI, false);  // 绘制内圆
+            context.moveTo(250,250);
+            context.lineTo(100,250);
+            context.moveTo(250,250);
+            context.lineTo(250,100);
+            context.stroke();   // 描画路径
+        }
+    </script>
+</body>
+
+</html>

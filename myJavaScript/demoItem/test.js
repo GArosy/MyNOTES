@@ -15,6 +15,13 @@
 // }
 // console.log(selectionSort(arr));
 
-let observer = new MutationObserver((a) => console.log(a));
-observer.observe(document.body, { attributes: true });
-document.body.className = "cls";
+// let observer = new MutationObserver((a) => console.log(a));
+// observer.observe(document.body, { attributes: true });
+// document.body.className = "cls";
+
+function addURLParam(url, name, value) {
+    url += (url.indexOf("?") == -1 ? "?" : "&");
+    url+=encodeURIComponent(name)+"="+encodeURIComponent(value);
+    return url;
+}
+console.log(addURLParam("example.php","aaa","bbb"));

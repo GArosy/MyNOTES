@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="login-form" method="post" onsubmit="return checkForm()">
+        <input type="text" id="username" name="username">
+        <input type="password" id="input-password">
+        <input type="hidden" id="md5-password" name="password">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function checkForm() {
+            var input_pwd = document.getElementById('input-password');
+            var md5_pwd = document.getElementById('md5-password');
+            // 把用户输入的明文变为MD5:
+            md5_pwd.value = toMD5(input_pwd.value);
+            console.log(md5_pwd.value);
+            // 继续下一步:
+            return true;
+        }
+    </script>
+</body>
+
+</html>

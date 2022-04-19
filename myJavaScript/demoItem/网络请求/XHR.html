@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax</title>
+</head>
+
+<body>
+
+    <h1>使用XHR</h1>
+    <div>
+        <input id="input-xhr" type="text" placeholder="输入url">
+        <button id="btn-xhr" type="submit">通过XHR访问</button>
+    </div>
+    <div>
+        <p>访问结果：</p>
+        <ul id="ul-xhr"></ul>
+    </div>
+
+
+    <h1>GET请求</h1>
+    <p>get通常用于向服务器查询信息。必要时，需要在URL后面添加查询字符串参数:</p>
+    <div>
+        <span>URL:</span>
+        <input type="text" id="input-get-url" placeholder="url">
+        <span> ? </span>
+        <input type="text" id="input-get-name" placeholder="name" style="width: 80px;">
+        <span> = </span>
+        <input type="text" id="input-get-value" placeholder="value" style="width: 80px;">
+        <button id="btn-get">组合为格式正确的URL</button>
+    </div>
+    <div>
+        输出：
+        <input type="text" id="input-get-output" style="width: 364px;">
+    </div>
+
+    <h1>POST请求</h1>
+
+    <script>
+        // 使用XHR
+        function useXHR(url) {
+            let ul_XHR = document.getElementById("ul-xhr");
+            let xhr = new XMLHttpRequest();
+            // XHR的readyState属性表示当前的请求/响应过程处在哪一阶段
+            // 0：未初始化，未调用open();
+            // 1：已打开，已调用open()，未调用send();
+            // 2：已发送，已调用send()，未收到响应；
+            // 3：接收中，已收到部分响应；
+            // 4：完成，已收到所有响应；
+            // 每次readyState的变化都会触发r eadystatechange事件，可借此机会检查readyState值
+            // 用DOM0方式定义一个onreadystatechange事件处理程序：
+            async function change() {
+                if (xhr.readyState == 4) {
+                    // 检查status属性确保响应成功返回，并输出内容
+                    if ((await xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                        alert("请求成功：" + xhr.responseText);
+                    } else {
+                        alert("请求失败，错误：" + xhr.status);
+                    }
+                }
+            }
+            xhr.onreadystatechange = change;
+            // 调用open([方式],[URL],[是否异步])定义一个发送请求，此举不会实际发送请求
+            // 只能访问同源URL，否则会抛出安全错误
+            xhr.open("get", `./${url}`, false);
+            // send([请求体])发送定义好的请求，如果无请求体参数必须为null
+            xhr.send(null);
+            // 等待响应，此时readystatechange被触发多次
+            // 收到响应后，onreadystatechange()执行，XHR的以下属性会被填充数据
+            while (ul_XHR.firstChild) {
+                ul_XHR.removeChild(ul_XHR.firstChild);  // 移除ul节点的所有子节点
+            }
+            ul_XHR.appendChild(document.createElement("li")).textContent = `1.响应的http状态: ${xhr.status}`;
+            ul_XHR.appendChild(document.createElement("li")).textContent = `2.响应的http状态描述: ${xhr.statusText}`;
+            ul_XHR.appendChild(document.createElement("li")).textContent = `3.响应体返回文本: ${xhr.responseText}`;   // 始终会返回文本
+            ul_XHR.appendChild(document.createElement("li")).textContent = `4.响应体返回的XML DOM文档: ${xhr.responseXML}`;   // 对于非XML数据会返回null
+        }
+        let btn_XHR = document.getElementById("btn-xhr");
+        let input_XHR = document.getElementById("input-xhr");
+        btn_XHR.addEventListener("click", () => {
+            // console.log(input_XHR.value);
+            useXHR(input_XHR.value);
+        }, false);
+
+        // 使用GET
+        // 获取引用：
+        let url = document.getElementById("input-get-url");
+        let name = document.getElementById("input-get-name");
+        let val = document.getElementById("input-get-value");
+        let output = document.getElementById("input-get-output");
+        let btn_GET = document.getElementById("btn-get");
+        // 定义一个组合查询字符串的函数：
+        function addURLParam(url, name, value) {
+            url += (url.indexOf("?") == -1 ? "?" : "&");
+            url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+            return url;
+        }
+
+        btn_GET.addEventListener("click", () => {
+            output.value = addURLParam(url.value, name.value, val.value);
+        }, false);
+
+        // POST请求
+        // POST请求需要在请求体中携带数据
+
+        
+    </script>
+</body>
+
+</html>

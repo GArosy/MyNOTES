@@ -1,0 +1,21 @@
+{
+    "sites": [{
+            "name": "Baidu",
+            "url": "www.baidu.com"
+        },
+        {
+            "name": "Google",
+            "url": "www.google.com"
+        },
+        {
+            "name": "Taobao",
+            "url": "www.taobao.com"
+        }
+    ],
+    "othersites": {
+        "name":"Zhihu",
+        "url":"www.zhihu.com"
+    }
+        
+    
+}
