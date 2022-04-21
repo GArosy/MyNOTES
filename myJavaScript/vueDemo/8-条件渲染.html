@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <!-- v-if 指令用于条件性地渲染一块内容。
+            这块内容只会在指令的表达式返回 truthy 值的时候被渲染。 -->
+        <h1 v-if="condition">Vue</h1>
+        <!-- 也可以用 v-else 添加一个“else 块” -->
+        <h1 v-else>Hello</h1>
+
+        <!-- 因为 v-if 是一个指令，所以必须将它添加到一个元素上。
+            但是如果想选择性渲染多个元素呢？
+            此时可以把一个 <template> 元素当做不可见的包裹元素，
+            并在上面使用 v-if -->
+        <template v-if="condition2">
+            <h2>Title</h2>
+            <p>Paragraph1</p>
+            <p>Paragraph2</p>
+        </template>
+        <!-- 用 key 管理可复用的元素 -->
+        <!-- 上面的代码中切换 loginType 将不会清除用户已经输入的内容。
+            因为两个模板使用了相同的元素，
+            <input> 不会被替换掉,仅仅是替换了它的 placeholder。 -->
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input type="text" placeholder="Enter your username">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input type="text" placeholder="Enter your Email">
+        </template>
+        <button @click="toggle">Toggle login type</button>
+        <div>
+        </div>
+    </div>
+
+    <script>
+        let vm = new Vue({
+            el: '#app1',
+            data: {
+                condition: false,
+                condition2: false,
+                loginType: 'username'
+            },
+            methods: {
+                toggle: function () {
+                    (this.loginType === 'username') ? (this.loginType = 'email') : (this.loginType = 'username')
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

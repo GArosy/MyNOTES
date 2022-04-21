@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+    <style>
+        .green {
+            background-color: #43bd87;
+            color: #FFF;
+            line-height: 100px;
+            font-size: 50px;
+        }
+
+        .blue {
+            background-color: #34495e;
+            color: #FFF;
+            line-height: 100px;
+            font-size: 50px;
+        }
+
+        .black {
+            color: black;
+        }
+
+        .small {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- v-bind 表达式结果的类型除了字符串之外，还可以是对象或数组。-->
+        <!-- green 这个 class 存在与否将取决于数据 property isGreen 的 truthiness -->
+        <!-- 可以在对象中传入更多字段来动态切换多个 class -->
+        <div v-bind:class="{green: isGreen, black: isBlack}" style="width: 200px; height: 100px;text-align: center;">
+            Hi
+        </div>
+        <div v-bind:class="classObject" style="width: 200px; height: 100px;text-align: center;">
+            Vue
+        </div>
+    </div>
+    <hr>
+    <div id="app2">
+        <!-- 可以把一个数组传给 v-bind:class，以应用一个 class 列表 -->
+        <div :class="[{green: isGreen}, smallClass]">Framework</div>
+    </div>
+
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                isGreen: true,
+                isBlue: true,
+                isBlack: false,
+                classObject: {
+                    isSmall: false,
+                    isBlack: true
+                }
+            }
+        })
+
+        let vm2 = new Vue({
+            el: "#app2",
+            data: {
+                isGreen: true,
+                smallClass: 'small'     // 引用class时要用字符串形式
+            }
+        })
+
+    </script>
+</body>
+
+</html>
