@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>First Vue App</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{a}}
+        <!-- {{b}} -->
+    </div>
+
+    <script>
+        let myData = { a: 1 };
+        // 实例化Vue对象（vm=view model）
+        let vm = new Vue({
+            // 选择要绑定的元素，el=element
+            el: '#app',
+            // Vue实例中，data对象的所有属性都会加入到Vue的*响应式系统*
+            // 当其中的值发生改变时，视图层将会响应匹更新的值
+            data: myData
+        })
+        // 改变data数据
+        // myData.a = "2";  // 响应
+        // vm.$data.a ="test";  // 响应
+
+        // myData.b = "test"   // 无响应
+        // vm.b = "test"   // 无响应
+
+        // $watch 方法：监视并记录变量变化
+        vm.$watch('a', (newVal, oldVal) => {
+            console.log(newVal,oldVal);
+        })
+        vm.$data.a = "new";
+        // 输出 new 1
+    </script>
+</body>
+
+</html>

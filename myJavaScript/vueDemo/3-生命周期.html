@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>生命周期</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{msg}}
+    </div>
+
+    <script>
+        /**
+         * 钩子函数：
+         * Vue在生命周期中预留了一些钩子函数。
+         * 生命周期可以理解为一个自动执行的线程，
+         * 而钩子函数可以让我们在某些节点处
+         * 人为干预这个线程的执行。
+         * - 钩子函数在系统事件触发时被系统调用，非用户触发
+         * - 钩子函数事先已被定义好，使用时直接编写函数体
+         * - 钩子函数不能使用箭头方式
+         */
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hi Vue!'
+            },
+            // 实例化Vue之后，页面创建之前：
+            beforeCreate() {
+                console.log('beforeCreate');
+            },
+            // 
+            created() {
+                console.log('created');
+            },
+
+            beforeMount() {
+                console.log('beforeMount');
+            },
+
+            mounted() {
+                console.log('mounted');
+            },
+
+            beforeUpdate() {
+                console.log('beforeUpdate');
+            },
+
+            updated() {
+                console.log('updated');
+            },
+
+            beforeDestroy() {
+                console.log('beforeDestroy');
+            },
+
+            destroyed() {
+                console.log('destroyed');
+            },
+        })
+
+        setTimeout(()=>{
+            vm.$data.msg = "Updated!"
+        }, 3000)
+    </script>
+</body>
+
+</html>

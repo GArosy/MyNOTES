@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Vue App</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+
+    <script>
+        // 实例化Vue对象（vm=view model）
+        let vm = new Vue({
+            // 选择要绑定的元素，el=element
+            el: '#app',  
+            // Vue实例中，data对象的所有属性都会加入到Vue的*响应式系统*
+            // 当其中的值发生改变时，视图层将会响应匹更新的值
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+    </script>
+</body>
+</html>

@@ -20,13 +20,45 @@ $ git config --global user.name "Your Name" #配置用户名
 $ git config --global user.email "email@example.com" #配置邮箱名
 ```
 
-## 3. 创建本地仓库
+## 3. 创建仓库并连接GitHub
+
+连接GitHub前，需要生成本机的SSH的Key，上传至GitHub账号：
 
 ```
-$ cd E:\NOTES #用cd命令切换到想要建立仓库的目录
-$ git init #将这个目录设置成git空仓库，产生一个'.git'隐藏文件夹
-$ git status #查看仓库目前状态
-$ touch readme.md #在仓库中创建一个readme文档
+ssh-keygen -t rsa -C "gitHub上注册时用的邮箱" 
+    Generating public/private rsa key pair.(/Users/your_user_directory/.ssh/id_rsa)直接敲回车
+    Enter passphrase (empty for no passphrase):<enter a passphrase>  直接敲回车
+    Enter same passphrase again:<enter passphrase again>直接敲回车
+    生成类似于下面的内容
++--[ RSA 2032]----+  
+|     .+   +      |  
+|      ssssssss   |  
+|        = * *    |  
+|       o = +     |  
+|     ssss .      |  
+|     o oss       |  
+|      o .sE      |  
+|                 |  
+|                 |  
++-----------------+  
+```
+
+生成后，在本机.ssh文件夹中找到id_rsa.pub文件，复制里面的内容。打开gitHub的settings选项选择Deploy keys点击add deploy key 添加key，title填写用户名称+SSHkey，然后把刚才复制的内容直接粘贴到key里面，点选Allow write access。然后点击add key。
+```
+# 在本地创建仓库并连接至远程仓库
+$ cd E:\NOTES 					#用cd命令切换到想要建立仓库的目录
+$ git init 						#将这个目录设置成git空仓库，产生一个'.git'隐藏文件夹
+$ git add README.md				#添加README文档
+$ git commit -m "first commit" 	#首次提交
+$ git branch -M main 			#添加一个main分支
+$ git status 					#查看仓库目前状态
+$ git remote add origin [GitHub库地址]
+$ git push -u origin main 		# -u 把本地库的所有内容推送到远程库上
+
+# 直接提交本地仓库的内容至远程仓库
+$ git remote add origin [GitHub库地址]
+$ git branch -M main
+$ git push -u origin main
 ```
 
 其中：
@@ -44,6 +76,8 @@ $ touch readme.md #在仓库中创建一个readme文档
 - `touch`指令实现在当前目录新建文件
 
 - 其余常用Linux命令可参考：[linux常用命令（50个） - 后知、后觉 - 博客园 (cnblogs.com)](https://www.cnblogs.com/xuxinstyle/p/9609551.html)
+
+
 
 ## 4. 提交文件
 
@@ -85,6 +119,35 @@ Unpacking objects: 100% (12/12), done.
  拷贝完成后，在当前目录下会生成一个 jerry 目录。
 
 ## 5. 指令列表
+
+### 分支管理
+
+- 创建分支
+
+  git branch test: 基于当前commit创建test分支。.git/HEAD 文件中记录了当前分支名字。
+
+- 删除分支
+
+  git branch -d test：删除本地test分支
+  git branch -D test： test分支还没有合入当前分支，所以要用-D参数才能删掉。
+  git push origin --delete test 删除远程test分支
+  git push origin :test 删除远程test分支
+
+- 查看分支
+  it branch 列出当前分支清单
+  git branch -a 查看远程分支和本地分支
+  git branch -v 查看各个分支最后一个提交信息
+  git branch --merged 查看哪些分支已经合并入当前分支
+
+- 拉取分支
+  git fetch origin 同步远程服务器的数据到本地
+  git checkout -b test origin/test_remote 将远程分支test_remote拉取下来到本地test分支
+  git checkout test 将远程分支test拉取下来到本地test分支
+  git pull test从远程分支test 中checkout下来的本地分支test成为跟踪分支，使用git pull或者git push就会操作到对应的远程分支test
+
+- 切换分支
+  git checkout -b B origin/A
+  切换到origin/A分支命令本地分支为”B”
 
 |    指令    |                             说明                             | 备注                                                         |
 | :--------: | :----------------------------------------------------------: | :----------------------------------------------------------- |

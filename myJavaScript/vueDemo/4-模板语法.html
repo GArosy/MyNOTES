@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <p>文本插值：{{rawHTML}}</p>
+        <p>HTML插值：<span v-html="rawHTML"></span></p>
+
+        <div v-bind:style="redColor">
+            test
+        </div>
+        <div v-bind:style="blueColor">
+            test
+        </div>
+    </div>
+
+    <div id="app2">
+        <!-- v-if指令将根据表达式seen的值的真假来插入/移除 <p> 元素。-->
+        <p v-if="seen">now you see me</p>
+
+        <!-- Vue 为 v-bind 和 v-on 这两个最常用的指令，提供了特定简写 : 和 @  -->
+        <a :href="url">url</a>
+        <p @click="click1">click</p>
+
+        <!-- 以下代码触发了事件冒泡，输出 click2 click1 -->
+        <div @click="click1">
+            <div @click="click2">
+                点击实现无修饰符的事件冒泡    
+            </div>
+        </div>
+        
+        <!-- 内层click加修饰符.stop后，阻断了后续事件冒泡，只输出click2 -->
+        <div @click="click1">
+            <div @click.stop="click2">
+                点击实现有修饰符阻断事件冒泡    
+            </div>
+        </div>
+
+    </div>
+    <script>
+        /**
+         * Vue基于HTML的模板语法声明式地将DOM绑定至Vue实例数据
+         * Vue将模板编译为虚拟DOM，智能计算出最少的DOM操作次数
+         */
+
+        // 插值
+        //      文本插值
+        //          数据绑定最常见形式：「Mustache语法」 「{{}}」
+
+        //      原始HTML插值
+        //          v-html指令会输出真正HTML
+        //      动态绑定属性
+        //          v-bind: [属性]="值"
+        let vm = new Vue({
+            el: '#app1',
+            data: {
+                rawHTML: '<span style="color:red">RED</span>',
+                redColor: 'color:red',
+                blueColor: 'color:blue; font-size:30px'
+            }
+        })
+
+        // 指令
+        // 指令是带有v-前缀的特殊标签属性，它的值是一单个js表达式
+        // 表达式的结果可以响应式地作用于DOM。
+        //      参数
+        //          一些指令能够接收一个“参数”，在指令名称之后以冒号表示
+        let vm2 = new Vue({
+            el: '#app2',
+            data: {
+                seen: true,
+                url: 'https://cn.vuejs.org',
+            },
+            methods: {
+                click1: function () {
+                    console.log('click1');
+                },
+                click2: function () {
+                    console.log('click2');
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
