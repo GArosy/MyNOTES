@@ -76,4 +76,6 @@
 
     auto-fit 自动拉伸（填满）: `repeat(auto-fit, minmax(90px, 1fr))`
 
-11. 
+## CSS3
+
+- `pointer-events: none;`禁用鼠标事件（看得见摸不着）

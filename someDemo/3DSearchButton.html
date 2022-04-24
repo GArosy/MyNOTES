@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: consolas;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #cfd1e1;
+            overflow: hidden;
+        }
+
+        .shadow {
+            position: absolute;
+            top: 0;
+            left: -50px;
+            /* 50px为input元素高度 */
+            width: calc(100% + 50px);
+            height: 300px;
+            transform-origin: top;
+            /* 45°投影 */
+            transform: skew(45deg);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent, transparent);
+            pointer-events: none;
+        }
+
+        /* 狗皮膏药 */
+        .shadow::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #cfd1e1;
+            z-index: 1;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 65px;
+            height: 50px;
+            transition: 0.5s;
+        }
+
+        .search-box:hover {
+            width: 400px;
+        }
+
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -1px;
+            width: 10px;
+            height: 100%;
+            background: #fff;
+            z-index: 1;
+            filter: blur(1px);
+        }
+
+        .search-box::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 0;
+            width: 10px;
+            height: 100%;
+            background: #9d9d9d;
+            z-index: 1;
+            filter: blur(1px);
+        }
+
+        .search-box input {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            outline: 0;
+            padding: 10px 25px;
+            font-size: 1.1em;
+            color: #555;
+            background: linear-gradient(#dbdae1, #a3aaba);
+            /* 连续的柔和阴影 */
+            box-shadow:
+                5px 5px 5px rgba(0, 0, 0, .1),
+                15px 15px 15px rgba(0, 0, 0, .1),
+                20px 20px 15px rgba(0, 0, 0, .1),
+                30px 30px 15px rgba(0, 0, 0, .1),
+                /* 高光 */
+                inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .search-box input::placeholder,
+        .search-box input {
+            color: transparent;
+            transition: 0.5s;
+        }
+
+        .search-box:hover input::placeholder,
+        .search-box:hover input {
+            color: #555;
+            transition: all 0.5s;
+        }
+
+        ion-icon {
+            position: absolute;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-box">
+        <div class="shadow"></div>
+        <input placeholder="Search Anything You Want">
+        </input>
+        <ion-icon name="search-outline"></ion-icon>
+    </div>
+</body>
+
+</html>

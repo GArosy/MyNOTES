@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 用 v-on 指令监听 DOM 事件，并在触发时运行一些 JavaScript 代码 -->
+    <div id="listenAnEvent">
+        <h1>{{title}}</h1>
+        <button v-on:click="add">按键</button>
+        <p>按键被按了 {{counter}} 次</p>
+    </div>
+
+    <script>
+        let listenAnEvent = new Vue({
+            el: '#listenAnEvent',
+            data: {
+                title: '监听事件',
+                counter: 0
+            },
+            methods: {
+                add: function() {
+                    this.counter += 1;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

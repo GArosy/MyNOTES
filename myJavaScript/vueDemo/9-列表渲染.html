@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <ul id="example1">
+        <!-- 数组遍历渲染列表 -->
+        <li v-for="(item, index) in items" :key="item.message">
+            {{item.message}}
+        </li>
+    </ul>
+
+    <ul id="example2">
+        <!-- v-for块可以访问所有父作用域的属性 -->
+        <li v-for="(item, index) in items" :key="index">
+            {{parentMessage}} - {{index}} - {{item.message}}
+        </li>
+    </ul>
+
+    <!-- v-for遍历一个对象的属性 -->
+    <ul id="v-for-object" class="demo">
+        <li v-for="(propValue, propName, propIndex) in anObject">
+            {{propName}} : {{propValue}} -- {{propIndex}}
+        </li>
+    </ul>
+
+    <script>
+        let example1 = new Vue({
+            el: '#example1',
+            data: {
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' },
+                    { message: 'Vue' }
+                ]
+            }
+        })
+
+        let example2 = new Vue({
+            el: '#example2',
+            data: {
+                parentMessage: 'Parent',
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' },
+                    { message: 'Vue' }
+                ]
+            }
+        })
+
+        let vm = new Vue({
+            el: '#v-for-object',
+            data: {
+                parentMessage: 'Parent',
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' },
+                    { message: 'Vue' }
+                ],
+                anObject: {
+                    title: 'How to do lists in Vue',
+                    author: 'Jane Doe',
+                    publishedAt: '2016-04-10'
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
