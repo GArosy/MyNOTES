@@ -2387,7 +2387,7 @@ arr.map(String); // ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 arr.reduce(callback(prev,cur,index,arr){...}, init);
 ```
 
-reduce() 的参数包含一个「回调函数」和一个「初始值 init」，其中回调函数包含四个参数：
+reduce() 的参数包含一个「回调函数」和一个「初始值 init」，**初始值init用于初始化prev，可以是对象、数组等等**。其中回调函数包含四个参数：
 
 - `prev` 上一次调用回调时的返回值，或者初始值 init；**不提供初始值时为第一项的值**；
 - `cur` 当前正在处理的数组元素； 
@@ -2419,6 +2419,17 @@ let max = arr.reduce(function(prev, cur) {
 	return Math.max(prev, cur);
 })
 // 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
+
+// 统计各个物品的数量
+const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
+const reduce = data.reduce((obj, item) => {
+  if (!obj[item]) {  	// 若累加对象中无元素item
+    obj[item] = 0;   	// 令累加对象中元素item = 0
+  }
+  obj[item]++;        	// 累加器item++
+  return obj;         	// 返回累加器进入下一轮迭代
+}, {});					// 初始化累加器为对象
+console.log(reduce);
 ```
 
 #### forEach() 方法
@@ -4878,4 +4889,4 @@ let max = arr.reduce(function(prev, cur) {
 // 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
 ```
 
-
+# 

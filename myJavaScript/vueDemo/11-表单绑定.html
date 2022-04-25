@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <!-- v-model 指令可以在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定 -->
+    <!-- v-model 会忽略所有表单元素的 value、checked、selected attribute 的初始值而总是将 Vue 实例的数据作为数据来源 -->
+    <div id="bindInput">
+        <!-- 单行文本 -->
+        <input type="text" v-model="inputContent">
+        <p>你输入的内容：{{inputContent}}</p>
+        <!-- 多行文本 -->
+        <textarea cols="30" rows="10" v-model="textareaContent"></textarea>
+        <p>你输入的内容：{{textareaContent}}</p>
+        <!-- 复选框 -->
+        <input type="checkbox" name="checkbox" id="Jack" value="Jack" v-model="checkboxContents">
+        <label for="Jack">Jack</label>
+        <input type="checkbox" name="checkbox" id="John" value="John" v-model="checkboxContents">
+        <label for="John">John</label>
+        <input type="checkbox" name="checkbox" id="Mike" value="Mike" v-model="checkboxContents">
+        <label for="Mike">Mike</label>
+        <p>你的选项：{{checkboxContents}}</p>
+        <!-- 单选按钮 -->
+        <input type="radio" id="one" value="One" v-model="radioContent">
+        <label for="one">One</label>
+        <input type="radio" id="two" value="Two" v-model="radioContent">
+        <label for="two">Two</label>
+        <p>你的选项：{{radioContent}}</p>
+        <!-- 选择框 -->
+        <!-- multiple attribute设置可多选 -->
+        <select v-model="selected" multiple>
+            <option disabled value="">请选择</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <p>你的选项：{{selected}}</p>
+
+    </div>
+
+    <script>
+        let bindInput = new Vue({
+            el: '#bindInput',
+            data: {
+                inputContent:'',
+                textareaContent: '',
+                checkboxContents: [],
+                radioContent: '',
+                selected: ''
+            }
+        })
+    </script>
+</body>
+
+</html>
