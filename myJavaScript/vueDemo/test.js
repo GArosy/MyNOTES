@@ -32,7 +32,7 @@ process.stdin.on('end', () => {
 
     console.log(doFunc(arr[0]));
 
-    // console.log(doFunc('ABC'));
+    console.log(doFunc('ABC'));
 
     process.exit();
 })

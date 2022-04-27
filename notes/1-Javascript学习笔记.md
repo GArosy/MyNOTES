@@ -1971,6 +1971,10 @@ JavaScript可以模拟任意事件的触发，这些事件会被当成浏览器�
 
 ### 定义
 
+在 JavaScript 中，**函数是对象的方法**。
+
+如果一个函数不是 JavaScript 对象的方法，那么它就是全局对象的方法。
+
 1. 声明：
 
 ```js
@@ -2244,31 +2248,33 @@ console.log(sum.length);
 
 #### call()
 
-`call(this, arg1, arg2...)`
+通过 `call()`，我们能够使用属于另一个对象的方法。
 
-- *this* 任意**指定**调用函数的上下文对象；
+`F.call(thisArg, arg1, arg2...)`
 
-- *arg* *可选*，逐个传入参数；
+- *thisArg* 指定一个对象，函数`F()`的执行上下文将在这个对象之内；
+
+- *arg* *可选*，对`F()`逐个传入参数；
 
 以上这两个方法作用相同，仅传参形式不同。它们主要用来**控制函数的调用上下文**，即函数体内 `this` 值：
 
 ```js
-window.color = 'red';
+window.color = 'red';			// 全局变量color
 let o = {
-    color: 'blue'
+    color: 'blue'				// 对象o的私有变量color
 };
 
 function sayColor() {
-    console.log(this.color);
+    console.log(this.color);	// 输出本函数当前执行上下文的color
 }
 
 sayColor();
 // red
-sayColor.call(this);
+sayColor.call(this);	// this指向window，在全局作用域下执行，输出全局变量color
 // red
-sayColor.call(window);
+sayColor.call(window);	// 在全局作用域下执行，输出全局变量color
 // red
-sayColor.call(o);
+sayColor.call(o);		// 在对象o作用域下执行，输出对象o的私有变量color
 // blue
 ```
 
@@ -3526,11 +3532,11 @@ console.log(instance.getSuperValue)						// true
   SubType.prototype = new SuperType();
   
   let instance1 = new SubType();
-  instance1.colors.push("green");
+  instance1.colors.push("green"); // 在实例上的修改实际上已经修改了构造函数
   console.log(instance1.colors);	// 'red, blue, green'
   
   let instance2 = new SubType();
-  console.log(instance2.colors);	// 'red, blue, green'
+  console.log(instance2.colors);	// 'red, blue, green' 另一实例共享了instance1的改动
   ```
 
   
@@ -3551,7 +3557,7 @@ function SuperType() {
 }
 
 function SubType() {
-    SuperType.call(this);	// 继承SuperType
+    SuperType.call(this);	// 执行上下文切换至SubType
 }
 
 let instance1 = new SubType();
@@ -3562,7 +3568,7 @@ let instance2 = new SubType();
 console.log(instance2.colors);	// "red,blue"
 ```
 
-通过使用 `call()` 方法，在执行 `new SubType()` 创建实例时，会自动运行 `SuperType` 构造函数中的所有初始化引用类型值的代码，这样每个实例都会有自己的 `color` 属性了。
+通过使用 `call()` 方法，在执行 `new SubType()` 创建实例时，js会将执行上下文转换至`SuperType`函数内部，然后运行 `SuperType` 构造函数中的所有初始化引用类型值的代码，这样每个实例都会有自己的 `colors` 属性了。
 
 (2) 解决传参
 
@@ -3580,6 +3586,8 @@ function SubType() {
 ```
 
 (3) 借用构造函数的问题
+
+- 本质上，此方法仅仅是在构造实例时，将执行上下文从子类函数指向父类函数，
 
 - 借用构造函数的缺点也是构造函数模式的缺点：必须在构造函数中定义方法，因此函数不能复用；（**只能独享不能共享**）
 
@@ -3637,24 +3645,29 @@ function object(o) {
 }
 ```
 
-这个 `object()` 函数会创建一个临时构造函数 `F()`，将传入的对象赋值给这个构造函数的原型，然后返回这个临时类型的一个实例。本质上，`object()` 是对传入对象进行了一次浅拷贝。
+这个 `object()` 函数会创建一个临时构造函数 `F()`，将传入的对象赋值给这个构造函数的原型，然后返回这个临时类型的一个实例。本质上，`object()` 是对传入对象进行了一次**浅拷贝**。
 
 ```js
 let person = {
-    name: "Nicholas",
-    friends: ["Tom", "Jerry"]
+    name: "Nicholas",				// 原始值属性，直接继承，不共享
+    friends: ["Tom", "Jerry"]		// 引用值属性，直接继承，共享
 };
 
 let anotherPerson = object(person);
 anotherPerson.name = "Greg";
 anotherPerson.friends.push("Bob");
+console.log(anotherPerson);
+// { name:"Greg" } 原始值的属性屏蔽
+// [[Prototype]]: { name:"Nicholas", friends: ['Tom', 'Jerry', 'Bob', 'Barbie'] }
 
 let yetAnotherPerson = object(person);
 yetAnotherPerson.name = "Linda";
 yetAnotherPerson.friends.push("Barbie");
 
-console.log(person.friends);
-// ['Tom', 'Jerry', 'Bob', 'Barbie']
+console.log(person);
+// { name:"Nicholas", friends: ['Tom', 'Jerry', 'Bob', 'Barbie'] }
+
+// 数组作为引用值始终会共享，name作为原始值会
 ```
 
 ES5通过添加 `Object.create()` 方法将原型式继承的概念规范化了，这个方法接收两个参数：作为新对象原型的对象，和给新对象定义额外属性的对象（可选）。只有第一个参数时：
@@ -3681,8 +3694,8 @@ console.log(person.friends);
 
 ```js
 let person = {
-    name: "Nicholas",
-    friends: ["Tom", "Jerry"]
+    name: "Nicholas",			// 原始值属性，直接继承，不共享
+    friends: ["Tom", "Jerry"]	// 引用值属性，直接继承，共享
 };
 
 let anotherPerson = Object.create(person,{
