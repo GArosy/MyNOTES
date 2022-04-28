@@ -122,19 +122,20 @@ Unpacking objects: 100% (12/12), done.
 
 ### 分支管理
 
+>  [(17条消息) git的分支管理（详细版）_一眼青苔的博客-CSDN博客_git分支管理](https://blog.csdn.net/silence_pinot/article/details/111478596) 
+
 - 创建分支
 
-  git branch test: 基于当前commit创建test分支。.git/HEAD 文件中记录了当前分支名字。
+  git branch test	 基于当前commit创建test分支。.git/HEAD 文件中记录了当前分支名字。
 
 - 删除分支
 
-  git branch -d test：删除本地test分支
-  git branch -D test： test分支还没有合入当前分支，所以要用-D参数才能删掉。
-  git push origin --delete test 删除远程test分支
-  git push origin :test 删除远程test分支
-
+  git branch -d test 	删除本地test分支
+  git branch -D test 	test分支还没有合入当前分支，所以要用-D参数才能删掉。
+  git push origin -d 	test 删除远程test分支
+  
 - 查看分支
-  it branch 列出当前分支清单
+  git branch 列出当前分支清单
   git branch -a 查看远程分支和本地分支
   git branch -v 查看各个分支最后一个提交信息
   git branch --merged 查看哪些分支已经合并入当前分支

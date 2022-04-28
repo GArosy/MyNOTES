@@ -384,8 +384,11 @@ JavaScript中，作用域为可访问的变量、对象、函数的集合。
 
 ECMAScript 通过 `RegExp` 类型支持正则表达式：
 
-```
+```js
 let expression = /pattern/flags;
+/ab+c/i; //字面量形式
+new RegExp('ab+c', 'i'); // 首个参数为字符串模式的构造函数
+new RegExp(/ab+c/, 'i'); // 首个参数为常规字面量的构造函数
 ```
 
 #### 常用方法
@@ -564,7 +567,7 @@ repeatRegex.test(repeatStr); // Returns true
 repeatStr.match(repeatRegex); // Returns ["row row row", "row"]
 ```
 
-在字符串上调用 `.match()` 方法将返回一个数组，其中包含它最终匹配到的子字符串及其捕获组。
+在字符串上调用 `.match()` 方法将返回一个数组，其中包含它最终匹配到的子字符串及其捕获组。
 
 ##### 实例
 
@@ -592,6 +595,8 @@ function ischina(str) {
 #### RegExp 对象
 
 ==待补充==
+
+
 
 ### 原始值包装类型
 
