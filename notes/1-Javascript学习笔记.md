@@ -812,6 +812,53 @@ let max = arr.reduce(function(prev, cur) {
 // 未传入初始值，所以prev为第一项3，cur为第二项9，取两值最大值进入下一轮回调
 ```
 
+`some()`
+
+测试数组中是不是**至少有1个**元素通过了回调函数的测试，返回一个布尔值。
+
+```js
+arr.some(callback(element[, index[, array]])[, thisArg]);
+```
+
+- 数组中一旦有一个元素通过回调函数的测试就会返回**`true`**；所有元素都没有通过回调函数的测试返回值才会为false。 
+
+- `some()` 为数组中的每一个元素执行一次 `callback` 函数，直到找到一个使得 callback 返回一个“真值”（即可转换为布尔值 true 的值）。如果找到了这样一个值，`some()` 将会立即返回 `true`。否则，`some()` 返回 `false`。`callback` 只会在那些”有值“的索引上被调用，不会在那些被删除或从来未被赋值的索引上调用。 
+
+- `some()` 被调用时不会改变数组。 
+
+  
+
+`every()`
+
+与`some()`类似，测试一个数组内的**所有**元素是否都能通过了回调函数的测试，返回一个布尔值。
+
+```js
+arr.every(callback(element[, index[, array]])[, thisArg])
+```
+
+- `every` 方法为数组中的每个元素执行一次 `callback` 函数，直到它找到一个会使 `callback` 返回 假值的元素。如果发现了一个这样的元素，`every` 方法将会立即返回 `false`。否则，`callback` 为每一个元素返回 `true`，`every` 就会返回 `true`。 
+- `every` 不会改变原数组。 
+
+
+
+`find()` 
+
+返回数组中满足回调函数的第一个元素的值。否则返回 `undefined`。 
+
+```js
+arr.find(callback(element[, index[, array]])[, thisArg])
+```
+
+-  `find`方法不会改变数组。 
+
+
+
+`findIndex()` 
+
+返回数组中满足提供的测试函数的第一个元素的**索引**。若没有找到对应元素则返回-1。 
+
+
+
 ### Map
 
 JavaScript中默认的对象表达方式 `{}` 可以视为其他语言中的 `Map` 或 `Dic` 数据结构，即一组键值对。但JavaScript的键必须是字符串，在需要使用其他数据类型作为键时引发了诸多不便。
