@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>closure</title>
+</head>
+
+<body>
+    <!-- 点击baz按钮时，执行baz函数并传递一个匿名函数作为参数 -->
+    <button id="bazBtn" onclick="baz(() => {console.log('baz事件处理函数执行了一次')})">baz按钮</button>
+    <!--  -->
+    <button id="fooBtn" onclick="foo()">foo按钮</button>
+    <script>
+        // 无效的防抖函数baz
+        // 直接声明baz的事件处理函数，timer定义于内部。
+        // 其中，每次触发事件timer都会重置并产生一个计时器，各个计时器之间相互独立，
+        // baz函数只能依次延迟输入函数的执行，不能达到防抖的目的。
+        // （除非将timer设为全局变量；但这样会带来变量污染）
+        const baz = function (fn, delay = 1000) {
+            let timer
+            // timer每次都会重置，下面的if永远不会满足，clearTimeout(timer)永远不会执行
+            if (timer) clearTimeout(timer)
+            timer = setTimeout(fn, delay)
+        }
+
+
+        // 加入闭包的防抖函数foo
+        // 因计时器在回调函数内部，所以它也是无效的防抖函数
+        function debounce(fn, delay = 1000) {
+            console.log('立即执行debounce函数')
+            return function unnamed() {
+                // 将声明计时器这一步放在内部函数中，此时timer每次都会重置
+                // 这样一来与上面的baz函数无异
+                let timer
+                if (timer) clearTimeout(timer)
+                timer = setTimeout(fn, delay)
+                // 每次打印一个新的timer号
+                console.log('timer号码', timer)
+            }
+        }
+
+        // 带括号的表达式的方式赋值变量，debounce()此时会立即执行
+        // 变量foo指向的是函数debounce执行的结果，也就是closure函数
+        const foo = debounce(() => {
+            console.log('foo事件处理函数执行了一次')
+        })
+
+
+    </script>
+</body>
+
+</html>

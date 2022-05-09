@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,34 +11,65 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .test {
-            text-align: center;
-            margin: auto;
-            width: 50%;
-            height: 150px;
+            margin: 0 auto 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50vw;
+            height: 200px;
             line-height: 100px;
             font-size: 100px;
             color: #fff;
             background-color: #ccc;
         }
-
     </style>
     <title>Document</title>
 </head>
-<body>
-    <div id="test" class="test">
 
+<body>
+    <h3>无防抖的mousemove事件</h3>
+    <div id="nonDebounce" class="test">
+        0
     </div>
+    <h3>非立即执行的防抖</h3>
+    <div id="delayDebounce" class="test">
+        0
+    </div>
+
     <script>
         let num = 1;
-        const test = document.getElementById('test');
-        const count = function() {
-            test.innerText = num++;
+        const nonDebounce = document.getElementById('nonDebounce');
+        const delayDebounce = document.getElementById('delayDebounce');
+
+        // 无防抖
+        const count = function () {
+            this.innerText = num++;
+        }
+        // 非立即执行的防抖
+        const delayDebounceCount = function(func, delay) {
+            let timeout;
+            return function() {
+                let context = this;
+                let args = arguments;
+                if (timeout) {
+                    clearTimeout(timeout)
+                }
+
+                timeout = setTimeout(()=> {
+                    func.apply(context, args)
+                }, delay);
+            }
         }
 
-        test.addEventListener('mousemove', count)
+        nonDebounce.addEventListener('mousemove', count);
+        delayDebounce.addEventListener('mousemove', delayDebounceCount(count, 1000))
+
+
     </script>
 </body>
+
 </html>
