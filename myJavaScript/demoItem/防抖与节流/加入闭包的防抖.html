@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>closure</title>
+</head>
+
+<body>
+    <button onclick="foo()">foo按钮</button>
+    <button onclick="baz()">baz按钮</button>
+    <script>
+        // 声明防抖函数debounce1
+        function debounce1(fn, delay = 500) {
+            let timer
+            console.log('执行debounce1，参数是', fn);
+            return function closure() {
+                console.log(timer);
+                if (timer) clearTimeout(timer)
+                timer = setTimeout(fn, delay)
+                console.log('foo-clousure执行一次，timer号码', timer)
+            }
+        }
+
+        // 注意！！！给变量foo赋的值是debounce1的函数执行结果，赋值的同时debounce1已被执行一次
+        // 因为debounce1是一个函数，现在后面加上（）和实参，就是在执行。
+        // debounce1()返回的是一个闭包函数closure，
+        // 此次赋值之后，foo变量指向这个closure函数，点击foo按钮会直接执行closure()，而不再执行debounce1()。
+        // closure函数操作的timer在debounce1()函数的作用域中，形成了闭包，
+        // 所以，每次点击foo，clousure函数操作的timer都是同一个timer，不会重置计时器。
+        // 而当再次点击复用foo时，每次创建的新timer都有自己独立的函数作用域，多个按钮间的timer不会相互影响。
+        const foo = debounce1(() => {
+            console.log('foo事件处理函数执行了一次');
+        })
+
+        // 给变量baz赋的值是一个立即执行函数debounce2
+        const baz = (function debounce2(fn, delay) {
+            let timer
+            console.log('执行debounce2，参数是', fn);
+            return function closure() {
+                if (timer) clearTimeout(timer)
+                timer = setTimeout(fn, delay)
+                console.log('baz-clousure执行一次，timer号码', timer)
+            }
+        })(() => {
+            console.log('baz事件处理函数执行了一次');
+        }, 500)
+        // 上面这行代码，给debounce2传递实参（fn和delay）
+    </script>
+</body>
+
+</html>
