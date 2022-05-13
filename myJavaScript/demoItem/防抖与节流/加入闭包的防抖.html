@@ -17,7 +17,6 @@
             let timer
             console.log('执行debounce1，参数是', fn);
             return function closure() {
-                console.log(timer);
                 if (timer) clearTimeout(timer)
                 timer = setTimeout(fn, delay)
                 console.log('foo-clousure执行一次，timer号码', timer)
@@ -33,9 +32,10 @@
         // 而当再次点击复用foo时，每次创建的新timer都有自己独立的函数作用域，多个按钮间的timer不会相互影响。
         const foo = debounce1(() => {
             console.log('foo事件处理函数执行了一次');
-        })
+        }, 1000)
 
-        // 给变量baz赋的值是一个立即执行函数debounce2
+        // 闭包大部分会结合立即执行函数使用
+        // 声明防抖函数debounce2作为一个立即执行函数，执行后赋值给baz
         const baz = (function debounce2(fn, delay) {
             let timer
             console.log('执行debounce2，参数是', fn);
