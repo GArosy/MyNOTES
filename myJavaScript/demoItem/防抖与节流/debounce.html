@@ -41,7 +41,7 @@
     </div>
 
     <script>
-        let num = 1;
+        let num = 0;
         const nonDebounce = document.getElementById('nonDebounce');
         const delayDebounce = document.getElementById('delayDebounce');
 
@@ -56,7 +56,7 @@
             console.log(this);
             this.innerText = num++;
         }
-        // 非立即执行的防抖
+        // 非立即执行的防抖，触发事件后经过delay毫秒执行func
         const delayDebounceCount = function (func, delay) {
             // 在内部函数外声明计时器
             let timer;
@@ -77,6 +77,8 @@
                 }, delay);
             }
         }
+        // 立即执行的防抖，触发事件后func立即执行，
+
 
         nonDebounce.addEventListener('mousemove', count);
         delayDebounce.addEventListener('mousemove', delayDebounceCount(count, 200))
