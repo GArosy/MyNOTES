@@ -31,6 +31,7 @@
 </head>
 
 <body>
+    <h1>防抖</h1>
     <h3>无防抖的mousemove事件</h3>
     <div id="nonDebounce" class="test">
         0
@@ -40,7 +41,11 @@
         0
     </div>
     <h3>立即执行的防抖</h3>
-    <div id="immDelayDebounce" class="test">
+    <div id="immDebounce" class="test">
+        0
+    </div>
+    <h3>通过参数控制的防抖</h3>
+    <div id="debounce" class="test">
         0
     </div>
 
@@ -48,13 +53,8 @@
         let num = 0;
         const nonDebounce = document.getElementById('nonDebounce');
         const delayDebounce = document.getElementById('delayDebounce');
-        const immDelayDebounce = document.getElementById('immDelayDebounce');
-
-        const obj = {
-            print() {
-                console.log(this);
-            }
-        }
+        const immDebounce = document.getElementById('immDebounce');
+        const debounce = document.getElementById('debounce');
 
         /* 无防抖 */
         const count = function () {
@@ -67,7 +67,7 @@
             let timer;
             // 声明内部函数，形成闭包
             return function () {
-                // 获取this和arguments对象
+                // 获取this和arguments对象(可以将...args剩余参数传入内部函数，代替argumrnts)
                 let context = this;
                 let args = arguments;
 
@@ -77,14 +77,14 @@
                 timer = setTimeout(() => {
                     // 直接调用count()，count.this是Window对象，无法改变delayDebounce块中的innerText
                     // func();
-                    // 因为箭头函数的特性，需要利用apply手动指定this指向及参数
+                    // 箭头函数的this被固定在当前上下文，不能直接使用，需要利用apply手动指定this指向及参数
                     func.apply(context, args);
                 }, delay);
             }
         }
         /* 立即执行的防抖，触发事件后立即执行一次func，经过delay期间，事件如果没有再次触发，才能继续执行func */
         // （与非立即执行的防抖相反，函数执行提前到了delay之前）
-        const immDelayDebounceCount = function (func, delay) {
+        const immDebounceCount = function (func, delay) {
             let timer;
             return function () {
                 let context = this;
@@ -105,11 +105,34 @@
                 if (callNow) func.apply(context, args);
             }
         }
+        /* 以上两种方式结合，通过参数控制是否立即执行 */
+        const debounceCount = function (func, delay, immediate) {
+            let timer;
+            return function () {
+                let context = this;
+                let args = arguments;
+                if (timer) clearTimeout(timer);
+                let callNow = !timer;
+
+                if (immediate) {
+                    timer = setTimeout(() => {
+                        timer = null;
+                    }, delay);
+                    if (callNow) func.apply(context, args)
+                } else {
+                    timer = setTimeout(() => {
+                        func.apply(context, args);
+                    }, delay);
+                }
+
+            }
+        }
 
 
         nonDebounce.addEventListener('mousemove', count);
-        delayDebounce.addEventListener('mousemove', delayDebounceCount(count, 200))
-        immDelayDebounce.addEventListener('mousemove', immDelayDebounceCount(count, 200))
+        delayDebounce.addEventListener('mousemove', delayDebounceCount(count, 500))
+        immDebounce.addEventListener('mousemove', immDebounceCount(count, 500))
+        debounce.addEventListener('mousemove', debounceCount(count, 200, true))
     </script>
 </body>
 

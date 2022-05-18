@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .test {
+            margin: 0 auto 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50vw;
+            height: 200px;
+            line-height: 100px;
+            font-size: 100px;
+            color: #fff;
+            background-color: #ccc;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>节流</h1>
+    <h3>无节流的mousemove事件</h3>
+    <div id="nonThrottle" class="test">
+        0
+    </div>
+    <h3>时间戳版节流</h3>
+    <div id="timestampThrottle" class="test">
+        0
+    </div>
+    <h3>定时器版节流</h3>
+    <div id="timerThrottle" class="test">
+        0
+    </div>
+
+    <script>
+        let num = 0;
+        const nonThrottle = document.getElementById('nonThrottle');
+        const timestampThrottle = document.getElementById('timestampThrottle');
+        const timerThrottle = document.getElementById('timerThrottle');
+
+
+        /* 无节流 */
+        const count = function () {
+            console.log(this);
+            this.innerText = ++num;
+        }
+
+        /* 节流指事件连续触发时，n秒内，事件处理函数只执行一次
+         * 其中有两种实现方式：时间戳和定时器
+         */
+
+        /* 时间戳版节流 */
+        // 触发时事件处理函数立即执行，停止触发后函数不会执行
+        const timestampThrottleCount = function (func, wait) {
+            // 在闭包内声明一个变量储存事件触发的时间戳
+            let previous = 0;
+            return function () {
+                let now = Date.now();
+                let context = this;
+                let args = arguments;
+                
+                // 事件触发后执行内部函数，如果距上次触发的时间大于wait，函数func才会执行
+                if (now - previous > wait) {
+                    func.apply(context, args);
+                    // 每隔wait时间更新一次时间戳
+                    previous = now;
+                }
+            }
+        }
+        /* 定时器版节流 */
+        // 触发时事件处理函数不会立即执行，停止触发后函数会继续执行一次后停止
+        const timerThrottleCount = function (func, wait) {
+            let timer;
+            return function () {
+                let context = this;
+                let args = arguments;
+
+                // 从触发时开始计时，每隔wait时间清空定时器并执行函数func，wait时间内函数无效
+                if (!timer) {
+                    timer = setTimeout(() => {
+                        timer = null;
+                        func.apply(context, args);
+                    }, wait);
+                }
+            }
+        }
+
+
+        nonThrottle.addEventListener('mousemove', count);
+        timestampThrottle.addEventListener('mousemove', timestampThrottleCount(count, 1000))
+        timerThrottle.addEventListener('mousemove', timerThrottleCount(count, 1000))
+    </script>
+</body>
+
+</html>
