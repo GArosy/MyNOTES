@@ -2530,7 +2530,7 @@ m.forEach(function (value, key, map) {
 
 
 
-#### filter
+#### filter()
 
 创建一个新数组，返回经过滤后的剩余元素，不会改变原数组。
 
@@ -2564,7 +2564,7 @@ var result = arr.filter((element, index, array) => {
 console.log(result); // ['apple', 'strawberry', 'banana', 'pear', 'orange']
 ```
 
-#### sort
+#### sort()
 
 这是 JavaScript 自带的排序函数，它可以实现对数组的**原地排序**。但如果直接使用，可能会产生意想不到的后果：
 
@@ -2618,7 +2618,7 @@ arr.sort((a, b) => {
     if (nameA === nameB) {
         return 0;
     }
-    return nameA - nameB;
+    return nameA > nameB ? 1 : -1;
 });
 console.log(arr);
 ```
