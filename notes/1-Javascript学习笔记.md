@@ -1703,10 +1703,15 @@ JavaScript在浏览器中以单线程模式运行，页面加载过程中，所�
 
    DOM2 Events 为事件处理程序的赋值和移除定义了两个方法：
 
-   - `addEventListener([event],[function],[eventStream])` 
-   - `removeEventListener([event],[function],[eventStream])` 
-
-   它们接收3个参数，要处理的事件（**不带on**）、事件处理函数、使用冒泡（false，默认）/捕获（true）事件流。
+   - `addEventListener([event],[listener],[options]/[useCapture])` 
+   - `removeEventListener([event],[listener],[options]/[useCapture])` 
+     - *event* ：表示监听事件类型的字符串；
+     - *listener* ：一个实现了EventListener接口的对象，通常为一个函数；
+     - *options* ：可选，一个有关listener的属性的参数对象，可用选项如下：
+       - *capture* ： Boolean，表示 `listener` 会在该类型的事件捕获阶段传播到该 `EventTarget` 时触发；
+       - *once* ：Boolean，表示 `listener` 在添加之后**最多只调用一次**。如果是 `true`，`listener` 会在其被调用之后自动移除；
+       - *passive* ：Boolean，设置为true时，表示 `listener` 永远不会调用 `preventDefault()` 
+     - *useCapture* ：可选，Boolean，是否使用捕获流。默认为false使用冒泡事件流，ture使用捕获事件流。
 
    ```html
    <button id="btnId" name="myBtn">button</button>
