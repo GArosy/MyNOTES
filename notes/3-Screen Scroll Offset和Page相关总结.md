@@ -1,4 +1,4 @@
-## `window`对象（BOM）
+## `window` 对象（BOM）
 
 - 宽高：和页面的位置、滚动与否无关，只表示页面宽高
   - `innerWidth`/`innerHeight` 页面所在浏览器视口的宽度/高度，包含滚动条，不包含未在页面中显示的可滚动部分；
@@ -17,13 +17,20 @@
 
     
 
-## `element`对象（DOM）
+## `element` 对象（DOM）
 
 - 宽高：和元素的位置、滚动与否无关，只表示元素宽高
   - `clientWidth`/`clientHeight` 元素可见内容的内部宽高。包含padding，不包含border、水平滚动条与margin（height+padding）；
   - `offsetWidth`/`offsetHeight` 元素可见内容的整体宽高。包含padding、border与水平滚动条，不包含margin；
 - scroll
   - `scrollWidth`/`scrollHeight` 元素（包含不可见内容）的宽高。当本元素的子元素宽/高大于本元素，且 `overflow=scroll` 时，会出现水平/垂直滚动条，导致部分子元素被隐藏，此时。`scrollWidth/Height` 代表不可见部分的元素宽高，包含padding。scrollHeight/Width >= clientHeight/Width 恒成立；
-  - `scrollLeft`/`scrollTop` 有滚动条时，元素向左/向上滑出boder外的长度；
+  - `scrollLeft`/`scrollTop` 有滚动条时，元素向左/向上滑出border外的长度；
 - 距离
   - `offsetLeft`/`offsetTop` 当前元素左边/顶部padding距离父元素左边/顶部padding的距离；
+
+## `MouseEvent` 对象
+
+- scroll
+  - `pageX`/`pageY` 事件发生时当前鼠标位置相对于整个页面的X/Y坐标；
+  - `clientX`/`clientY` 事件发生时鼠标在视口的X/Y坐标（不包含滚动条）；当浏览器窗口缩小时，它们的最大值也会缩小；
+  - `screenX`/`screenY` 事件发生时鼠标在屏幕上的坐标。它们的最大值不会超过屏幕分辨率。
