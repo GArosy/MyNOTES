@@ -1,97 +1,36 @@
-# SCSS
+# Sass
 
-## flex布局
+## 认识Sass
 
-- display: flex 写在父容器声明一个弹性盒子，它的所有子元素自动成为容器成员（项目），容器属性主要控制项目的**伸缩方向**和**对齐方式**，容器属性有：
-  - flex-direction 主轴方向 
-  - justify-content 主轴对齐方式 
-  - align-items 交叉轴对齐方式 
-  - align-content 多轴线对齐方式 
-  - flex-wrap 换行方式 
-- 各个容器成员的**排列顺序**、**伸缩比例**、**预设大小**和**独立特性**，由项目属性属性控制：
-  - flex-grow 当前项目的伸展比例，默认0，即如果存在剩余空间，也不伸展
-  - flex-shrink 当前项目的缩小比例，默认1，即如果空间不足，该项目将缩小
-  - flex-basis 当前项目在伸缩之前，预设占据的主轴空间，浏览器根据这个属性，计算主轴是否有多余空间。默认auto，即项目的本来大小
-  - flex 以上三个属性的缩写，默认值为 0 1 auto。该属性有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)。设置为一个无单位**数**时，flex: [number] 1 0
-  - order 当前项目的排列顺序，默认0
-  - align-self 当前项目有与其他项目不一样的对齐方式，可覆盖align-items属性，默认auto
+CSS书写代码规模较大的Web应用时，容易造成选择器、层叠的复杂度过高，因此推荐通过 Sass 进行CSS开发：Sass 是一款成熟的**CSS预处理器**，它在 CSS 语法的基础上增加了变量 (variables)、嵌套 (nested rules)、混合 (mixins)、导入 (inline imports) 等高级功能，让CSS的书写更加高效和规范。
 
-> [Flex 布局教程：语法篇 - 阮一峰的网络日志 (ruanyifeng.com)](http://ruanyifeng.com/blog/2015/07/flex-grammar.html) 
 
-## grid 网格
 
-1. 创建网格 `display: grid` 
+从第三代开始，Sass的语法格式放弃了缩进式风格，改用在 CSS3 语法的基础上拓展的 SCSS (Sassy CSS) 格式。它完全向下兼容普通的CSS代码，这一代的 Sass 被称为 **SCSS**。 
 
-2. 添加多列 `grid-template-columns: auto 50px 2fr 1fr 10% ` 
 
-3. 添加多行 `grid-template-rows: auto 50px 2fr 1fr 10%` 
 
-4. 添加间距 `grid-gap: [row] [column]` / `grid-column-gap: 10px` / `grid-row-gap: 10px` 
+Sass 目前有三个版本`Dart Sass`、`libsass`和`Ruby Sass`：
 
-5. 跨列占据 `grid-column:[n]/[m]` ( `n/m` 为网格线编号，跨行占据同上)
+- `Dart Sass`，用`Dart`语言写的`sass`实现，于2016年11月1日发布`alpha`版本，版本`1.23.0`之后完全支持模块化机制。
 
-6. 将网格划分为区域模板
+- `libSass`也就是俗称的`node-sass`，用`c/c++`实现的`sass`版本，使用非常广泛。 `node-sass`是绑定了 `libsass`的`nodejs`库，可以极快的将`.scss` 文件编译为`.css`文件，安装过程过于繁琐，官方不推荐再使用。
 
-    ```
-    .grid {
-        grid-template-areas:
-            "header header header"
-            "advert content content"
-            "footer footer footer";
-    }
-    ```
+- `Ruby Sass`，是最初的`Sass`实现，但是2019年3月26日被停止了，以后也不会再支持，使用者需要迁移到别的实现上。
 
-7. 放置项目于区域模板
 
-   ```
-   .item1 {
-   	grid-area: header;
-   }
-   ```
 
-   若未定义区域模板，可直接为项目添加模板，其中 a-b 为水平网格线，A-B 为垂直网格线
+## 使用Sass
 
-   ```
-   .item1 {
-   	grid-area: [a]/[A]/[b]/[B];
-   }
-   ```
+### 部署
 
-8. repeat 函数
+推荐使用`npm`安装`Dart Sass` ：
 
-   ```
-   .grid {
-       grid-template-column: repeat(3, 1fr);
-   }
-   ```
 
-9. 限制项目大小
 
-   ```
-   .grid {
-   	grid-template-column: repeat(3, minmax(90px, 1fr));
-   }
-   ```
+全局安装：
 
-10. 自动填充 
+```
+npm install -g sass
+```
 
-    auto-fill 以最小大小填充（留空）: `repeat(auto-fill, minmax(90px, 1fr))` 
-
-    auto-fit 自动拉伸（填满）: `repeat(auto-fit, minmax(90px, 1fr))`
-
-## CSS3
-
-- `pointer-events: none;`禁用鼠标事件（看得见摸不着）
-
-## 其他
-
-- 带阴影的圆角边框
-
-  [CSS3 box-shadow 属性 | 菜鸟教程 (runoob.com)](https://www.runoob.com/cssref/css3-pr-box-shadow.html)
-
-- `background-image` 属性
-
-  [CSS background-image 属性 | 菜鸟教程 (runoob.com)](https://www.runoob.com/cssref/pr-background-image.html)
-
-- `width : 100%` 的含义
-  [正确使用"width:100%" - 简书 (jianshu.com)](https://www.jianshu.com/p/7d565f14f98e)
