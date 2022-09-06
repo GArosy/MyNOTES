@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>包含内部浮动</h1>
+    <section>
+      <div class="box">
+        <div class="float">I am a floated box!</div>
+        <p>I am content inside the container.</p>
+      </div>
+    </section>
+    <p>👆未创建BFC的父元素：浮动子元素溢出</p>
+    <section>
+      <div class="box" style="overflow: auto">
+        <div class="float">I am a floated box!</div>
+        <p>I am content inside the <code>overflow:auto</code> container.</p>
+      </div>
+    </section>
+    <p>👆使用 <code>overflow: auto</code> 创建RFC的父元素：BFC包含了内部浮动</p>
+    <p>
+      如果使用它仅仅为了创建 BFC，你可能会遇到不希望出现的滚动条或阴影。<strong
+        >不建议使用</strong
+      >
+    </p>
+    <section>
+      <div class="box" style="display: flow-root">
+        <div class="float">I am a floated box!</div>
+        <p>I am content inside the <code>display:flow-root</code> container.</p>
+      </div>
+    </section>
+    <p>
+      👆使用 <code>display: flow-root</code> 创建RFC的父元素：BFC包含了内部浮动
+    </p>
+    <p>
+      <code>display: flow-root</code> 可以创建无副作用的
+      BFC，其中的所有内容都会参与 BFC
+    </p>
+
+    <h1>排除外部浮动</h1>
+    <section>
+      <div class="float2">Try to resize this outer float</div>
+      <div class="box"><p>Normal</p></div>
+    </section>
+    <section>
+      <div class="float2">Try to resize this outer float</div>
+      <div class="box" style="display: flow-root">
+        <p><code>display:flow-root</code></p>
+        <p></p>
+      </div>
+    </section>
+
+    <h1>阻止margin塌陷</h1>
+    <section>
+      <div class="box" style="margin: 30px 0">A</div>
+      <div class="box" style="margin: 30px 0">B</div>
+    </section>
+    <p>👆两个div之间margin塌陷为30px</p>
+    <section>
+      <div class="bfc">
+        <div class="box" style="margin: 30px 0;">A</div>
+      </div>
+      <div class="bfc">
+        <div class="box" style="margin: 30px 0;">B</div>
+      </div>
+    </section>
+    <p>👆将其放在不同的 BFC 容器中，避免了margin塌陷</p>
+  </body>
+
+  <style>
+    section {
+      height: 150px;
+    }
+    .box {
+      background-color: rgb(224, 206, 247);
+      border: 5px solid rebeccapurple;
+    }
+    .box[style] {
+      background-color: aliceblue;
+      border: 5px solid steelblue;
+    }
+    .float {
+      float: left;
+      width: 200px;
+      height: 100px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 1px solid black;
+      padding: 10px;
+    }
+    .float2 {
+      float: left;
+      overflow: hidden; /* required by resize:both */
+      resize: both;
+      margin-right: 25px;
+      width: 200px;
+      height: 100px;
+      background-color: rgba(255, 255, 255, 0.75);
+      border: 1px solid black;
+      padding: 10px;
+    }
+    .bfc {
+      display: flow-root;
+    }
+  </style>
+</html>
