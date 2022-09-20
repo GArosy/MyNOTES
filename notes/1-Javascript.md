@@ -2672,7 +2672,7 @@ function makeFunc() {
     return displayName;
 }
 
-var myFunc = makeFunc();
+var myFunc = makeFunc();		// myFunc存放了makeFunc()返回的displayName函数
 myFunc();
 ```
 
