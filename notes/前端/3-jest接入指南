@@ -1,0 +1,116 @@
+1. 在src目录下新建tests文件夹
+
+2. 安装jest依赖
+
+   ```
+   yarn add jest @types/jest --dev
+   ```
+
+3. 在tests中新建`index.spec.ts`文件
+
+   ```ts
+   // 简单写入一些测试代码
+   it('init', () => {
+     expect(true).toBe(true);
+   });
+   ```
+
+   > 新项目的.ts文件编译需要确保项目已经安装了typescript依赖
+   >
+   > ```
+   > yarn add typescript --dev
+   > ```
+   >
+   > 然后使用tsc工具初始化ts配置
+   >
+   > ```
+   > npx tsc --init
+   > ```
+
+4. 支持Typescript
+
+   使用babel：
+
+   ```
+   yarn add --dev @babel/preset-typescript
+   ```
+
+   ```
+   // babel.config.js
+   module.exports = {
+     presets: [
+       ['@babel/preset-env', {targets: {node: 'current'}}],
+       '@babel/preset-typescript',
+     ],
+   };
+   ```
+
+   配置ts：
+
+   ```json
+   // tsconfig.json
+   {
+     "compilerOptions": {
+       // ...
+       "types": ["jest"], 
+       // ...
+     }
+   }
+   ```
+
+5. 配置eslint
+
+   安装eslint jest插件：
+
+   ```
+   yarn add eslint-plugin-jest -dev
+   ```
+
+   在 ESLint 配置文件中添加插件：
+
+   ```js
+   module.exports = {
+     env: {
+       browser: true,
+       es2021: true,
+       'jest/globals': true,
+     },
+     plugins: [
+       'vue',
+       '@typescript-eslint',
+       'jest',
+     ],
+     // ...
+   }
+   ```
+
+6. 配置package.json脚本指令
+
+   ```json
+   {
+   	// ...
+   	"scripts": {
+       "test": "jest"
+     },
+     // ...
+   }
+   ```
+
+7. 运行 yarn test即可查看测试结果
+
+   ```sh
+   ➜  sc-vue yarn test                        
+   yarn run v1.22.19
+   $ jest
+    PASS  src/reactivity/tests/index.spec.ts
+     ✓ init (1 ms)
+   
+   Test Suites: 1 passed, 1 total
+   Tests:       1 passed, 1 total
+   Snapshots:   0 total
+   Time:        0.42 s, estimated 1 s
+   Ran all test suites.
+   ✨  Done in 1.52s.
+   ```
+
+   
